@@ -38,4 +38,5 @@ More information on how to generate your datagrid.
 - Adding a Flex recipe
 - Upgrading to PHP 8
 - Adding Bootstrap 5 theme
+- Use Symfony UX
 - More column types and template options ?

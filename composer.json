@@ -11,7 +11,6 @@
       "homepage": "https://kibatic.com"
     }
   ],
-  "homepage": "https://docs.sonata-project.org/projects/SonataAdminBundle",
   "require": {
     "php": "^7.4",
     "doctrine/orm": "^2.7",
