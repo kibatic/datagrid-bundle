@@ -1,0 +1,4 @@
+column:
+  boolean:
+    'true': Yes
+    'false': No

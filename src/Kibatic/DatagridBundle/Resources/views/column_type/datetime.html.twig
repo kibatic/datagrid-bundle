@@ -1,0 +1,3 @@
+{% set format = parameters.format|default('Y-m-d H:i:s') %}
+
+{{ value|date(format) }}

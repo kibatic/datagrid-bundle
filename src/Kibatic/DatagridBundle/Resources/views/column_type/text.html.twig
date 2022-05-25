@@ -1,0 +1,7 @@
+{% set escape = parameters.escape|default(true) %}
+{% set value = escape ? value : value|raw %}
+
+{% set truncate = parameters.truncate|default(0)  %}
+{% set value = truncate == 0 ? value : value|u.truncate(truncate, '...') %}
+
+{{ value }}

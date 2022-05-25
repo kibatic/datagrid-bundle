@@ -1,0 +1,11 @@
+No result: Aucun résultat
+Batch action: Traitement par lot
+Select all: Tout selectionner
+Sort: Trier
+Filter: Filtrer
+Reset: Réinitialiser
+
+column:
+  boolean:
+    'true': Oui
+    'false': Non

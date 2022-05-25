@@ -1,0 +1,90 @@
+{% if grid.pagination.totalItemCount > 0 %}
+    {% if grid.hasBatchActions %}
+        <form name="datagrid-batch-action" method="POST" action="{{ grid.batchActions[0].url }}">
+    {% endif %}
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            {% if grid.hasBatchActions %}
+                <th>
+                    <input type="checkbox" data-check-all title="{{ 'Select all'|trans({}, 'KibaticDatagridBundle') }}" />
+                    <script>
+                        document.addEventListener("DOMContentLoaded", () => {
+                            const batchForm = document.querySelector('form[name="datagrid-batch-action"]')
+                            const checkboxes = batchForm.querySelectorAll('input[type="checkbox"]')
+                            const metaCheckboxes = batchForm.querySelectorAll('input[data-check-all]')
+
+                            metaCheckboxes.forEach(metaCheckbox =>
+                                metaCheckbox.addEventListener("change", event =>
+                                    checkboxes.forEach(checkbox => checkbox.checked = event.target.checked)
+                                )
+                            )
+                        })
+                    </script>
+                </th>
+            {% endif %}
+            {% for column in grid.columns %}
+                <th {% if column.templateParameter('col_class', null) is not null %}class="{{ column.templateParameter('col_class', null) }}"{% endif %}>
+                    {% if column.sortable is not null %}
+                        {% set sortUrl = path(
+                            app.request.attributes.get('_route'),
+                            app.request.attributes.get('_route_params')|merge(app.request.query.all)|merge({
+                                'sort_by': column.sortable,
+                                'sort_order': app.request.get('sort_dir') == 'ASC' ? 'DESC' : 'ASC',
+                                'page': null
+                            })
+                        ) %}
+                        <a href="{{ sortUrl }}" title="{{ 'Sort'|trans({}, 'KibaticDatagridBundle') }}">{{ column.name }}</a>
+                    {% else %}
+                        {{ column.name }}
+                    {% endif %}
+                </th>
+            {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in grid.pagination %}
+            <tr>
+                <td>
+                    <input type="checkbox" name="ids[]" value="{{ item.id }}" />
+                </td>
+                {% for column in grid.columns %}
+                    <td {% if column.templateParameter('col_class', null) is not null %}class="{{ column.templateParameter('col_class', null) }}"{% endif %}>
+                        {% include column.template with {
+                            'column': column,
+                            'parameters': column.templateParameters,
+                            'item': item,
+                            'value': column.value(item),
+                        } %}
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="form-inline clearfix">
+        {% if grid.hasBatchActions %}
+            <div class="pull-left">
+                {{ 'Batch action'|trans({}, 'KibaticDatagridBundle') }}
+
+                <select name="batch_action" onchange="this.closest('form').action = this.value" style="width: auto; height: auto">
+                    {% for batchAction in grid.batchActions %}
+                        <option value="{{ batchAction.url }}">{{ batchAction.label }}</option>
+                    {% endfor %}
+                </select>
+
+                <input type="submit" class="btn btn-small btn-primary" value="OK">
+            </div>
+        {% endif %}
+
+        <div class="pull-right">
+            {{ knp_pagination_render(grid.pagination) }}
+        </div>
+    </div>
+
+    {% if grid.hasBatchActions %}</form>{% endif %}
+{% else %}
+    <p class="alert alert-info">{{ 'No result'|trans({}, 'KibaticDatagridBundle') }}</p>
+{% endif %}

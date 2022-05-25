@@ -1,0 +1,12 @@
+{% set actions = value %}
+
+<ul class="list-inline">
+{% for action in value if action.visible is not defined or action.visible %}
+    <li>
+        <a href="{{ action.url }}" class="btn btn-{{ action.btn_type|default('primary') }}">
+            {% if action.icon_class is defined %}<span class="{{ action.icon_class }}"></span>{% endif %}
+            {{ action.name }}
+        </a>
+    </li>
+{% endfor %}
+</ul>
