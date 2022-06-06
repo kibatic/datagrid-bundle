@@ -21,7 +21,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Kibatic\\DatagridBundle\\": "src/"
+      "Kibatic\\DatagridBundle\\": "src"
     }
   }
 }
