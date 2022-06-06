@@ -1,0 +1,3 @@
+services:
+  Kibatic\DatagridBundle\Grid\GridBuilder:
+    public: true
