@@ -6,8 +6,12 @@
     </div>
 
     <div class="box box-primary grid-table-box">
-        <div class="box-body">
-            {% include '@KibaticDatagrid/datagrid-table.html.twig' %}
+        <div class="box-body table-responsive no-padding">
+            {% embed '@KibaticDatagrid/datagrid-table.html.twig' %}
+                {% block grid_table_class %}{{ parent() }} sonata-ba-list{% endblock %}
+                {% block grid_header_tr_class %}sonata-ba-list-field-header{% endblock %}
+                {% block grid_header_th_class %}sonata-ba-list-field-header-string{% endblock %}
+            {% endembed %}
         </div>
     </div>
 </div>

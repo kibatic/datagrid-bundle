@@ -1,11 +1,13 @@
+{% set header_tr_class = block('grid_header_tr_class')|default('') %}
+
 {% if grid.pagination.totalItemCount > 0 %}
     {% if grid.hasBatchActions %}
         <form name="datagrid-batch-action" method="POST" action="{{ grid.batchActions[0].url }}">
     {% endif %}
 
-    <table class="table table-striped">
+    <table class="{% block grid_table_class %}table table-bordered table-striped table-hover{% endblock %}">
         <thead>
-        <tr>
+        <tr{% if header_tr_class is not empty %} class="{{ header_tr_class }}"{% endif %}>
             {% if grid.hasBatchActions %}
                 <th>
                     <input type="checkbox" data-check-all title="{{ 'Select all'|trans({}, 'KibaticDatagridBundle') }}" />
@@ -25,13 +27,19 @@
                 </th>
             {% endif %}
             {% for column in grid.columns %}
-                <th {% if column.templateParameter('col_class', null) is not null %}class="{{ column.templateParameter('col_class', null) }}"{% endif %}>
+                {% set th_class = block('grid_header_th_class')|default('') %}
+
+                {% if column.templateParameter('col_class', null) is not null %}
+                    {% set th_class = th_class ~ ' ' ~ column.templateParameter('col_class', null) %}
+                {% endif %}
+
+                <th {% if th_class is not empty %}class="{{ th_class }}"{% endif %}>
                     {% if column.sortable is not null %}
                         {% set sortUrl = path(
                             app.request.attributes.get('_route'),
                             app.request.attributes.get('_route_params')|merge(app.request.query.all)|merge({
                                 'sort_by': column.sortable,
-                                'sort_order': app.request.get('sort_dir') == 'ASC' ? 'DESC' : 'ASC',
+                                'sort_order': app.request.get('sort_order') == 'ASC' ? 'DESC' : 'ASC',
                                 'page': null
                             })
                         ) %}
@@ -46,9 +54,11 @@
         <tbody>
         {% for item in grid.pagination %}
             <tr>
-                <td>
-                    <input type="checkbox" name="ids[]" value="{{ item.id }}" />
-                </td>
+                {% if grid.hasBatchActions %}
+                    <td>
+                        <input type="checkbox" name="ids[]" value="{{ item.id }}" />
+                    </td>
+                {% endif %}
                 {% for column in grid.columns %}
                     <td {% if column.templateParameter('col_class', null) is not null %}class="{{ column.templateParameter('col_class', null) }}"{% endif %}>
                         {% include column.template with {
