@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Kibatic\DatagridBundle\Grid;
+namespace Kibatic\DatagridBundle\Grid;
 
 use Knp\Component\Pager\Pagination\PaginationInterface;
 

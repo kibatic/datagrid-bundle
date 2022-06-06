@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Kibatic\DatagridBundle;
+namespace Kibatic\DatagridBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

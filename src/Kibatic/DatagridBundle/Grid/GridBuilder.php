@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Kibatic\DatagridBundle\Grid;
+namespace Kibatic\DatagridBundle\Grid;
 
 use Doctrine\ORM\QueryBuilder;
 use Knp\Component\Pager\PaginatorInterface;
