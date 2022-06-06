@@ -1,3 +1,7 @@
 services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
   Kibatic\DatagridBundle\Grid\GridBuilder:
     public: true
