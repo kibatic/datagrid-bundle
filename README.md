@@ -31,7 +31,7 @@ composer require kibatic/datagrid-bundle
 
 # Usage
 
-More information on how to generate your datagrid.
+More information on [how to generate your datagrid](docs/advanced-example.md).
 
 # Roadmap
 
