@@ -21,53 +21,53 @@
             )
             ->addColumn(
                 'ID',
-                fn(Thread $thread) => $thread->getId(),
+                fn(Book $book) => $book->getId(),
                 null,
                 ['colClass' => 'col-md-1'],
                 't.id'
             )
             ->addColumn(
-                'Message',
-                fn(Thread $thread) => $thread->getMessage(),
+                'Title',
+                fn(Book $book) => $book->getTitle(),
                 null,
                 ['truncate' => 30]
             )
             ->addColumn(
                 'Created at',
-                fn(Thread $thread) => $thread->getCreatedAt(),
+                fn(Book $book) => $book->getCreatedAt(),
                 Template::DATETIME,
                 ['format' => 'd/m/Y']
             )
             ->addColumn(
                 'Promoted',
-                fn(Thread $thread) => $thread->isPromoted(),
+                fn(Book $book) => $book->isPromoted(),
                 Template::BOOLEAN,
                 [],
                 't.promoted'
             )
             ->addColumn(
                 'Actions',
-                fn(Thread $thread) => [
+                fn(Book $book) => [
                     [
                         'name' => 'Edit',
-                        'url' => $this->generateUrl('book_edit', ['id' => $thread->getId()]),
+                        'url' => $this->generateUrl('book_edit', ['id' => $book->getId()]),
                         'iconClass' => 'fa fa-pencil'
                     ],
                     [
-                        'url' => $this->generateUrl('book_delete', ['id' => $thread->getId()]),
+                        'url' => $this->generateUrl('book_delete', ['id' => $book->getId()]),
                         'name' => 'Delete',
                         'btnType' => 'danger',
                         'iconClass' => 'fa fa-trash',
                     ],
                     [
-                        'url' => $this->generateUrl('book_promote', ['id' => $thread->getId()]),
+                        'url' => $this->generateUrl('book_promote', ['id' => $book->getId()]),
                         'name' => 'Promote',
                         'btnType' => 'default',
                         'iconClass' => 'fa fa-map-pin',
                         'visible' => !$book->isPromoted(),
                     ],
                     [
-                        'url' => $this->generateUrl('book_demote', ['id' => $thread->getId()]),
+                        'url' => $this->generateUrl('book_demote', ['id' => $book->getId()]),
                         'name' => 'Demote',
                         'btnType' => 'default',
                         'iconClass' => 'fa fa-map-pin',
