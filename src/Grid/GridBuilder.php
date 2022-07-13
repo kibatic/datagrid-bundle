@@ -134,7 +134,7 @@ class GridBuilder
                 10
             );
 
-            $this->grid = new Grid($this->columns, $pagination, $this->batchActions, $this->theme);
+            $this->grid = new Grid($this->columns, $pagination, $this->theme, $this->batchActions);
         }
 
         return $this->grid;

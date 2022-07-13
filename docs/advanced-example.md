@@ -19,16 +19,17 @@
                 $request,
                 $form
             )
+            ->setTheme(Theme::BOOTSTRAP4_SONATA) // default theme is Bootstrap 5
             ->addColumn(
                 'ID',
-                fn(Book $book) => $book->getId(),
+                'id', // first way of getting the value, using a string accessor
                 null,
                 ['colClass' => 'col-md-1'],
                 't.id'
             )
             ->addColumn(
                 'Title',
-                fn(Book $book) => $book->getTitle(),
+                fn(Book $book) => $book->getTitle(), // second way using a callable returning wanted value
                 null,
                 ['truncate' => 30]
             )
@@ -126,4 +127,10 @@
             ->add('promoted', BooleanChoiceType::class, ['label' => 'Promoted ?'])
         ;
     }
+```
+
+```twig
+{# templates/book/list.html.twig #}
+
+{% include grid.theme ~ '/datagrid.html.twig' %}
 ```

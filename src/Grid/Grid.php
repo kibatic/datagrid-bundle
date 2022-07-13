@@ -18,8 +18,8 @@ class Grid
     public function __construct(
         array $columns,
         PaginationInterface $pagination,
+        string $theme,
         array $batchActions = [],
-        string $theme
     ) {
         $this->columns = $columns;
         $this->pagination = $pagination;
