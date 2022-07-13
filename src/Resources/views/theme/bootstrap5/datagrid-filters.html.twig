@@ -1,16 +1,15 @@
 {{ form_start(form) }}
     {{ form_widget(form) }}
 
-    <div class="form-group row">
-        <div class="col-sm-2"></div>
-        <div class="col-sm-10">
-            <ul class="list-inline text-right">
-                <li>
-                    <a href="{{ path('admin_thread_broadcast_list') }}" class="btn btn-default">
+    <div class="row">
+        <div class="col text-end">
+            <ul class="list-inline">
+                <li class="list-inline-item">
+                    <a href="" class="btn btn-default">
                         {{ 'Reset'|trans({}, 'KibaticDatagridBundle') }}
                     </a>
                 </li>
-                <li>
+                <li class="list-inline-item">
                     <button type="submit" class="btn btn-primary">
                         {{ 'Filter'|trans({}, 'KibaticDatagridBundle') }}
                     </button>

@@ -12,7 +12,7 @@ class Column
 
     public function __construct(
         string $name,
-        callable $valueCallback = null,
+        string|callable $valueCallback = null,
         string $template = null,
         array $templateParameters = [],
         string $sortable = null
@@ -24,8 +24,21 @@ class Column
         $this->sortable = $sortable;
     }
 
-    public function getValue(object $entity)
+    public function isCallableValue(): bool
     {
+        return is_callable($this->valueCallback);
+    }
+
+    public function getValue(object $entity = null)
+    {
+        if (!$this->isCallableValue()) {
+            return $this->valueCallback;
+        }
+
+        if ($entity === null) {
+            throw new \LogicException("entity parameter required when valueCallback is callable.");
+        }
+
         $valueCallback = $this->valueCallback;
         return $valueCallback($entity);
     }

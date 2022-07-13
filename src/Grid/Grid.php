@@ -11,17 +11,20 @@ class Grid
      */
     private array $columns;
     private array $batchActions;
+    private string $theme;
 
     private PaginationInterface $pagination;
 
     public function __construct(
         array $columns,
         PaginationInterface $pagination,
-        array $batchActions = []
+        array $batchActions = [],
+        string $theme
     ) {
         $this->columns = $columns;
         $this->pagination = $pagination;
         $this->batchActions = $batchActions;
+        $this->theme = $theme;
     }
 
     public function getColumns(): array
@@ -42,5 +45,10 @@ class Grid
     public function hasBatchActions(): bool
     {
         return !empty($this->batchActions);
+    }
+
+    public function getTheme(): string
+    {
+        return $this->theme;
     }
 }

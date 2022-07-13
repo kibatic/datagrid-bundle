@@ -24,6 +24,7 @@ class GridBuilder
      */
     private array $filters = [];
     private array $batchActions = [];
+    private ?string $theme = '@KibaticDatagrid/theme/bootstrap5';
 
     private ?Grid $grid;
 
@@ -45,9 +46,16 @@ class GridBuilder
         return $this;
     }
 
+    public function setTheme(string $theme): self
+    {
+        $this->theme = $theme;
+        
+        return $this;
+    }
+
     public function addColumn(
         string $name,
-        callable $valueCallback = null,
+        string|callable $valueCallback = null,
         string $template = null,
         array $templateParameters = [],
         string $sortable = null
@@ -126,7 +134,7 @@ class GridBuilder
                 10
             );
 
-            $this->grid = new Grid($this->columns, $pagination, $this->batchActions);
+            $this->grid = new Grid($this->columns, $pagination, $this->batchActions, $this->theme);
         }
 
         return $this->grid;

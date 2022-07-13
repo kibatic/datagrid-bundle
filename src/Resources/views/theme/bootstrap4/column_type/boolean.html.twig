@@ -1,0 +1,5 @@
+{% if value %}
+    <span class="text-success">{{ 'column.boolean.true'|trans({}, 'KibaticDatagridBundle') }}</span>
+{% else %}
+    <span class="text-danger">{{ 'column.boolean.false'|trans({}, 'KibaticDatagridBundle') }}</span>
+{% endif %}

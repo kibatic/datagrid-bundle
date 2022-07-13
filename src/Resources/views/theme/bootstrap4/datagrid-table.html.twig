@@ -1,4 +1,4 @@
-{% set header_tr_class = block('grid_header_tr_class')|default('') %}
+{% set header_tr_class = block('grid_header_tr_class') is defined ? block('grid_header_tr_class') : '' %}
 
 {% if grid.pagination.totalItemCount > 0 %}
     {% if grid.hasBatchActions %}
@@ -27,7 +27,7 @@
                 </th>
             {% endif %}
             {% for column in grid.columns %}
-                {% set th_class = block('grid_header_th_class')|default('') %}
+                {% set th_class = block('grid_header_th_class') is defined ? block('grid_header_th_class') : '' %}
 
                 {% if column.templateParameter('col_class', null) is not null %}
                     {% set th_class = th_class ~ ' ' ~ column.templateParameter('col_class', null) %}
@@ -61,12 +61,7 @@
                 {% endif %}
                 {% for column in grid.columns %}
                     <td {% if column.templateParameter('col_class', null) is not null %}class="{{ column.templateParameter('col_class', null) }}"{% endif %}>
-                        {% include column.template with {
-                            'column': column,
-                            'parameters': column.templateParameters,
-                            'item': item,
-                            'value': column.value(item),
-                        } %}
+                        {% include '@KibaticDatagrid/_column_value.html.twig' %}
                     </td>
                 {% endfor %}
             </tr>
