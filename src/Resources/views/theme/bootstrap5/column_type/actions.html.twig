@@ -1,13 +1,17 @@
 {% set actions = value %}
 
-<ul class="list-inline mb-0">
+<ul class="list-inline">
 {% for action in value %}
     {% if action.visible is not defined or action.visible %}
-        <li>
-            <a href="{{ action.url }}" class="btn btn-{{ action.btn_size|default('sm') }} btn-{{ action.btn_type|default('default') }}">
-                {% if action.icon_class is defined %}<span class="{{ action.icon_class }}"></span>{% endif %}
-                {{ action.name }}
-            </a>
+        <li class="list-inline-item">
+            {% if action.template is defined %}
+                {% include action.template %}
+            {% else %}
+                <a href="{{ action.url }}" class="btn btn-{{ action.btn_size|default('sm') }} btn-{{ action.btn_type|default('secondary') }}">
+                    {% if action.icon_class is defined %}<span class="{{ action.icon_class }}"></span>{% endif %}
+                    {{ action.name }}
+                </a>
+            {% endif %}
         </li>
     {% endif %}
 {% endfor %}

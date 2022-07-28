@@ -55,14 +55,14 @@ class GridBuilder
 
     public function addColumn(
         string $name,
-        string|callable $valueCallback = null,
+        string|callable $value = null,
         string $template = null,
         array $templateParameters = [],
         string $sortable = null
     ): self {
         $this->columns[] = new Column(
             $name,
-            $valueCallback,
+            $value,
             $template,
             $templateParameters,
             $sortable

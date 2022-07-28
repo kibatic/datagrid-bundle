@@ -1,8 +1,6 @@
-{% include [grid.theme ~ '/' ~ column.template, '@KibaticDatagrid/column_type/' ~ column.template, column.template] with {
+{% include [grid.theme ~ '/column_type/' ~ column.template, '@KibaticDatagrid/column_type/' ~ column.template, column.template] with {
     'column': column,
     'parameters': column.templateParameters,
     'item': item,
-    'value': column.isCallableValue ?
-        column.value(item) :
-        include(template_from_string("{{ item." ~ column.value ~ " }}", "datagrid_column_" ~ column.name ~ "_value_dynamic_template"))
+    'value': column.value(item)
 } %}
