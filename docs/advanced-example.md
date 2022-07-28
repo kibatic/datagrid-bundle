@@ -24,7 +24,7 @@
                 'ID',
                 'id', // first way of getting the value, using a string accessor
                 null,
-                ['colClass' => 'col-md-1'],
+                ['col_class' => 'col-md-1'],
                 't.id'
             )
             ->addColumn(
@@ -52,26 +52,26 @@
                     [
                         'name' => 'Edit',
                         'url' => $this->generateUrl('book_edit', ['id' => $book->getId()]),
-                        'iconClass' => 'fa fa-pencil'
+                        'icon_class' => 'fa fa-pencil'
                     ],
                     [
                         'url' => $this->generateUrl('book_delete', ['id' => $book->getId()]),
                         'name' => 'Delete',
-                        'btnType' => 'danger',
-                        'iconClass' => 'fa fa-trash',
+                        'btn_type' => 'danger',
+                        'icon_class' => 'fa fa-trash',
                     ],
                     [
                         'url' => $this->generateUrl('book_promote', ['id' => $book->getId()]),
                         'name' => 'Promote',
-                        'btnType' => 'default',
-                        'iconClass' => 'fa fa-map-pin',
+                        'btn_type' => 'default',
+                        'icon_class' => 'fa fa-map-pin',
                         'visible' => !$book->isPromoted(),
                     ],
                     [
                         'url' => $this->generateUrl('book_demote', ['id' => $book->getId()]),
                         'name' => 'Demote',
-                        'btnType' => 'default',
-                        'iconClass' => 'fa fa-map-pin',
+                        'btn_type' => 'default',
+                        'icon_class' => 'fa fa-map-pin',
                         'visible' => $book->isPromoted(),
                     ],
                 ],
