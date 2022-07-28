@@ -80,20 +80,14 @@ class GridBuilder
 
     private function applySort()
     {
-        foreach ($this->columns as $column) {
-            if ($column->sortable === null) {
-                continue;
-            }
+        $sortBy = $this->request->get('sort_by');
+        $direction = $this->request->get('sort_order', 'ASC');
 
-            $sortBy = $this->request->get('sort_by');
-            $direction = $this->request->get('sort_order', 'ASC');
-
-            if ($sortBy === null) {
-                continue;
-            }
-
-            $this->queryBuilder->orderBy($column->sortable, $direction);
+        if ($sortBy === null) {
+            return;
         }
+
+        $this->queryBuilder->orderBy($sortBy, $direction);
     }
 
     private function applyFilters()
