@@ -14,6 +14,7 @@ class GridBuilder
     private QueryBuilder $queryBuilder;
     private ?Request $request;
     private ?FormInterface $filtersForm;
+    private int $itemsPerPage = 10;
 
     /**
      * @var array|Column[]
@@ -125,7 +126,7 @@ class GridBuilder
             $pagination = $this->paginator->paginate(
                 $this->queryBuilder->getQuery(),
                 $this->request->query->getInt('page', 1),
-                10
+                $this->itemsPerPage
             );
 
             $this->grid = new Grid($this->columns, $pagination, $this->theme, $this->batchActions);
@@ -141,6 +142,13 @@ class GridBuilder
             'label' => $label,
             'url' => $url
         ];
+
+        return $this;
+    }
+
+    public function setItemsPerPage(int $itemsPerPage): self
+    {
+        $this->itemsPerPage = $itemsPerPage;
 
         return $this;
     }
