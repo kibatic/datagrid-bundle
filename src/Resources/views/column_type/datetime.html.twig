@@ -1,3 +1,3 @@
 {% set format = parameters.format|default('Y-m-d H:i:s') %}
 
-{{ value|date(format) }}
+{% if value is not null %}{{ value|date(format) }}{% else %}{{ null_value|default('-') }}{% endif %}
