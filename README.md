@@ -33,6 +33,14 @@ composer require kibatic/datagrid-bundle
 
 More information on [how to generate your datagrid](docs/advanced-example.md).
 
+If you want to customize the pagination, use the knp paginator configuration.
+
+```
+# config/packages/knp_paginator.yaml
+knp_paginator:
+    page_limit: 20   
+```
+
 # Roadmap
 
 - Adding a Flex recipe
