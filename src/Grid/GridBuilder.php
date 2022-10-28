@@ -4,6 +4,7 @@ namespace Kibatic\DatagridBundle\Grid;
 
 use Doctrine\ORM\QueryBuilder;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -14,7 +15,7 @@ class GridBuilder
     private QueryBuilder $queryBuilder;
     private ?Request $request;
     private ?FormInterface $filtersForm;
-    private int $itemsPerPage = 10;
+    private int $itemsPerPage;
 
     /**
      * @var array|Column[]
@@ -29,9 +30,10 @@ class GridBuilder
 
     private ?Grid $grid;
 
-    public function __construct(PaginatorInterface $paginator)
+    public function __construct(PaginatorInterface $paginator, ParameterBagInterface $params)
     {
         $this->paginator = $paginator;
+        $this->itemsPerPage = $params->get('knp_paginator.page_limit') ?? 10;
     }
 
     public function create(QueryBuilder $queryBuilder, Request $request, FormInterface $filtersForm = null): self
