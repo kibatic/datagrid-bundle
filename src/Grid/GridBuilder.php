@@ -54,6 +54,9 @@ class GridBuilder
         return $this;
     }
 
+    /**
+     * @param string|null $template #Template
+     */
     public function addColumn(
         string $name,
         string|callable $value = null,
