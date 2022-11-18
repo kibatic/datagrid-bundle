@@ -59,7 +59,7 @@
                 fn(Book $book) => $book->getSpellCheckedAt(),
                 Template::DATETIME,
                 [],
-                'SpellCheckedAt',
+                'spellCheckedAt',
                 function (QueryBuilder $qb, string $direction)  {
                     // ORDER BY NULLS LAST does not exist in vanilla doctrine
                     $qb->addSelect('CASE WHEN t.spellCheckedAt IS NULL THEN 1 ELSE 0 END as HIDDEN spellCheckedAtIsNull');
