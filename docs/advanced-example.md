@@ -47,6 +47,27 @@
                 't.promoted'
             )
             ->addColumn(
+                'Editor',
+                fn(Book $book) => $book->getEditor()->getName(),
+                Template::BOOLEAN,
+                [],
+                'editor',
+                't.editor.name',
+            )
+            ->addColumn(
+                'Spell checked At',
+                fn(Book $book) => $book->getSpellCheckedAt(),
+                Template::DATETIME,
+                [],
+                'spellCheckedAt',
+                function (QueryBuilder $qb, string $direction)  {
+                    // ORDER BY NULLS LAST does not exist in vanilla doctrine
+                    $qb->addSelect('CASE WHEN t.spellCheckedAt IS NULL THEN 1 ELSE 0 END as HIDDEN spellCheckedAtIsNull');
+                    $qb->addOrderBy( "spellCheckedAtIsNull", $direction === 'ASC' ? 'DESC': 'ASC');
+                    $qb->addOrderBy( "t.spellCheckedAt", $direction);
+                }
+            )
+            ->addColumn(
                 'Actions',
                 fn(Book $book) => [
                     [

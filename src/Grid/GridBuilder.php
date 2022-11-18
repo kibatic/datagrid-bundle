@@ -64,14 +64,16 @@ class GridBuilder
         string|callable $value = null,
         string $template = null,
         array $templateParameters = [],
-        string $sortable = null
+        string $sortable = null,
+        callable|string|null $sortableQuery = null
     ): self {
         $this->columns[] = new Column(
             $name,
             $value,
             $template,
             $templateParameters,
-            $sortable
+            $sortable,
+            $sortableQuery
         );
 
         return $this;
@@ -93,7 +95,25 @@ class GridBuilder
             return;
         }
 
-        $this->queryBuilder->orderBy($sortBy, $direction);
+        // check if the sortBy param is configured
+        foreach ($this->columns as $column) {
+            if ($column->sortable !== $sortBy) {
+                continue;
+            }
+            
+            if (is_callable($column->sortableQuery)) {
+                $sortCallback = $column->sortableQuery;
+                $sortCallback($this->queryBuilder, $direction);
+                continue;
+            }
+
+            if ($column->sortableQuery !== null) {
+                $this->queryBuilder->orderBy($column->sortableQuery, $direction);
+                continue;
+            }
+
+            $this->queryBuilder->orderBy($column->sortable, $direction);
+        }
     }
 
     private function applyFilters()
