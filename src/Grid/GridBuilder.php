@@ -97,20 +97,22 @@ class GridBuilder
 
         // check if the sortBy param is configured
         foreach ($this->columns as $column) {
-            if ($column->sortable === $sortBy) {
-                if (is_callable($column->sortableQuery)) {
-                    $sortCallback = $column->sortableQuery;
-                    $sortCallback($this->queryBuilder, $direction);
-                    continue;
-                }
-
-                if ($column->sortableQuery === null) {
-                    $this->queryBuilder->orderBy($column->sortable, $direction);
-                    continue;
-                }
-
-                $this->queryBuilder->orderBy($column->sortableQuery, $direction);
+            if ($column->sortable !== $sortBy) {
+                continue;
             }
+            
+            if (is_callable($column->sortableQuery)) {
+                $sortCallback = $column->sortableQuery;
+                $sortCallback($this->queryBuilder, $direction);
+                continue;
+            }
+
+            if ($column->sortableQuery !== null) {
+                $this->queryBuilder->orderBy($column->sortableQuery, $direction);
+                continue;
+            }
+
+            $this->queryBuilder->orderBy($column->sortable, $direction);
         }
     }
 
