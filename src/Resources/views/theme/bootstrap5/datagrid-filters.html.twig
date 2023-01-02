@@ -1,20 +1,29 @@
 {{ form_start(form) }}
     {{ form_widget(form) }}
 
-    <div class="row">
-        <div class="col text-end">
-            <ul class="list-inline">
-                <li class="list-inline-item">
-                    <a href="" class="btn btn-default">
-                        {{ 'Reset'|trans({}, 'KibaticDatagridBundle') }}
-                    </a>
-                </li>
-                <li class="list-inline-item">
-                    <button type="submit" class="btn btn-primary">
-                        {{ 'Filter'|trans({}, 'KibaticDatagridBundle') }}
-                    </button>
-                </li>
-            </ul>
-        </div>
+<div class="row">
+    <div class="col text-end">
+        <ul class="list-inline">
+            {% set cleared_url = '' %}
+            {% if form.vars.method == 'GET' %}
+                {% set cleared_url = path(
+                    app.request.attributes.get('_route'),
+                    app.request.attributes.get('_route_params')|merge(app.request.query.all|filter((v, k) => k != form.vars.name))
+                ) %}
+            {% endif %}
+
+            <li class="list-inline-item">
+                <a href="{{ cleared_url }}" class="btn btn-default">
+                    {{ 'Reset'|trans({}, 'KibaticDatagridBundle') }}
+                </a>
+            </li>
+
+            <li class="list-inline-item">
+                <button type="submit" class="btn btn-primary">
+                    {{ 'Filter'|trans({}, 'KibaticDatagridBundle') }}
+                </button>
+            </li>
+        </ul>
     </div>
+</div>
 {{ form_end(form) }}
