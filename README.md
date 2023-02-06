@@ -27,6 +27,8 @@ Quick start
 composer require kibatic/datagrid-bundle
 ```
 
+You'll most likely also need to enable this twig function : https://twig.symfony.com/doc/2.x/functions/template_from_string.html
+
 ### Basic usage
 
 ```php
