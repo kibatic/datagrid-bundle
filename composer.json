@@ -18,7 +18,7 @@
     "twig/extra-bundle": "^3.4",
     "twig/string-extra": "^3.4",
     "knplabs/knp-paginator-bundle": "^5.8",
-    "symfony/property-access": "^6.1.*"
+    "symfony/property-access": "^6.1"
   },
   "autoload": {
     "psr-4": {
