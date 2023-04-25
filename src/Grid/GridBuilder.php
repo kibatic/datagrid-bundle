@@ -78,6 +78,22 @@ class GridBuilder
 
         return $this;
     }
+    
+    public function getColumns(): array
+    {
+        return $this->columns;
+    }
+
+    public function getColumn(string $name): Column
+    {
+        foreach ($this->columns as $column) {
+            if ($column->name === $name) {
+                return $column;
+            }
+        }
+
+        throw new \Exception("Column named {$name} not found.");
+    }
 
     public function addFilter(string $formFieldName, callable $callback): self
     {
