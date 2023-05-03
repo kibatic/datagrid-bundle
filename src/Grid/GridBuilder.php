@@ -15,7 +15,7 @@ class GridBuilder
     private QueryBuilder $queryBuilder;
     private ?Request $request;
     private ?FormInterface $filtersForm;
-    private int $itemsPerPage;
+    private ?int $itemsPerPage;
 
     /**
      * @var array|Column[]
@@ -187,7 +187,7 @@ class GridBuilder
         return $this;
     }
 
-    public function setItemsPerPage(int $itemsPerPage): self
+    public function setItemsPerPage(?int $itemsPerPage): self
     {
         $this->itemsPerPage = $itemsPerPage;
 
