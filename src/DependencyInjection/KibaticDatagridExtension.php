@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class KibaticDatagridExtension extends Extension
 {
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         (new YamlFileLoader(
             $container,
