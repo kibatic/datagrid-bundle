@@ -14,12 +14,12 @@ class DateRangeType extends AbstractType
     {
         $builder
             ->add('start', DateType::class, [
-                'label' => 'From',
+                'label' => $options['start_label'],
                 'widget' => 'single_text',
                 'required' => false,
             ])
             ->add('end', DateType::class, [
-                'label' => 'To',
+                'label' => $options['end_label'],
                 'widget' => 'single_text',
                 'required' => false,
             ])
@@ -30,6 +30,8 @@ class DateRangeType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => DateRange::class,
+            'start_label' => 'From',
+            'end_label' => 'To',
         ]);
     }
 }
