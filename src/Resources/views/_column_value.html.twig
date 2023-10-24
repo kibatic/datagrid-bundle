@@ -1,4 +1,6 @@
-{% include [grid.theme ~ '/column_type/' ~ column.template, '@KibaticDatagrid/column_type/' ~ column.template, column.template] with {
+{% set template = column.template(item) %}
+
+{% include [grid.theme ~ '/column_type/' ~ template, '@KibaticDatagrid/column_type/' ~ template, template] with {
     'column': column,
     'parameters': column.templateParameters,
     'item': item,

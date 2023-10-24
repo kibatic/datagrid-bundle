@@ -9,7 +9,7 @@ class Column
 {
     public string $name;
     public $value;
-    public string $template;
+    private ?string $template;
     public array $templateParameters;
     public ?string $sortable;
     public $sortableQuery;
@@ -19,15 +19,28 @@ class Column
         string|callable $value = null,
         string $template = null,
         array $templateParameters = [],
-        string|array  $sortable = null,
+        string|array $sortable = null,
         callable|string|null $sortableQuery = null
     ) {
         $this->name = $name;
         $this->value = $value ?? fn($item) => $item;
-        $this->template = $template ?? Template::TEXT;
+        $this->template = $template;
         $this->templateParameters = $templateParameters;
         $this->sortable = $sortable;
         $this->sortableQuery = $sortableQuery;
+    }
+
+    public function getTemplate(?object $entity = null): string
+    {
+        if ($this->template !== null) {
+            return $this->template;
+        }
+
+        if ($entity !== null && is_array($this->getValue($entity))) {
+            return Template::ARRAY;
+        }
+
+        return Template::TEXT;
     }
 
     public function getValue(object $entity)
