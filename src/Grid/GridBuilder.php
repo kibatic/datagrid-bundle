@@ -103,6 +103,17 @@ class GridBuilder
         throw new \Exception("Column named {$name} not found.");
     }
 
+    public function removeColumn(string $name): self
+    {
+        foreach ($this->columns as $key => $column) {
+            if ($column->name === $name) {
+                unset($this->columns[$key]);
+            }
+        }
+
+        return $this;
+    }
+
     public function addFilter(string $formFieldName, callable $callback): self
     {
         $this->filters[] = new Filter($formFieldName, $callback);
