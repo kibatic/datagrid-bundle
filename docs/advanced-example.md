@@ -13,25 +13,25 @@
         $form = $this->createForm(BookFiltersType::class)
             ->handleRequest($request);
 
+        $qb = $repository->createQueryBuilder('b')
+            ->leftJoin('b.tags', 't')
+            ->addSelect('count(t) as tagsCount')
+            ->where('b.published = true')
+        ;
+
         $grid = $gridBuilder
-            ->create(
-                $repository->createQueryBuilder('b')->where('b.published = true'),
-                $request,
-                $form
-            )
+            ->initialize($request, $qb, $form)
             ->setTheme(Theme::BOOTSTRAP4_SONATA) // default theme is Bootstrap 5
             ->addColumn(
                 'ID',
                 'id', // first way of getting the value, using a string accessor
-                null,
-                ['col_class' => 'col-md-1'],
-                't.id'
+                templateParameters: ['col_class' => 'col-md-1'],
+                sortable: 't.id'
             )
             ->addColumn(
                 'Title',
                 fn(Book $book) => $book->getTitle(), // second way using a callable returning wanted value
-                null,
-                ['truncate' => 30]
+                templateParameters: ['truncate' => 30]
             )
             ->addColumn(
                 'Created at',
@@ -43,29 +43,34 @@
                 'Promoted',
                 fn(Book $book) => $book->isPromoted(),
                 Template::BOOLEAN,
-                [],
-                't.promoted'
+                sortable: 't.promoted'
             )
             ->addColumn(
                 'Editor',
                 fn(Book $book) => $book->getEditor()->getName(),
                 Template::BOOLEAN,
-                [],
-                'editor',
-                't.editor.name',
+                sortable: 'editor', // The name of the sort option in the query can be customized
+                sortableQuery: 't.editor.name', // and then you can specify what will actually be used in the query to sort
             )
             ->addColumn(
                 'Spell checked At',
                 fn(Book $book) => $book->getSpellCheckedAt(),
                 Template::DATETIME,
-                [],
-                'spellCheckedAt',
-                function (QueryBuilder $qb, string $direction)  {
+                sortable: 'spellCheckedAt',
+                sortableQuery: function (QueryBuilder $qb, string $direction)  { // You can also work with the QueryBuilder directly
                     // ORDER BY NULLS LAST does not exist in vanilla doctrine
                     $qb->addSelect('CASE WHEN t.spellCheckedAt IS NULL THEN 1 ELSE 0 END as HIDDEN spellCheckedAtIsNull');
                     $qb->addOrderBy( "spellCheckedAtIsNull", $direction === 'ASC' ? 'DESC': 'ASC');
                     $qb->addOrderBy( "t.spellCheckedAt", $direction);
                 }
+            )
+            ->addColumn(
+                'Tags',
+                // You can access extra select data too
+                value: 'tagsCount', 
+                // If you want to use a callback, read the value from the second argument
+                value: fn(Book $book, array $extra) => $extra['tagsCount'],
+                sortable: 'tagsCount'
             )
             ->addColumn(
                 'Actions',

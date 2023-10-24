@@ -3,6 +3,7 @@
 namespace Kibatic\DatagridBundle\Grid;
 
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class Column
@@ -30,7 +31,7 @@ class Column
         $this->sortableQuery = $sortableQuery;
     }
 
-    public function getTemplate(?object $entity = null): string
+    public function getTemplate(null|object|array $entity = null): string
     {
         if ($this->template !== null) {
             return $this->template;
@@ -43,14 +44,27 @@ class Column
         return Template::TEXT;
     }
 
-    public function getValue(object $entity)
+    public function getValue(object|array $entity)
     {
-        if (is_callable($this->value)) {
-            $valueCallback = $this->value;
-            return $valueCallback($entity);
+        if (is_array($entity)) {
+            $extra = $entity;
+            $entity = $entity[0];
         }
 
-        return (PropertyAccess::createPropertyAccessor())->getValue($entity, $this->value);
+        if (is_callable($this->value)) {
+            $valueCallback = $this->value;
+            return $valueCallback($entity, $extra ?? []);
+        }
+
+        try {
+            return (PropertyAccess::createPropertyAccessor())->getValue($entity, $this->value);
+        } catch (NoSuchPropertyException $e) {
+            if (isset($extra)) {
+                return (PropertyAccess::createPropertyAccessor())->getValue($extra, "[{$this->value}]");
+            }
+
+            throw $e;
+        }
     }
 
     public function getTemplateParameter(string $parameterName, $defaultValue = null)

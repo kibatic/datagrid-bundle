@@ -64,13 +64,14 @@ class ProjectController extends AbstractController
             ->orderBy('p.createdAt', 'DESC');
         ;
         $grid = $gridBuilder
-            ->create($queryBuilder, $request)
-            ->setTheme(Theme::BOOTSTRAP5)
+            ->initialize($request, $queryBuilder)
+            ->setTheme(Theme::BOOTSTRAP5) // optional, it's the default value
             ->addColumn('Name', 'name')
             ->addColumn(
                 'Created at',
                 'createdAt',
-                Template::DATETIME
+                Template::DATETIME,
+                sortable: 'createdAt'
             )
             ->getGrid()
         ;
