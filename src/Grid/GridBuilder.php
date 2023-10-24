@@ -36,7 +36,15 @@ class GridBuilder
         $this->itemsPerPage = $params->get('knp_paginator.page_limit') ?? 10;
     }
 
+    /**
+     * @deprecated
+     */
     public function create(QueryBuilder $queryBuilder, Request $request, FormInterface $filtersForm = null): self
+    {
+        return $this->initialize($request, $queryBuilder, $filtersForm);
+    }
+
+    public function initialize(Request $request, QueryBuilder $queryBuilder, FormInterface $filtersForm = null): self
     {
         $this->queryBuilder = $queryBuilder;
         $this->request = $request;
