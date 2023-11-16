@@ -57,8 +57,6 @@ class Grid
 
     public function getRowAttributes($item, bool $keepAsArray = false): null|array|string
     {
-        dump($this->rowAttributesCallback);
-
         if (!is_callable($this->rowAttributesCallback)) {
             return null;
         }
