@@ -53,7 +53,7 @@
         </thead>
         <tbody>
         {% for item in grid.pagination %}
-            <tr>
+            <tr{{ grid.rowAttributes(item)|raw }}>
                 {% if grid.hasBatchActions %}
                     <td>
                         <input type="checkbox" name="ids[]" value="{{ item.id }}" />

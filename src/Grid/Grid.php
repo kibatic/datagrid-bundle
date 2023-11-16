@@ -21,11 +21,13 @@ class Grid
         PaginationInterface $pagination,
         string $theme,
         array $batchActions = [],
+        ?callable $rowAttributesCallback = null
     ) {
         $this->columns = $columns;
         $this->pagination = $pagination;
         $this->batchActions = $batchActions;
         $this->theme = $theme;
+        $this->rowAttributesCallback = $rowAttributesCallback;
     }
 
     public function getColumns(): array
@@ -55,6 +57,8 @@ class Grid
 
     public function getRowAttributes($item, bool $keepAsArray = false): null|array|string
     {
+        dump($this->rowAttributesCallback);
+
         if (!is_callable($this->rowAttributesCallback)) {
             return null;
         }
