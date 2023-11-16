@@ -16,6 +16,7 @@ class GridBuilder
     private ?Request $request;
     private ?FormInterface $filtersForm;
     private ?int $itemsPerPage;
+    private $rowAttributesCallback = null;
 
     /**
      * @var array|Column[]
@@ -177,24 +178,6 @@ class GridBuilder
         }
     }
 
-    public function getGrid(): Grid
-    {
-        if ($this->grid === null) {
-            $this->applySort();
-            $this->applyFilters();
-
-            $pagination = $this->paginator->paginate(
-                $this->queryBuilder->getQuery(),
-                $this->request->query->getInt('page', 1),
-                $this->itemsPerPage
-            );
-
-            $this->grid = new Grid($this->columns, $pagination, $this->theme, $this->batchActions);
-        }
-
-        return $this->grid;
-    }
-
     public function addBatchAction(string $id, string $label, string $url): self
     {
         $this->batchActions[] = [
@@ -211,5 +194,36 @@ class GridBuilder
         $this->itemsPerPage = $itemsPerPage;
 
         return $this;
+    }
+
+    public function setRowAttributesCallback(callable $callback): self
+    {
+        $this->rowAttributesCallback = $callback;
+
+        return $this;
+    }
+
+    public function getGrid(): Grid
+    {
+        if ($this->grid === null) {
+            $this->applySort();
+            $this->applyFilters();
+
+            $pagination = $this->paginator->paginate(
+                $this->queryBuilder->getQuery(),
+                $this->request->query->getInt('page', 1),
+                $this->itemsPerPage
+            );
+
+            $this->grid = new Grid(
+                $this->columns,
+                $pagination,
+                $this->theme,
+                $this->batchActions,
+                $this->rowAttributesCallback
+            );
+        }
+
+        return $this->grid;
     }
 }
