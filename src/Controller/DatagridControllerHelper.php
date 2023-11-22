@@ -6,7 +6,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 trait DatagridControllerHelper
 {
-    public function createFilterFormBuilder(string $name = '', string $method = 'GET', bool $csrfProtection = false): FormBuilderInterface
+    public function createFilterFormBuilder(string $name = 'filters', string $method = 'GET', bool $csrfProtection = false): FormBuilderInterface
     {
         return $this->container->get('form.factory')->createNamedBuilder($name, options: [
             'method' => $method,
