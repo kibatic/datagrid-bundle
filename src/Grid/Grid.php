@@ -2,6 +2,7 @@
 
 namespace Kibatic\DatagridBundle\Grid;
 
+use Kibatic\DatagridBundle\Twig\HtmlExtension;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 
 class Grid
@@ -21,7 +22,7 @@ class Grid
         PaginationInterface $pagination,
         string $theme,
         array $batchActions = [],
-        ?callable $rowAttributesCallback = null
+        ?callable $rowAttributesCallback = null,
     ) {
         $this->columns = $columns;
         $this->pagination = $pagination;
@@ -72,31 +73,6 @@ class Grid
             return $attributes;
         }
 
-        return self::attributesToHtml($attributes);
-    }
-
-    private static function attributesToHtml(array $attributes): string
-    {
-        return array_reduce(
-            array_keys($attributes),
-            function (string $carry, string $key) use ($attributes) {
-                $value = $attributes[$key];
-
-                if (!\is_scalar($value) && null !== $value) {
-                    throw new \LogicException(sprintf('A "%s" prop was passed when creating the component. No matching "%s" property or mount() argument was found, so we attempted to use this as an HTML attribute. But, the value is not a scalar (it\'s a %s). Did you mean to pass this to your component or is there a typo on its name?', $key, $key, get_debug_type($value)));
-                }
-
-                if (null === $value) {
-                    throw new \Exception('Passing "null" as an attribute value is forbidden');
-                }
-
-                return match ($value) {
-                    true => "{$carry} {$key}",
-                    false => $carry,
-                    default => sprintf('%s %s="%s"', $carry, $key, $value),
-                };
-            },
-            ''
-        );
+        return HtmlExtension::attributesToHtml($attributes);
     }
 }
