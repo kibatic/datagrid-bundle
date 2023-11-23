@@ -28,6 +28,8 @@ class GridBuilder
     private array $filters = [];
     private array $batchActions = [];
     private ?string $theme = '@KibaticDatagrid/theme/bootstrap5';
+    private ?string $explicitRouteName = null;
+    private array $explicitRouteParams = [];
 
     private ?Grid $grid;
 
@@ -196,6 +198,14 @@ class GridBuilder
         return $this;
     }
 
+    public function setExplicitRoute(string $routeName, array $routeParams = []): self
+    {
+        $this->explicitRouteName = $routeName;
+        $this->explicitRouteParams = $routeParams;
+
+        return $this;
+    }
+
     public function setRowAttributesCallback(callable $callback): self
     {
         $this->rowAttributesCallback = $callback;
@@ -214,6 +224,14 @@ class GridBuilder
                 $this->request->query->getInt('page', 1),
                 $this->itemsPerPage
             );
+
+            if ($this->explicitRouteName) {
+                $pagination->setUsedRoute($this->explicitRouteName);
+
+                foreach ($this->explicitRouteParams as $key => $value) {
+                    $pagination->setParam($key, $value);
+                }
+            }
 
             $this->grid = new Grid(
                 $this->columns,

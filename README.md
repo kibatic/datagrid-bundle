@@ -110,6 +110,8 @@ knp_paginator:
     page_limit: 20   
 ```
 
+If you're using a datagrid inside a live component (symfony ux), [you'll need to do this](docs/advanced-example.md).
+
 Requirements
 ------------
 
