@@ -12,6 +12,7 @@ class Grid
      */
     private array $columns;
     private array $batchActions;
+    private string $batchMethod;
     private string $theme;
     private $rowAttributesCallback = null;
 
@@ -22,11 +23,13 @@ class Grid
         PaginationInterface $pagination,
         string $theme,
         array $batchActions = [],
+        string $batchMethod = 'POST',
         ?callable $rowAttributesCallback = null,
     ) {
         $this->columns = $columns;
         $this->pagination = $pagination;
         $this->batchActions = $batchActions;
+        $this->batchMethod = $batchMethod;
         $this->theme = $theme;
         $this->rowAttributesCallback = $rowAttributesCallback;
     }
@@ -49,6 +52,16 @@ class Grid
     public function hasBatchActions(): bool
     {
         return !empty($this->batchActions);
+    }
+
+    public function getBatchMethod(): string
+    {
+        return $this->batchMethod;
+    }
+
+    public function getBatchActionsTokenId(): string
+    {
+        return json_encode($this->getBatchActions());
     }
 
     public function getTheme(): string

@@ -2,7 +2,8 @@
 
 {% if grid.pagination.totalItemCount > 0 %}
     {% if grid.hasBatchActions %}
-        <form name="datagrid-batch-action" method="POST" action="{{ grid.batchActions[0].url }}">
+        <form name="datagrid-batch-action" method="{{ grid.batchMethod }}" action="{{ grid.batchActions[0].url }}">
+            <input type="hidden" name="_token" value="{{ csrf_token(grid.batchActionsTokenId) }}">
     {% endif %}
 
     <table class="{% block grid_table_class %}table table-bordered table-striped table-hover{% endblock %}">
@@ -12,6 +13,7 @@
                 <th>
                     <input type="checkbox" data-check-all title="{{ 'Select all'|trans({}, 'KibaticDatagridBundle') }}" />
                     <script>
+                        {# TODO: convertir en controller stimulus pour que ça soit compatible avec Turbo Drive #}
                         document.addEventListener("DOMContentLoaded", () => {
                             const batchForm = document.querySelector('form[name="datagrid-batch-action"]')
                             const checkboxes = batchForm.querySelectorAll('input[type="checkbox"]')
@@ -71,15 +73,17 @@
     <div class="clearfix">
         {% if grid.hasBatchActions %}
             <div class="float-start">
-                {{ 'Batch action'|trans({}, 'KibaticDatagridBundle') }}
-
-                <select name="batch_action" onchange="this.closest('form').action = this.value" style="width: auto; height: auto">
-                    {% for batchAction in grid.batchActions %}
-                        <option value="{{ batchAction.url }}">{{ batchAction.label }}</option>
-                    {% endfor %}
-                </select>
-
-                <input type="submit" class="btn btn-small btn-primary" value="OK">
+                <div class="input-group">
+                    <label class="input-group-text" for="batch-select">
+                        {{ 'Batch action'|trans({}, 'KibaticDatagridBundle') }}
+                    </label>
+                    <select onchange="this.closest('form').action = this.value" class="form-select" id="batch-select">
+                        {% for batchAction in grid.batchActions %}
+                            <option value="{{ batchAction.url }}">{{ batchAction.label }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="submit" class="btn btn-small btn-primary" value="OK">
+                </div>
             </div>
         {% endif %}
 

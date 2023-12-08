@@ -27,6 +27,7 @@ class GridBuilder
      */
     private array $filters = [];
     private array $batchActions = [];
+    private ?string $batchMethod = 'POST';
     private ?string $theme = '@KibaticDatagrid/theme/bootstrap5';
     private ?string $explicitRouteName = null;
     private array $explicitRouteParams = [];
@@ -191,6 +192,13 @@ class GridBuilder
         return $this;
     }
 
+    public function setBatchMethod(string $method): self
+    {
+        $this->batchMethod = $method;
+
+        return $this;
+    }
+
     public function setItemsPerPage(?int $itemsPerPage): self
     {
         $this->itemsPerPage = $itemsPerPage;
@@ -238,6 +246,7 @@ class GridBuilder
                 $pagination,
                 $this->theme,
                 $this->batchActions,
+                $this->batchMethod,
                 $this->rowAttributesCallback
             );
         }
