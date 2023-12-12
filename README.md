@@ -129,14 +129,13 @@ If you're using a datagrid inside a live component (symfony ux), [you'll need to
 Requirements
 ------------
 
-- Symfony 4.4 or more
-- PHP 7.4 or more
+- Symfony 6
+- PHP 8.2
 - Doctrine ORM
 
 Roadmap
 -------
 
 - Adding a Flex recipe
-- Upgrading to PHP 8
 - Remove Bootstrap 4 and Sonata variant
 - More column types and template options ?
