@@ -27,6 +27,20 @@ Quick start
 composer require kibatic/datagrid-bundle
 ```
 
+Add this to your `assets/controllers.json` :
+
+```json
+{
+    "controllers": {
+        "@kibatic/datagrid-bundle": {
+            "checker": {
+                "enabled": true,
+                "fetch": "eager"
+            }
+        }
+}
+```
+
 You'll most likely also need to enable this twig function : https://twig.symfony.com/doc/2.x/functions/template_from_string.html
 
 ### Basic usage
@@ -124,6 +138,5 @@ Roadmap
 
 - Adding a Flex recipe
 - Upgrading to PHP 8
-- Adding Bootstrap 5 theme
-- Use Symfony UX
+- Remove Bootstrap 4 and Sonata variant
 - More column types and template options ?
