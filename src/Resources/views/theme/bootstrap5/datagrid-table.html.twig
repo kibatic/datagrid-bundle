@@ -22,17 +22,19 @@
                 {% endif %}
 
                 <th {% if th_class is not empty %}class="{{ th_class }}"{% endif %}>
-                    {% if column.sortable is not null %}
-                        {% set sortUrl = path(
-                            grid.pagination.route,
-                            grid.pagination.params|merge({
-                                'sort_by': column.sortable,
-                                'sort_order': app.request.get('sort_order') == 'ASC' ? 'DESC' : 'ASC'
-                            })
-                        ) %}
-                        <a href="{{ sortUrl }}" title="{{ 'Sort'|trans({}, 'KibaticDatagridBundle') }}">{{ column.name }}</a>
-                    {% else %}
-                        {{ column.name }}
+                    {% if not (column.name starts with '_') %}
+                        {% if column.sortable is not null %}
+                            {% set sortUrl = path(
+                                grid.pagination.route,
+                                grid.pagination.params|merge({
+                                    'sort_by': column.sortable,
+                                    'sort_order': app.request.get('sort_order') == 'ASC' ? 'DESC' : 'ASC'
+                                })
+                            ) %}
+                            <a href="{{ sortUrl }}" title="{{ 'Sort'|trans({}, 'KibaticDatagridBundle') }}">{{ column.name }}</a>
+                        {% else %}
+                            {{ column.name }}
+                        {% endif %}
                     {% endif %}
                 </th>
             {% endfor %}
