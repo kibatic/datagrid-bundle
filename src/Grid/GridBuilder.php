@@ -15,6 +15,7 @@ class GridBuilder
     private QueryBuilder $queryBuilder;
     private ?Request $request;
     private ?FormInterface $filtersForm;
+    private ?int $defaultItemsPerPage;
     private ?int $itemsPerPage;
     private $rowAttributesCallback = null;
 
@@ -37,7 +38,7 @@ class GridBuilder
     public function __construct(PaginatorInterface $paginator, ParameterBagInterface $params)
     {
         $this->paginator = $paginator;
-        $this->itemsPerPage = $params->get('knp_paginator.page_limit') ?? 10;
+        $this->defaultItemsPerPage = $params->get('knp_paginator.page_limit') ?? 10;
     }
 
     /**
@@ -50,15 +51,27 @@ class GridBuilder
 
     public function initialize(Request $request, QueryBuilder $queryBuilder, FormInterface $filtersForm = null): self
     {
-        $this->queryBuilder = $queryBuilder;
         $this->request = $request;
+        $this->queryBuilder = $queryBuilder;
         $this->filtersForm = $filtersForm;
 
-        $this->grid = null;
-        $this->columns = [];
-        $this->filters = [];
+        $this->reset();
 
         return $this;
+    }
+
+    public function reset()
+    {
+        $this->itemsPerPage = $this->defaultItemsPerPage;
+        $this->rowAttributesCallback = null;
+        $this->columns = [];
+        $this->filters = [];
+        $this->batchActions = [];
+        $this->batchMethod = 'POST';
+        $this->theme = '@KibaticDatagrid/theme/bootstrap5';
+        $this->explicitRouteName = null;
+        $this->explicitRouteParams = [];
+        $this->grid = null;
     }
 
     public function setTheme(string $theme): self
