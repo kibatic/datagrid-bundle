@@ -1,0 +1,27 @@
+{
+    "name": "@kibatic/datagrid-bundle",
+    "description": "",
+    "license": "MIT",
+    "version": "0.0.1",
+    "main": "dist/checker_controller.js",
+    "symfony": {
+        "controllers": {
+            "checker": {
+                "main": "dist/checker_controller.js",
+                "name": "checker",
+                "webpackMode": "eager",
+                "fetch": "eager",
+                "enabled": true
+            }
+        },
+        "importmap": {
+            "@hotwired/stimulus": "^3.0.0"
+        }
+    },
+    "peerDependencies": {
+        "@hotwired/stimulus": "^3.0.0"
+    },
+    "devDependencies": {
+        "@hotwired/stimulus": "^3.0.0"
+    }
+}

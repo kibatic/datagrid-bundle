@@ -6,26 +6,12 @@
             <input type="hidden" name="_token" value="{{ csrf_token(grid.batchActionsTokenId) }}">
     {% endif %}
 
-    <table class="{% block grid_table_class %}table table-bordered table-striped table-hover{% endblock %}">
+    <table class="{% block grid_table_class %}table table-bordered table-striped table-hover{% endblock %}" {% if grid.hasBatchActions %}data-controller="checker"{% endif %}>
         <thead>
         <tr{% if header_tr_class is not empty %} class="{{ header_tr_class }}"{% endif %}>
             {% if grid.hasBatchActions %}
                 <th>
-                    <input type="checkbox" data-check-all title="{{ 'Select all'|trans({}, 'KibaticDatagridBundle') }}" />
-                    <script>
-                        {# TODO: convertir en controller stimulus pour que ça soit compatible avec Turbo Drive #}
-                        document.addEventListener("DOMContentLoaded", () => {
-                            const batchForm = document.querySelector('form[name="datagrid-batch-action"]')
-                            const checkboxes = batchForm.querySelectorAll('input[type="checkbox"]')
-                            const metaCheckboxes = batchForm.querySelectorAll('input[data-check-all]')
-
-                            metaCheckboxes.forEach(metaCheckbox =>
-                                metaCheckbox.addEventListener("change", event =>
-                                    checkboxes.forEach(checkbox => checkbox.checked = event.target.checked)
-                                )
-                            )
-                        })
-                    </script>
+                    <input type="checkbox" data-checker-target="master" title="{{ 'Select all'|trans({}, 'KibaticDatagridBundle') }}" />
                 </th>
             {% endif %}
             {% for column in grid.columns %}
@@ -57,7 +43,7 @@
             <tr{{ grid.rowAttributes(item)|raw }}>
                 {% if grid.hasBatchActions %}
                     <td>
-                        <input type="checkbox" name="ids[]" value="{{ item.id }}" />
+                        <input type="checkbox" name="ids[]" value="{{ item.id }}" data-checker-target="checkbox" />
                     </td>
                 {% endif %}
                 {% for column in grid.columns %}
