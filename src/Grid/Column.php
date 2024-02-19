@@ -56,6 +56,10 @@ class Column
             return $valueCallback($entity, $extra ?? []);
         }
 
+        if ($this->value === null) {
+            return isset($extra) ? [$entity, $extra] : $entity;
+        }
+
         try {
             return (PropertyAccess::createPropertyAccessor())->getValue($entity, $this->value);
         } catch (NoSuchPropertyException $e) {
