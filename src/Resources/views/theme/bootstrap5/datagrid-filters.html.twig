@@ -1,5 +1,10 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
+
+{% for field in form %}
+    {% if field.vars.block_prefixes[0] != 'button' %}
+        {{ form_row(field) }}
+    {% endif %}
+{% endfor %}
 
 <div class="row">
     <div class="col text-end">
@@ -17,6 +22,14 @@
                     {{ 'Reset'|trans({}, 'KibaticDatagridBundle') }}
                 </a>
             </li>
+
+            {% for field in form %}
+                <li class="list-inline-item">
+                    {% if field.vars.block_prefixes[0] == 'button' %}
+                        {{ form_row(field) }}
+                    {% endif %}
+                </li>
+            {% endfor %}
 
             <li class="list-inline-item">
                 <button type="submit" class="btn btn-primary">
