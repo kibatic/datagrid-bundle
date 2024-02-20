@@ -234,9 +234,9 @@ class GridBuilder
         return $this;
     }
 
-    public function getGrid(): Grid
+    public function getGrid(bool $forceRecreate = false): Grid
     {
-        if ($this->grid === null) {
+        if ($this->grid === null || $forceRecreate) {
             $this->applySort();
             $this->applyFilters();
 
