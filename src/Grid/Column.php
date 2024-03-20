@@ -2,7 +2,6 @@
 
 namespace Kibatic\DatagridBundle\Grid;
 
-use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
