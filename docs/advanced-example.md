@@ -43,14 +43,13 @@
                 'Promoted',
                 fn(Book $book) => $book->isPromoted(),
                 Template::BOOLEAN,
-                sortable: 't.promoted'
+                sortable: 'b.promoted'
             )
             ->addColumn(
                 'Editor',
                 fn(Book $book) => $book->getEditor()->getName(),
-                Template::BOOLEAN,
                 sortable: 'editor', // The name of the sort option in the query can be customized
-                sortableQuery: 't.editor.name', // and then you can specify what will actually be used in the query to sort
+                sortableQuery: 'b.editor.name', // and then you can specify what will actually be used in the query to sort
             )
             ->addColumn(
                 'Spell checked At',
@@ -68,7 +67,7 @@
                 'Tags',
                 // You can access extra select data too
                 value: 'tagsCount', 
-                // If you want to use a callback, read the value from the second argument
+                // If you want to use a callback, read the value from the second argument to get any extra select data
                 value: fn(Book $book, array $extra) => $extra['tagsCount'],
                 sortable: 'tagsCount'
             )
@@ -138,7 +137,7 @@
     public function batchDelete(Request $request): Response
     {
         $request->get('ids');
-        // etc...
+        // etc.
     }
 ```
 
