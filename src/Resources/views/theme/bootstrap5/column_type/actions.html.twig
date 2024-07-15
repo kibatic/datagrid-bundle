@@ -5,7 +5,7 @@
     {% if action.visible is not defined or action.visible %}
         <li class="list-inline-item">
             {% if action.template is defined %}
-                {% include action.template %}
+                {% include action.template with action %}
             {% else %}
                 <a href="{{ action.url }}" class="btn btn-{{ action.btn_size|default('sm') }} btn-{{ action.btn_type|default('secondary') }}">
                     {% if action.icon_class is defined %}<span class="{{ action.icon_class }}"></span>{% endif %}
