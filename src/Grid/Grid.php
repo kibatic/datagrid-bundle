@@ -4,6 +4,7 @@ namespace Kibatic\DatagridBundle\Grid;
 
 use Kibatic\DatagridBundle\Twig\HtmlExtension;
 use Knp\Component\Pager\Pagination\PaginationInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class Grid
 {
@@ -16,10 +17,12 @@ class Grid
     private string $theme;
     private $rowAttributesCallback = null;
 
+    private Request $request;
     private PaginationInterface $pagination;
 
     public function __construct(
         array $columns,
+        Request $request,
         PaginationInterface $pagination,
         string $theme,
         array $batchActions = [],
@@ -27,6 +30,7 @@ class Grid
         ?callable $rowAttributesCallback = null,
     ) {
         $this->columns = $columns;
+        $this->request = $request;
         $this->pagination = $pagination;
         $this->batchActions = $batchActions;
         $this->batchMethod = $batchMethod;
@@ -37,6 +41,11 @@ class Grid
     public function getColumns(): array
     {
         return $this->columns;
+    }
+
+    public function getRequest(): Request
+    {
+        return $this->request;
     }
 
     public function getPagination(): PaginationInterface

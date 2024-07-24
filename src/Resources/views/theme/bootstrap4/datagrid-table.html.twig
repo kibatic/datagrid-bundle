@@ -36,10 +36,10 @@
                 <th {% if th_class is not empty %}class="{{ th_class }}"{% endif %}>
                     {% if column.sortable is not null %}
                         {% set sortUrl = path(
-                            app.request.attributes.get('_route'),
-                            app.request.attributes.get('_route_params')|merge(app.request.query.all)|merge({
+                            grid.request.attributes.get('_route'),
+                            grid.request.attributes.get('_route_params')|merge(grid.request.query.all)|merge({
                                 'sort_by': column.sortable,
-                                'sort_order': app.request.get('sort_order') == 'ASC' ? 'DESC' : 'ASC',
+                                'sort_order': grid.request.get('sort_order') == 'ASC' ? 'DESC' : 'ASC',
                                 'page': null
                             })
                         ) %}

@@ -256,6 +256,7 @@ class GridBuilder
 
             $this->grid = new Grid(
                 $this->columns,
+                $this->request,
                 $pagination,
                 $this->theme,
                 $this->batchActions,
