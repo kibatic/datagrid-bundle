@@ -177,10 +177,12 @@ class GridBuilder
         }
 
         foreach ($this->filters as $filter) {
-            $filterField = $this->filtersForm->get($filter->formFieldName);
+            $filterField = $this->filtersForm->has($filter->formFieldName) ?
+                $this->filtersForm->get($filter->formFieldName) :
+                null;
 
             if ($filterField === null) {
-                throw new \Exception("Form field named {$filter->formFieldName} not found in the filters form of the datagrid.");
+                throw new \Exception("Unable to apply datagrid filter : \"{$filter->formFieldName}\".\nThe form must contains a field also named \"{$filter->formFieldName}\" but it doesn't.");
             }
 
             $filterValue = $filterField->getData();
