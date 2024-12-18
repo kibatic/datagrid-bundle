@@ -33,7 +33,7 @@
                             ) %}
                             <a href="{{ sortUrl }}" title="{{ 'Sort'|trans({}, 'KibaticDatagridBundle') }}">{{ column.name }}</a>
                         {% else %}
-                            {{ column.name }}
+                            {{ column.name|trans }}
                         {% endif %}
                     {% endif %}
                 </th>
