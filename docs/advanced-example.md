@@ -115,7 +115,7 @@
             ->addFilter(
                 'message',
                 fn (QueryBuilder $qb, $formValue) =>
-                    $qb->andWhere($qb->expr()->like('t.message', $qb->expr()->literal("%$formValue%")))
+                    $qb->andWhere($qb->expr()->like('LOWER(t.message)', $qb->expr()->literal(strtolower("%$formValue%")=)))
             )
             ->addFilter(
                 'promoted',
