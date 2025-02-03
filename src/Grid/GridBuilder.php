@@ -90,7 +90,8 @@ class GridBuilder
         string $template = null,
         array $templateParameters = [],
         string $sortable = null,
-        callable|string|null $sortableQuery = null
+        callable|string|null $sortableQuery = null,
+        bool $enabled = true,
     ): self {
         $this->columns[] = new Column(
             $name,
@@ -98,7 +99,8 @@ class GridBuilder
             $template,
             $templateParameters,
             $sortable,
-            $sortableQuery
+            $sortableQuery,
+            $enabled,
         );
 
         return $this;
@@ -106,7 +108,7 @@ class GridBuilder
     
     public function getColumns(): array
     {
-        return $this->columns;
+        return array_filter($this->columns, fn(Column $column) => $column->enabled);
     }
 
     public function getColumn(string $name): Column
@@ -131,9 +133,20 @@ class GridBuilder
         return $this;
     }
 
-    public function addFilter(string $formFieldName, callable $callback): self
+    public function addFilter(string $formFieldName, callable $callback, bool $enabled = true): self
     {
-        $this->filters[] = new Filter($formFieldName, $callback);
+        $this->filters[] = new Filter($formFieldName, $callback, $enabled);
+
+        return $this;
+    }
+
+    public function removeFilter(string $formFieldName): self
+    {
+        foreach ($this->filters as $key => $filter) {
+            if ($filter->formFieldName === $formFieldName) {
+                unset($this->filters[$key]);
+            }
+        }
 
         return $this;
     }
@@ -149,6 +162,10 @@ class GridBuilder
 
         // check if the sortBy param is configured
         foreach ($this->columns as $column) {
+            if (!$column->enabled) {
+                continue;
+            }
+
             if ($column->sortable !== $sortBy) {
                 continue;
             }
@@ -177,12 +194,14 @@ class GridBuilder
         }
 
         foreach ($this->filters as $filter) {
-            $filterField = $this->filtersForm->has($filter->formFieldName) ?
-                $this->filtersForm->get($filter->formFieldName) :
-                null;
+            if (!$filter->enabled) {
+                continue;
+            }
+
+            $filterField = $this->filtersForm->get($filter->formFieldName);
 
             if ($filterField === null) {
-                throw new \Exception("Unable to apply datagrid filter : \"{$filter->formFieldName}\".\nThe form must contains a field also named \"{$filter->formFieldName}\" but it doesn't.");
+                throw new \Exception("Form field named {$filter->formFieldName} not found in the filters form of the datagrid.");
             }
 
             $filterValue = $filterField->getData();
@@ -257,7 +276,7 @@ class GridBuilder
             }
 
             $this->grid = new Grid(
-                $this->columns,
+                $this->getColumns(),
                 $this->request,
                 $pagination,
                 $this->theme,

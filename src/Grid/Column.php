@@ -13,6 +13,7 @@ class Column
     public array $templateParameters;
     public ?string $sortable;
     public $sortableQuery;
+    public bool $enabled;
 
     public function __construct(
         string $name,
@@ -20,7 +21,8 @@ class Column
         string $template = null,
         array $templateParameters = [],
         string|array $sortable = null,
-        callable|string|null $sortableQuery = null
+        callable|string|null $sortableQuery = null,
+        bool $enabled = true,
     ) {
         $this->name = $name;
         $this->value = $value ?? fn($item) => $item;
@@ -28,6 +30,7 @@ class Column
         $this->templateParameters = $templateParameters;
         $this->sortable = $sortable;
         $this->sortableQuery = $sortableQuery;
+        $this->enabled = $enabled;
     }
 
     public function getTemplate(null|object|array $entity = null): string
