@@ -151,7 +151,7 @@ class GridBuilder
         return $this;
     }
 
-    private function applySort()
+    private function applySort(): void
     {
         $sortBy = $this->request->get('sort_by');
         $direction = $this->request->get('sort_order', 'ASC');
@@ -185,7 +185,7 @@ class GridBuilder
         }
     }
 
-    private function applyFilters()
+    public function applyFilters(): void
     {
         if (empty($this->filters) ||
             $this->filtersForm === null
@@ -253,6 +253,11 @@ class GridBuilder
         $this->rowAttributesCallback = $callback;
 
         return $this;
+    }
+
+    public function getQueryBuilder(): QueryBuilder
+    {
+        return $this->queryBuilder;
     }
 
     public function getGrid(bool $forceRecreate = false): Grid

@@ -31,7 +31,7 @@
                                     'sort_order': grid.request.get('sort_order') == 'ASC' ? 'DESC' : 'ASC'
                                 })
                             ) %}
-                            <a href="{{ sortUrl }}" title="{{ 'Sort'|trans({}, 'KibaticDatagridBundle') }}">{{ column.name }}</a>
+                            <a href="{{ sortUrl }}" title="{{ 'Sort'|trans({}, 'KibaticDatagridBundle') }}">{{ column.name|trans }}</a>
                         {% else %}
                             {{ column.name|trans }}
                         {% endif %}

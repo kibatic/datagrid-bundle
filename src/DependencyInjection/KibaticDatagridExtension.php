@@ -1,4 +1,5 @@
 <?php
+
 namespace Kibatic\DatagridBundle\DependencyInjection;
 
 use Symfony\Component\AssetMapper\AssetMapperInterface;

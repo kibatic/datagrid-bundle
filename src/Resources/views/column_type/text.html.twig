@@ -2,7 +2,7 @@
 {% set value = truncate == 0 ? value : value|u.truncate(truncate, '...') %}
 
 {% if parameters.escape ?? true %}
-    {{ value }}
+    {{ value|trans }}
 {% else %}
-    {{ value | raw }}
+    {{ value|trans|raw }}
 {% endif %}

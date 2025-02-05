@@ -109,18 +109,20 @@
             )
             ->addFilter(
                 'id',
-                fn (QueryBuilder $qb, $formValue) =>
-                    $qb->andWhere('t.id = :id')->setParameter('id', $formValue)
+                fn (QueryBuilder $qb, $formValue) => $qb
+                    ->andWhere('t.id = :id')->setParameter('id', $formValue)
             )
             ->addFilter(
                 'message',
-                fn (QueryBuilder $qb, $formValue) =>
-                    $qb->andWhere($qb->expr()->like('LOWER(t.message)', $qb->expr()->literal(strtolower("%$formValue%"))))
+                fn (QueryBuilder $qb, $formValue) => $qb
+                    ->andWhere('LOWER(t.message) LIKE LOWER(:message)')
+                    ->setParameter('message', "%$formValue%")
             )
             ->addFilter(
                 'promoted',
-                fn (QueryBuilder $qb, $formValue) =>
-                    $qb->andWhere('t.promoted = :promoted')->setParameter('promoted', $formValue)
+                fn (QueryBuilder $qb, $formValue) => $qb
+                    ->andWhere('t.promoted = :promoted')
+                    ->setParameter('promoted', $formValue)
             )
             ->getGrid()
         ;
