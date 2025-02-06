@@ -8,7 +8,6 @@ namespace <?= $class_data->getNamespace() ?>;
 {
     public function __construct(
         private readonly RequestStack $requestStack,
-        private readonly GridBuilder $gridBuilder,
         private readonly <?= $repository_class ?> $repository,
         private readonly RouterInterface $router,
         PaginatorInterface $paginator,
@@ -34,15 +33,15 @@ namespace <?= $class_data->getNamespace() ?>;
             ->addColumn(
                 new TranslatableMessage('<?= $column['name'] ?>'),
                 '<?= $column['value'] ?>',
-                <?php if ($column['template']): ?>
+<?php if ($column['template']): ?>
                 template: <?= $column['template'] ?>,
-                <?php endif; ?>
+<?php endif; ?>
                 sortable: '<?= $query_entity_alias ?>.<?= $column['value'] ?>'
             )
 <?php endforeach; ?>
             //->addColumn(
             //    new TranslatableMessage('Total'),
-            //    fn(<?= $entity_short_name ?> <?= $entity_var ?>) => <?= $entity_var ?>->getTotal(),
+            //    fn(<?= $entity_short_name ?> $<?= $entity_var ?>) => $<?= $entity_var ?>->getTotal(),
             //)
             //->addColumn(
             //    'Relation',
@@ -73,9 +72,9 @@ namespace <?= $class_data->getNamespace() ?>;
                     ->andWhere(
                         $qb->expr()->orX(
 <?php foreach ($entity_display_fields as $field): ?>
-    <?php if ($field['type'] === 'string'): ?>
+<?php if ($field['type'] === 'string'): ?>
                             $qb->expr()->like('LOWER(<?= $query_entity_alias ?>.<?= $field['fieldName'] ?>)', $qb->expr()->literal(strtolower("%$formValue%"))),
-    <?php endif; ?>
+<?php endif; ?>
 <?php endforeach; ?>
                         )
                     )

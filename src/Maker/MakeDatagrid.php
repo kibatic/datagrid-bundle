@@ -133,7 +133,7 @@ final class MakeDatagrid extends AbstractMaker
 
         foreach ($entityDetails->getDisplayFields() as $field) {
             $columns[] = [
-                'name' => Str::asHumanWords($field['fieldName']),
+                'name' => ucfirst(strtolower(Str::asHumanWords($field['fieldName']))),
                 'value' => $field['fieldName'],
                 'template' => $this->getColumnTemplateByType($field['type']),
             ];
