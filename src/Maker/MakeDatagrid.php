@@ -3,9 +3,12 @@
 namespace Kibatic\DatagridBundle\Maker;
 
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
+use Doctrine\ORM\QueryBuilder;
+use Kibatic\DatagridBundle\Grid\Grid;
 use Kibatic\DatagridBundle\Grid\GridBuilder;
 use Kibatic\DatagridBundle\Grid\Template;
 use Kibatic\UX\Controller\AbstractController;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Bundle\MakerBundle\DependencyBuilder;
 use Symfony\Bundle\MakerBundle\Doctrine\DoctrineHelper;
@@ -24,10 +27,12 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Question\Question;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Attribute\Route;
@@ -36,11 +41,14 @@ use Symfony\Component\Translation\TranslatableMessage;
 use Symfony\Component\Validator\Validation;
 use function Symfony\Component\String\u;
 
+// TODO: ajouter une colonne avec le template entity (sur l'identifier ?)
 final class MakeDatagrid extends AbstractMaker
 {
+    private string $gridBuilderClassName;
+
     public function __construct(
         private DoctrineHelper $entityHelper,
-        private Generator $generator,
+        private FormTypeRenderer $formTypeRenderer,
     ) {
     }
 
@@ -57,17 +65,16 @@ final class MakeDatagrid extends AbstractMaker
     public function configureCommand(Command $command, InputConfiguration $inputConfig): void
     {
         $command
-            ->addArgument('name', InputArgument::REQUIRED, \sprintf('The name of the datagrid class (e.g. <fg=yellow>%sGridBuilder</>)', Str::asClassName(Str::getRandomTerm())))
-            ->addArgument('entity', InputArgument::REQUIRED, 'The name of Entity or fully qualified model class name that the new datagrid will be listing')
+            ->addArgument('entity-class', InputArgument::REQUIRED, 'The name of Entity or fully qualified model class name that the new datagrid will be listing')
         ;
 
-        $inputConfig->setArgumentAsNonInteractive('bound-class');
+        $inputConfig->setArgumentAsNonInteractive('entity-class');
     }
 
     public function interact(InputInterface $input, ConsoleStyle $io, Command $command): void
     {
-        if (null === $input->getArgument('entity')) {
-            $argument = $command->getDefinition()->getArgument('entity');
+        if (null === $input->getArgument('entity-class')) {
+            $argument = $command->getDefinition()->getArgument('entity-class');
 
             $entities = $this->entityHelper->getEntitiesForAutocomplete();
 
@@ -76,14 +83,21 @@ final class MakeDatagrid extends AbstractMaker
             $question->setAutocompleterValues($entities);
             $question->setMaxAttempts(3);
 
-            $input->setArgument('bound-class', $io->askQuestion($question));
+            $input->setArgument('entity-class', $io->askQuestion($question));
         }
+
+        $defaultGridBuilderClass = Str::asClassName(\sprintf('%s GridBuilder', $input->getArgument('entity-class')));
+
+        $this->gridBuilderClassName = $io->ask(
+            \sprintf('Choose a name for your class (e.g. <fg=yellow>%s</>)', $defaultGridBuilderClass),
+            $defaultGridBuilderClass
+        );
     }
 
     public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
         $entityClassDetails = $generator->createClassNameDetails(
-            $input->getArgument('entity'),
+            $input->getArgument('entity-class'),
             'Entity\\'
         );
 
@@ -96,14 +110,19 @@ final class MakeDatagrid extends AbstractMaker
         );
 
         $classData = ClassData::create(
-            class: \sprintf('Datagrid\%s', $input->getArgument('name')),
-            suffix: 'GridBuilder',
+            class: \sprintf('Datagrid\%s', $this->gridBuilderClassName),
+            extendsClass: GridBuilder::class,
             useStatements: [
                 $entityClassDetails->getFullName(),
                 $repositoryClassDetails->getFullName(),
+                Grid::class,
                 GridBuilder::class,
+                PaginatorInterface::class,
+                ParameterBagInterface::class,
+                QueryBuilder::class,
                 RouterInterface::class,
                 Request::class,
+                RequestStack::class,
                 FormInterface::class,
                 Template::class,
                 TranslatableMessage::class,
@@ -120,7 +139,7 @@ final class MakeDatagrid extends AbstractMaker
             ];
         }
 
-        $this->generator->generateClass(
+        $generator->generateClass(
             $classData->getFullClassName(),
             \sprintf('%s/../templates/maker/GridBuilder.tpl.php', \dirname(__DIR__)),
             [
@@ -130,9 +149,19 @@ final class MakeDatagrid extends AbstractMaker
                 'entity_var' => lcfirst($entityClassDetails->getShortName()),
                 'entity_snake_case' => Str::asSnakeCase($entityClassDetails->getShortName()),
                 'query_entity_alias' => strtolower($entityClassDetails->getShortName()[0]),
+                'entity_display_fields' => $entityDetails->getDisplayFields(),
                 'columns' => $columns,
             ]
         );
+
+//        $this->formTypeRenderer->render(
+//            $generator->createClassNameDetails(
+//                "{$entityClassDetails->getRelativeNameWithoutSuffix()}FiltersType",
+//                'Form\\DatagridFilters\\',
+//                'Type'
+//            ),
+//            ['search' => null],
+//        );
 
         $generator->writeChanges();
 

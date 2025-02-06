@@ -1,4 +1,4 @@
-{% if form is defined %}
+{% if form is defined and form != null %}
     {% include grid.theme ~ '/datagrid-filters.html.twig' %}
 {% endif %}
 

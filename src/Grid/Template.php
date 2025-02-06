@@ -8,5 +8,6 @@ class Template
     const DATETIME = 'datetime.html.twig';
     const BOOLEAN = 'boolean.html.twig';
     const ARRAY = 'array.html.twig';
+    const ENTITY = 'entity.html.twig';
     const ACTIONS = 'actions.html.twig';
 }

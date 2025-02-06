@@ -14,6 +14,14 @@ services:
   Kibatic\DatagridBundle\Maker\MakeDatagrid:
     arguments:
       $entityHelper: '@maker.doctrine_helper'
-      $generator: '@maker.generator'
+       $formTypeRenderer: '@maker.renderer.form_type_renderer'
     tags:
       - { name: maker.command }
+
+  Kibatic\DatagridBundle\Twig\Components\DatagridComponent:
+    tags:
+        - twig.component: { key: 'datagrid', template: '@KibaticDatagrid/components/datagrid.html.twig' }
+
+  Kibatic\DatagridBundle\Twig\Components\DatagridFiltersComponent:
+    tags:
+      - twig.component: { key: 'datagrid-filters', template: '@KibaticDatagrid/components/datagrid-filters.html.twig' }

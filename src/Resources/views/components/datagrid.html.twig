@@ -1,0 +1,7 @@
+<div{{ attributes }}>
+    {% if grid is defined and form is defined %}
+        {% include grid.theme ~ '/datagrid.html.twig' %}
+    {% elseif grid is defined and form is not defined %}
+        {% include grid.theme ~ '/datagrid-table.html.twig' %}
+    {% endif %}
+</div>

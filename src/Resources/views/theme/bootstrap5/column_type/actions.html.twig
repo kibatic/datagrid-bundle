@@ -7,10 +7,15 @@
             {% if action.template is defined %}
                 {% include action.template with action %}
             {% else %}
-                <a href="{{ action.url }}" class="btn btn-{{ action.btn_size|default('sm') }} btn-{{ action.btn_type|default('secondary') }}">
-                    {% if action.icon_class is defined %}<span class="{{ action.icon_class }}"></span>{% endif %}
+                <twig:btn
+                    href="{{ action.url }}"
+                    type="{{ action.btn_type|default('secondary') }}"
+                    size="{{ action.btn_size|default('sm') }}"
+                    icon="{{ action.icon_class|default('') }}"
+                    modal="{{ action.modal is defined and action.modal }}"
+                >
                     {{ action.name|trans }}
-                </a>
+                </twig:btn>
             {% endif %}
         </li>
     {% endif %}
