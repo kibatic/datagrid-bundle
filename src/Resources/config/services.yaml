@@ -14,7 +14,7 @@ services:
   Kibatic\DatagridBundle\Maker\MakeDatagrid:
     arguments:
       $entityHelper: '@maker.doctrine_helper'
-       $formTypeRenderer: '@maker.renderer.form_type_renderer'
+      $formTypeRenderer: '@maker.renderer.form_type_renderer'
     tags:
       - { name: maker.command }
 
