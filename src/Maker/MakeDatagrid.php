@@ -115,7 +115,6 @@ final class MakeDatagrid extends AbstractMaker
             useStatements: [
                 $entityClassDetails->getFullName(),
                 $repositoryClassDetails->getFullName(),
-                Grid::class,
                 GridBuilder::class,
                 PaginatorInterface::class,
                 ParameterBagInterface::class,
