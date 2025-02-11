@@ -3,7 +3,7 @@ Kibatic Datagrid Bundle
 
 Datagrid bundle for Symfony with the following design philosophy : less magic for more flexibility.
 
-It's not the usual one line datagrid generator, it's a more verbose but we think it's worth it.
+It's not the usual one line datagrid generator, it's a more verbose one but we think it's worth it.
 
 Features
 --------
@@ -12,10 +12,10 @@ Features
 - Pagination
 - Sortable
 - Filterable
-- Actions (simple & batch)
+- Actions (single & batch)
 - Customizable templates
 - Only supports Doctrine ORM
-- Theme (bootstrap 4 and 5)
+- Theme (bootstrap 4 and 5 included)
 
 
 Quick start
@@ -45,6 +45,14 @@ You'll most likely also need to enable this twig function : https://twig.symfony
 
 ### Basic usage
 
+You can simply generate a specialized datagrid builder class skeleton using the make command :
+
+```
+bin/console make:datagrid
+```
+
+Or do everything manually, for example in your controller :
+
 ```php
 <?php
 
@@ -64,7 +72,6 @@ class ProjectController extends AbstractController
 {
     #[Route('/', name: 'app_project_index', methods: ['GET'])]
     public function index(
-        Request $request,
         ProjectRepository $projectRepository,
         GridBuilder $gridBuilder,
     ): Response {
@@ -78,8 +85,7 @@ class ProjectController extends AbstractController
             ->orderBy('p.createdAt', 'DESC');
         ;
         $grid = $gridBuilder
-            ->initialize($request, $queryBuilder)
-            ->setTheme(Theme::BOOTSTRAP5) // optional, it's the default value
+            ->initialize(queryBuilder: $queryBuilder)
             ->addColumn('Name', 'name')
             ->addColumn(
                 'Created at',
@@ -98,7 +104,20 @@ class ProjectController extends AbstractController
 }
 ```
 
-And the associated twig
+Then with Symfony UX handy twig components :
+
+```twig
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Project list</h1>
+
+    <twig:datagrid :grid="grid" />
+{% endblock %}
+```
+
+
+Or a more classic twig approach :
 
 ```twig
 {% extends 'base.html.twig' %}
@@ -114,7 +133,7 @@ And the associated twig
 Documentation
 -------------
 
-More information on [how to generate your datagrid](docs/advanced-example.md).
+You can find a more advanced example on [how to generate your datagrid](docs/advanced-example.md).
 
 If you want to customize the pagination, use the knp paginator configuration.
 
@@ -137,5 +156,5 @@ Roadmap
 -------
 
 - Adding a Flex recipe
-- Remove Bootstrap 4 and Sonata variant
-- More column types and template options ?
+- Remove Bootstrap 4 and Sonata theme
+- More generic column types and template options

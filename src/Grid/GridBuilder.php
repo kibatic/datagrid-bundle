@@ -7,11 +7,10 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class GridBuilder
 {
-    private PaginatorInterface $paginator;
-
     private QueryBuilder $queryBuilder;
     private ?Request $request;
     private ?FormInterface $filtersForm;
@@ -35,10 +34,13 @@ class GridBuilder
 
     private ?Grid $grid;
 
-    public function __construct(PaginatorInterface $paginator, ParameterBagInterface $params)
-    {
+    public function __construct(
+        protected readonly RequestStack $requestStack,
+        protected PaginatorInterface $paginator,
+        ParameterBagInterface $params
+    ) {
         $this->paginator = $paginator;
-        $this->defaultItemsPerPage = $params->get('knp_paginator.page_limit') ?? 10;
+        $this->defaultItemsPerPage = $params->get('knp_paginator.page_limit') ?? 25;
     }
 
     /**
@@ -49,8 +51,14 @@ class GridBuilder
         return $this->initialize($request, $queryBuilder, $filtersForm);
     }
 
-    public function initialize(Request $request, QueryBuilder $queryBuilder, FormInterface $filtersForm = null): self
+    public function initialize(?Request $request = null, QueryBuilder $queryBuilder, FormInterface $filtersForm = null): self
     {
+        $request ??= $this->requestStack->getMainRequest();
+
+        if (!$filtersForm->isSubmitted()) {
+            $filtersForm?->handleRequest($request);
+        }
+
         $this->request = $request;
         $this->queryBuilder = $queryBuilder;
         $this->filtersForm = $filtersForm;
