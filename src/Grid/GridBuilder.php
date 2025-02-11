@@ -51,11 +51,13 @@ class GridBuilder
         return $this->initialize($request, $queryBuilder, $filtersForm);
     }
 
-    public function initialize(?Request $request = null, QueryBuilder $queryBuilder, FormInterface $filtersForm = null): self
+    public function initialize(QueryBuilder $queryBuilder, FormInterface $filtersForm = null, ?Request $request = null): self
     {
         $request ??= $this->requestStack->getMainRequest();
 
-        if (!$filtersForm->isSubmitted()) {
+        if ($filtersForm !== null
+            && !$filtersForm->isSubmitted()
+        ) {
             $filtersForm?->handleRequest($request);
         }
 
