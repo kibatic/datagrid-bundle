@@ -7,16 +7,16 @@ namespace <?= $class_data->getNamespace() ?>;
 <?= $class_data->getClassDeclaration() ?>
 {
     public function __construct(
-        private readonly RequestStack $requestStack,
         private readonly <?= $repository_class ?> $repository,
         private readonly RouterInterface $router,
+        RequestStack $requestStack,
         PaginatorInterface $paginator,
         ParameterBagInterface $params
     ) {
         parent::__construct($paginator, $params);
     }
 
-    public function initialize(Request $request = null, QueryBuilder $queryBuilder = null, FormInterface $filtersForm = null): GridBuilder
+    public function initialize(QueryBuilder $queryBuilder = null, FormInterface $filtersForm = null, Request $request = null): GridBuilder
     {
         // TODO: déplacer ça dans le parent ?
         $request ??= $this->requestStack->getMainRequest();
@@ -27,7 +27,7 @@ namespace <?= $class_data->getNamespace() ?>;
             ->orderBy('<?= $query_entity_alias ?>.id', 'ASC')
         ;
 
-        return parent::initialize($request, $queryBuilder, $filtersForm)
+        return parent::initialize($queryBuilder, $filtersForm, $request)
             ->setItemsPerPage(30)
 <?php foreach ($columns as $column): ?>
             ->addColumn(
