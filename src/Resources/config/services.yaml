@@ -6,11 +6,6 @@ services:
   Kibatic\DatagridBundle\Grid\GridBuilder:
     public: true
 
-  Kibatic\DatagridBundle\Twig\HtmlExtension:
-    public: true
-    tags:
-      - { name: twig.extension }
-
   Kibatic\DatagridBundle\Maker\MakeDatagrid:
     arguments:
       $entityHelper: '@maker.doctrine_helper'
