@@ -9,16 +9,8 @@
 <div class="row">
     <div class="col text-end">
         <ul class="list-inline">
-            {% set cleared_url = '' %}
-            {% if form.vars.method == 'GET' %}
-                {% set cleared_url = path(
-                    grid.request.attributes.get('_route'),
-                    grid.request.attributes.get('_route_params')|merge(grid.request.query.all|filter((v, k) => k != form.vars.name))
-                ) %}
-            {% endif %}
-
             <li class="list-inline-item">
-                <a href="{{ cleared_url }}" class="btn btn-default">
+                <a href="{{ datagrid_reset_url(form) }}" class="btn btn-default">
                     {{ 'Reset'|trans({}, 'KibaticDatagridBundle') }}
                 </a>
             </li>

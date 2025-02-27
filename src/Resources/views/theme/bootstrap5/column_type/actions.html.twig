@@ -13,6 +13,7 @@
                     size="{{ action.btn_size|default('sm') }}"
                     icon="{{ action.icon_class|default('') }}"
                     modal="{{ action.modal is defined and action.modal }}"
+                    :attr="action.attr|default({})"
                 >
                     {{ action.name|trans }}
                 </twig:btn>

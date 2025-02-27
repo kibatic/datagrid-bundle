@@ -2,7 +2,7 @@
 
 namespace Kibatic\DatagridBundle\Grid;
 
-use Kibatic\DatagridBundle\Twig\HtmlExtension;
+use Kibatic\DatagridBundle\Twig\AppExtension;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -95,6 +95,6 @@ class Grid
             return $attributes;
         }
 
-        return HtmlExtension::attributesToHtml($attributes);
+        return AppExtension::attributesToHtml($attributes);
     }
 }
