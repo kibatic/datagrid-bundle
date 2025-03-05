@@ -156,5 +156,3 @@ Roadmap
 -------
 
 - Adding a Flex recipe
-- Remove Bootstrap 4 and Sonata theme
-- More generic column types and template options

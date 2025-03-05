@@ -2,9 +2,7 @@
 
 ```php
     // App\Controller\BookController
-    /**
-     * @Route("/book/list", methods={"GET", "POST"}, name="book_list")
-     */
+     #[Route('/book/list', name: 'book_list', methods=['GET', 'POST'])]
     public function list(
         Request $request,
         GridBuilder $gridBuilder,
@@ -20,8 +18,8 @@
         ;
 
         $grid = $gridBuilder
-            ->initialize($request, $qb, $form)
-            ->setTheme(Theme::BOOTSTRAP4_SONATA) // default theme is Bootstrap 5
+            ->initialize(queryBuilder: $qb, filtersForm: $form)
+            ->setTheme(Theme::BOOTSTRAP4_SONATA) // (optional) default theme is Bootstrap 5
             ->addColumn(
                 'ID',
                 'id', // first way of getting the value, using a string accessor
