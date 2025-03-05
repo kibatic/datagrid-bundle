@@ -15,7 +15,7 @@ Features
 - Actions (single & batch)
 - Customizable templates
 - Only supports Doctrine ORM
-- Theme (bootstrap 4 and 5 included)
+- Theme support (Bootstrap 5 included)
 
 
 Quick start

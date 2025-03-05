@@ -73,7 +73,7 @@ class Column
         }
     }
 
-    public function getTemplateParameter(string $parameterName, $defaultValue = null)
+    public function getTemplateParameter(string $parameterName, ?string $defaultValue = null)
     {
         return $this->templateParameters[$parameterName] ?? $defaultValue;
     }

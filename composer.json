@@ -20,7 +20,8 @@
     "knplabs/knp-paginator-bundle": "^5.8|^6.3",
     "symfony/property-access": "^6.3|^7.0",
     "symfony/form": "^6.3|^7.0",
-    "symfony/options-resolver": "^6.3|^7.0"
+    "symfony/options-resolver": "^6.3|^7.0",
+    "kibatic/ux-bundle": "2.*"
   },
   "autoload": {
     "psr-4": {

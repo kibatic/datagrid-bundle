@@ -46,12 +46,12 @@ class GridBuilder
     /**
      * @deprecated
      */
-    public function create(QueryBuilder $queryBuilder, Request $request, FormInterface $filtersForm = null): self
+    public function create(QueryBuilder $queryBuilder, Request $request, ?FormInterface $filtersForm = null): self
     {
         return $this->initialize($request, $queryBuilder, $filtersForm);
     }
 
-    public function initialize(QueryBuilder $queryBuilder, FormInterface $filtersForm = null, ?Request $request = null): self
+    public function initialize(QueryBuilder $queryBuilder, ?FormInterface $filtersForm = null, ?Request $request = null): self
     {
         $request ??= $this->requestStack->getMainRequest();
 
@@ -96,7 +96,7 @@ class GridBuilder
      */
     public function addColumn(
         string $name,
-        string|callable $value = null,
+        string|callable|null $value = null,
         string $template = null,
         array $templateParameters = [],
         string $sortable = null,
