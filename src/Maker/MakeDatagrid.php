@@ -167,4 +167,8 @@ final class MakeDatagrid extends AbstractMaker
     {
         return ucfirst(strtolower(preg_replace('/([a-z])([A-Z])/', '$1 $2', $string)));
     }
+
+    public function configureDependencies(DependencyBuilder $dependencies): void
+    {
+    }
 }
