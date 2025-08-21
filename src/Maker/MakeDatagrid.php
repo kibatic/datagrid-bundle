@@ -2,12 +2,9 @@
 
 namespace Kibatic\DatagridBundle\Maker;
 
-use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Doctrine\ORM\QueryBuilder;
-use Kibatic\DatagridBundle\Grid\Grid;
 use Kibatic\DatagridBundle\Grid\GridBuilder;
 use Kibatic\DatagridBundle\Grid\Template;
-use Kibatic\UX\Controller\AbstractController;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Bundle\MakerBundle\DependencyBuilder;
@@ -18,29 +15,18 @@ use Symfony\Bundle\MakerBundle\InputConfiguration;
 use Symfony\Bundle\MakerBundle\Maker\AbstractMaker;
 use Symfony\Bundle\MakerBundle\Renderer\FormTypeRenderer;
 use Symfony\Bundle\MakerBundle\Str;
-use Symfony\Bundle\MakerBundle\Util\ClassDetails;
-use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
 use Symfony\Bundle\MakerBundle\Util\ClassSource\Model\ClassData;
-use Symfony\Bundle\MakerBundle\Util\UseStatementGenerator;
 use Symfony\Bundle\MakerBundle\Validator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Translation\TranslatableMessage;
-use Symfony\Component\Validator\Validation;
-use function Symfony\Component\String\u;
-
 // TODO: ajouter une colonne avec le template entity (sur l'identifier ?)
 final class MakeDatagrid extends AbstractMaker
 {
@@ -180,11 +166,5 @@ final class MakeDatagrid extends AbstractMaker
     private function decamel(string $string): string
     {
         return ucfirst(strtolower(preg_replace('/([a-z])([A-Z])/', '$1 $2', $string)));
-    }
-
-    public function configureDependencies(DependencyBuilder $dependencies): void
-    {
-//        $dependencies->addClassDependency(AbstractType::class, 'form');
-//        $dependencies->addClassDependency(DoctrineBundle::class, 'orm', false);
     }
 }

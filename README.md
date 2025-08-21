@@ -43,6 +43,18 @@ Add this to your `assets/controllers.json` :
 
 You'll most likely also need to enable this twig function : https://twig.symfony.com/doc/2.x/functions/template_from_string.html
 
+It's not a hard dependency but some features shown here also requires you to install `kibatic/ux-bundle` :
+
+```bash
+composer require kibatic/ux-bundle
+```
+
+If you want to use the default templates styles and you don't have bootstrap css loaded yet, you will need to.
+If you're using AssetMapper, you can simply add this to your `assets/app.js` :
+```javascript
+import 'bootstrap/dist/css/bootstrap.min.css';
+```
+
 ### Basic usage
 
 You can simply generate a specialized datagrid builder class skeleton using the make command :

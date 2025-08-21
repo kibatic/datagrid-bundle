@@ -13,16 +13,11 @@ namespace <?= $class_data->getNamespace() ?>;
         PaginatorInterface $paginator,
         ParameterBagInterface $params
     ) {
-        parent::__construct($paginator, $params);
+        parent::__construct($requestStack, $paginator, $params);
     }
 
     public function initialize(QueryBuilder $queryBuilder = null, FormInterface $filtersForm = null, Request $request = null): GridBuilder
     {
-        // TODO: déplacer ça dans le parent ?
-        $request ??= $this->requestStack->getMainRequest();
-        // TODO: déplacer ça dans le parent ?
-        $filtersForm?->handleRequest($request);
-
         $queryBuilder ??= $this->repository->createQueryBuilder('<?= $query_entity_alias ?>')
             ->orderBy('<?= $query_entity_alias ?>.id', 'ASC')
         ;
