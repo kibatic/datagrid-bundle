@@ -2,8 +2,8 @@
 
 {% if grid.pagination.totalItemCount > 0 %}
     {% if grid.hasBatchActions %}
-        <form name="datagrid-batch-action" method="{{ grid.batchMethod }}" action="{{ grid.batchActions[0].url }}">
-            <input type="hidden" name="_token" value="{{ csrf_token(grid.batchActionsTokenId) }}">
+        <form name="datagrid-batch-action" method="{{ grid.batchMethod }}" action="{{ grid.batchActions[0].url }}" data-controller="confirm">
+            <input type="hidden" name="_token" value="">
     {% endif %}
 
     <table class="{% block grid_table_class %}table table-bordered table-striped table-hover{% endblock %}" {% if grid.hasBatchActions %}data-controller="checker"{% endif %}>
@@ -59,17 +59,28 @@
     </table>
 
     <div class="clearfix">
+
         {% if grid.hasBatchActions %}
             <div class="float-start">
                 <div class="input-group">
                     <label class="input-group-text" for="batch-select">
                         {{ 'Batch action'|trans({}, 'KibaticDatagridBundle') }}
                     </label>
-                    <select onchange="this.closest('form').action = this.value" class="form-select" id="batch-select">
+                    <select onchange="batch_set_action(this)" class="form-select" id="batch-select">
                         {% for batchAction in grid.batchActions %}
-                            <option value="{{ batchAction.url }}">{{ batchAction.label }}</option>
+                            <option value="{{ batchAction.url }}|{{ csrf_token(batchAction.tokenId ?? grid.batchActionsTokenId) }}">{{ batchAction.label }}</option>
                         {% endfor %}
                     </select>
+                    <script>
+                        function batch_set_action(selectElement) {
+                            parts = selectElement.value.split('|');
+                            selectElement.closest('form').action = parts[0];
+                            selectElement.closest('form').querySelector('input[name="_token"]').value = parts[1];
+                        }
+                        document.addEventListener('DOMContentLoaded', function() {
+                            batch_set_action(document.getElementById('batch-select'));
+                        });
+                    </script>
                     <input type="submit" class="btn btn-small btn-primary" value="OK">
                 </div>
             </div>

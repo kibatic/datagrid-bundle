@@ -225,12 +225,13 @@ class GridBuilder
         }
     }
 
-    public function addBatchAction(string $id, string $label, string $url): self
+    public function addBatchAction(string $id, string $label, string $url, ?string $tokenId = null): self
     {
         $this->batchActions[] = [
             'id' => $id,
             'label' => $label,
-            'url' => $url
+            'url' => $url,
+            'tokenId' => $tokenId,
         ];
 
         return $this;

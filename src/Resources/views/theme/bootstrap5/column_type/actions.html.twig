@@ -1,17 +1,24 @@
 {% set actions = value %}
 
 <ul class="list-inline">
-    {% for action in value %}
-        {% if action.visible is not defined or action.visible %}
-            <li class="list-inline-item">
-                {% if action.template is defined %}
-                    {% include action.template with action %}
-                {% else %}
-                    <a href="{{ action.url }}" class="btn btn-outline-primary">
-                        {{ action.name|trans }}
-                    </a>
-                {% endif %}
-            </li>
-        {% endif %}
-    {% endfor %}
+{% for action in value %}
+    {% if action.visible is not defined or action.visible %}
+        <li class="list-inline-item">
+            {% if action.template is defined %}
+                {% include action.template with action %}
+            {% else %}
+                <twig:btn
+                    href="{{ action.url }}"
+                    type="{{ action.btn_type|default('secondary') }}"
+                    size="{{ action.btn_size|default('sm') }}"
+                    icon="{{ action.icon_class|default('') }}"
+                    modal="{{ action.modal is defined and action.modal }}"
+                    :attr="action.attr|default({})"
+                >
+                    {{ action.name|trans }}
+                </twig:btn>
+            {% endif %}
+        </li>
+    {% endif %}
+{% endfor %}
 </ul>
