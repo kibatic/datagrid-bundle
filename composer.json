@@ -3,7 +3,7 @@
   "description": "Datagrid for Symfony",
   "license": "MIT",
   "type": "symfony-bundle",
-  "keywords": ["datagrid"],
+  "keywords": ["datagrid", "symfony-ux"],
   "authors": [
     {
       "name": "Kibatic",
