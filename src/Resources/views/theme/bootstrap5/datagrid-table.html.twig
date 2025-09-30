@@ -42,6 +42,7 @@
         </thead>
         <tbody>
         {% for item in grid.pagination %}
+            {% set gridLoop = loop %}
             <tr{{ grid.rowAttributes(item)|raw }}>
                 {% if grid.hasBatchActions %}
                     <td>
