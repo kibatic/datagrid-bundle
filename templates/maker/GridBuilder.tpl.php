@@ -3,6 +3,7 @@
 namespace <?= $class_data->getNamespace() ?>;
 
 <?= $class_data->getUseStatements(); ?>
+use function Symfony\Component\Translation\t;
 
 <?= $class_data->getClassDeclaration() ?>
 {
