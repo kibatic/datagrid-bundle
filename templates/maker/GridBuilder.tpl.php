@@ -13,7 +13,7 @@ namespace <?= $class_data->getNamespace() ?>;
         PaginatorInterface $paginator,
         ParameterBagInterface $params
     ) {
-        parent::__construct($paginator, $params);
+        parent::__construct($requestStack, $paginator, $params);
     }
 
     public function initialize(QueryBuilder $queryBuilder = null, FormInterface $filtersForm = null, Request $request = null): GridBuilder
