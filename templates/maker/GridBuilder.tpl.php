@@ -47,7 +47,7 @@ use function Symfony\Component\Translation\t;
             //    sortable: 'u.relation.name'
             //)
             ->addColumn(
-                new TranslatableMessage('Actions'),
+                t('Actions'),
                 fn(<?= $entity_short_name ?> $<?= $entity_var ?>) => [
                     [
                         'name' => t('Edit'),
