@@ -18,11 +18,6 @@ namespace <?= $class_data->getNamespace() ?>;
 
     public function initialize(QueryBuilder $queryBuilder = null, FormInterface $filtersForm = null, Request $request = null): GridBuilder
     {
-        // TODO: déplacer ça dans le parent ?
-        $request ??= $this->requestStack->getMainRequest();
-        // TODO: déplacer ça dans le parent ?
-        $filtersForm?->handleRequest($request);
-
         $queryBuilder ??= $this->repository->createQueryBuilder('<?= $query_entity_alias ?>')
             ->orderBy('<?= $query_entity_alias ?>.id', 'ASC')
         ;
@@ -31,7 +26,7 @@ namespace <?= $class_data->getNamespace() ?>;
             ->setItemsPerPage(30)
 <?php foreach ($columns as $column): ?>
             ->addColumn(
-                new TranslatableMessage('<?= $column['name'] ?>'),
+                t('<?= $column['name'] ?>'),
                 '<?= $column['value'] ?>',
 <?php if ($column['template']): ?>
                 template: <?= $column['template'] ?>,
@@ -40,7 +35,7 @@ namespace <?= $class_data->getNamespace() ?>;
             )
 <?php endforeach; ?>
             //->addColumn(
-            //    new TranslatableMessage('Total'),
+            //    t('Total'),
             //    fn(<?= $entity_short_name ?> $<?= $entity_var ?>) => $<?= $entity_var ?>->getTotal(),
             //)
             //->addColumn(
@@ -54,7 +49,7 @@ namespace <?= $class_data->getNamespace() ?>;
                 new TranslatableMessage('Actions'),
                 fn(<?= $entity_short_name ?> $<?= $entity_var ?>) => [
                     [
-                        'name' => new TranslatableMessage('Edit'),
+                        'name' => t('Edit'),
                         'url' => $this->router->generate(
                             'app_<?= strtolower($entity_var) ?>_edit',
                             ['id' => $<?= $entity_snake_case ?>->getId()]
