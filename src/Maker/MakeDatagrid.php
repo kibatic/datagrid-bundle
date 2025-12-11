@@ -110,7 +110,6 @@ final class MakeDatagrid extends AbstractMaker
                 RequestStack::class,
                 FormInterface::class,
                 Template::class,
-                TranslatableMessage::class,
             ],
         );
 
