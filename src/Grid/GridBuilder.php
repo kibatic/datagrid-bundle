@@ -163,8 +163,8 @@ class GridBuilder
 
     private function applySort(): void
     {
-        $sortBy = $this->request->get('sort_by');
-        $direction = $this->request->get('sort_order', 'ASC');
+        $sortBy = $this->request->query->get('sort_by');
+        $direction = $this->request->query->get('sort_order', 'ASC');
 
         if ($sortBy === null) {
             return;
