@@ -1,0 +1,7 @@
+{% if value is not null %}
+    {% if value.label is defined %}
+        {{  value.label|trans }}
+    {% else %}
+        {{ value.value|trans }}
+    {% endif %}
+{% endif %}

@@ -11,7 +11,7 @@
                     href="{{ action.url }}"
                     type="{{ action.btn_type|default('secondary') }}"
                     size="{{ action.btn_size|default('sm') }}"
-                    icon="{{ action.icon_class|default('') }}"
+                    icon="{{ action.icon|default('') }}"
                     modal="{{ action.modal is defined and action.modal }}"
                     :attr="action.attr|default({})"
                 >
