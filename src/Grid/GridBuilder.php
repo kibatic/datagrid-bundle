@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Translation\TranslatableMessage;
 
 class GridBuilder
 {
@@ -95,7 +96,7 @@ class GridBuilder
      * @param string|null $template #Template
      */
     public function addColumn(
-        string $name,
+        string|TranslatableMessage $name,
         string|callable|null $value = null,
         string $template = null,
         array $templateParameters = [],

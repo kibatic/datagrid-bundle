@@ -4,10 +4,11 @@ namespace Kibatic\DatagridBundle\Grid;
 
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\Translation\TranslatableMessage;
 
 class Column
 {
-    public string $name;
+    public string|TranslatableMessage $name;
     public $value;
     private ?string $template;
     public array $templateParameters;
@@ -16,7 +17,7 @@ class Column
     public bool $enabled;
 
     public function __construct(
-        string $name,
+        string|TranslatableMessage $name,
         string|callable $value = null,
         string $template = null,
         array $templateParameters = [],
