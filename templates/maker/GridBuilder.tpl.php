@@ -52,7 +52,7 @@ use function Symfony\Component\Translation\t;
                     [
                         'name' => t('Show'),
                         'url' => $this->router->generate(
-                            'app_<?= strtolower($entity_var) ?>_show',
+                            'app_<?= $entity_snake_case ?>_show',
                             ['id' => $<?= $entity_var ?>->getId()]
                         ),
                         'btn_type' => 'outline-primary',
@@ -62,7 +62,7 @@ use function Symfony\Component\Translation\t;
                     [
                         'name' => t('Edit'),
                         'url' => $this->router->generate(
-                            'app_<?= strtolower($entity_var) ?>_edit',
+                            'app_<?= $entity_snake_case ?>_edit',
                             ['id' => $<?= $entity_var ?>->getId()]
                         ),
                         'btn_type' => 'outline-primary',
