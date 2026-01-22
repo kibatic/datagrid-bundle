@@ -50,13 +50,23 @@ use function Symfony\Component\Translation\t;
                 t('Actions'),
                 fn(<?= $entity_short_name ?> $<?= $entity_var ?>) => [
                     [
+                        'name' => t('Show'),
+                        'url' => $this->router->generate(
+                            'app_<?= strtolower($entity_var) ?>_show',
+                            ['id' => $<?= $entity_snake_case ?>->getId()]
+                        ),
+                        'btn_type' => 'outline-primary',
+                        'icon' => 'bi:eye',
+                        'modal' => true,
+                    ],
+                    [
                         'name' => t('Edit'),
                         'url' => $this->router->generate(
                             'app_<?= strtolower($entity_var) ?>_edit',
                             ['id' => $<?= $entity_snake_case ?>->getId()]
                         ),
                         'btn_type' => 'outline-primary',
-                        'icon_class' => 'bi bi-pencil',
+                        'icon' => 'bi:pencil',
                         'modal' => true,
                     ],
                 ],
