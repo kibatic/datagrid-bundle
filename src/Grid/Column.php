@@ -54,7 +54,7 @@ class Column
             $entity = $entity[0];
         }
 
-        if (is_callable($this->value)) {
+        if (!is_string($this->value) && is_callable($this->value)) {
             $valueCallback = $this->value;
             return $valueCallback($entity, $extra ?? []);
         }
