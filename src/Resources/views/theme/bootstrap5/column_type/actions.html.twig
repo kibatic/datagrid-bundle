@@ -1,11 +1,11 @@
 {% set actions = value %}
 
 <ul class="list-inline">
-{% for action in value %}
+{% for action in actions %}
     {% if action.visible is not defined or action.visible %}
         <li class="list-inline-item">
             {% if action.template is defined %}
-                {% include action.template with action %}
+                {% include action.template %}
             {% else %}
                 <twig:btn
                     href="{{ action.url }}"
