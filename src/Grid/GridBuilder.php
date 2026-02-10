@@ -2,6 +2,7 @@
 
 namespace Kibatic\DatagridBundle\Grid;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\QueryBuilder;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -217,7 +218,10 @@ class GridBuilder
 
             $filterValue = $filterField->getData();
 
-            if ($filterValue === null) {
+            if (!is_bool($filterValue)
+                && empty($filterValue)
+                || ($filterValue instanceof Collection && $filterValue->isEmpty())
+            ) {
                 continue;
             }
 
