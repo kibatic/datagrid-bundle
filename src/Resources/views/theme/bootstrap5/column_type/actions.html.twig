@@ -7,16 +7,12 @@
             {% if action.template is defined %}
                 {% include action.template %}
             {% else %}
-                <twig:btn
+                <a
                     href="{{ action.url }}"
-                    type="{{ action.btn_type|default('secondary') }}"
-                    size="{{ action.btn_size|default('sm') }}"
-                    icon="{{ action.icon|default('') }}"
-                    modal="{{ action.modal is defined and action.modal }}"
-                    :attr="action.attr|default({})"
+                    class="btn btn-{{ action.btn_type|default('secondary') }} btn-{{ action.btn_size|default('sm') }}"
                 >
                     {{ action.name|trans }}
-                </twig:btn>
+                </a>
             {% endif %}
         </li>
     {% endif %}
