@@ -230,13 +230,12 @@ class GridBuilder
         }
     }
 
-    public function addBatchAction(string $id, string $label, string $url, ?string $tokenId = null): self
+    public function addBatchAction(string $id, string $label, string $url): self
     {
         $this->batchActions[] = [
             'id' => $id,
             'label' => $label,
             'url' => $url,
-            'tokenId' => $tokenId,
         ];
 
         return $this;
@@ -303,7 +302,8 @@ class GridBuilder
                 $this->theme,
                 $this->batchActions,
                 $this->batchMethod,
-                $this->rowAttributesCallback
+                $this::class,
+                $this->rowAttributesCallback,
             );
         }
 

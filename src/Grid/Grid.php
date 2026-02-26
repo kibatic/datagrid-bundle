@@ -13,6 +13,7 @@ class Grid
      */
     private array $columns;
     private array $batchActions;
+    private string $batchActionsTokenId;
     private string $batchMethod;
     private string $theme;
     private $rowAttributesCallback = null;
@@ -27,6 +28,7 @@ class Grid
         string $theme,
         array $batchActions = [],
         string $batchMethod = 'POST',
+        string $batchActionsTokenId,
         ?callable $rowAttributesCallback = null,
     ) {
         $this->columns = $columns;
@@ -34,6 +36,7 @@ class Grid
         $this->pagination = $pagination;
         $this->batchActions = $batchActions;
         $this->batchMethod = $batchMethod;
+        $this->batchActionsTokenId = $batchActionsTokenId;
         $this->theme = $theme;
         $this->rowAttributesCallback = $rowAttributesCallback;
     }
@@ -70,7 +73,7 @@ class Grid
 
     public function getBatchActionsTokenId(): string
     {
-        return json_encode($this->getBatchActions());
+        return $this->batchActionsTokenId;
     }
 
     public function getTheme(): string
