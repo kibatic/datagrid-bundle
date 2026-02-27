@@ -40,13 +40,16 @@ trait DatagridControllerHelper
      */
     private function getBatchIds(Request $request): array
     {
+        $ids = $request->request->all('ids');
+        
+        if (empty($ids)) {
+            $ids = $request->query->all('ids');
+        }
+
         return
             array_values(
                 array_filter(
-                    array_map(
-                        'intval',
-                        $request->request->all('ids')
-                    )
+                    array_map('intval', $ids)
                 )
             )
         ;
