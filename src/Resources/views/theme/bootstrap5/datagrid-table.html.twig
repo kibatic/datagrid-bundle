@@ -60,22 +60,34 @@
     </table>
 
     <div class="clearfix">
-
         {% if grid.hasBatchActions %}
-            <div class="float-start">
+            <div class="float-start mt-2">
                 <div class="input-group">
                     <label class="input-group-text" for="batch-select">
                         {{ 'Batch action'|trans({}, 'KibaticDatagridBundle') }}
                     </label>
                     <select onchange="batch_set_action(this)" class="form-select" id="batch-select">
                         {% for batchAction in grid.batchActions %}
-                            <option value="{{ batchAction.url }}">{{ batchAction.label|trans }}</option>
+                            <option value="{{ batchAction.url }}" data-confirm="{{ batchAction.confirm ? 'true' : 'false' }}">{{ batchAction.label|trans }}</option>
                         {% endfor %}
                     </select>
                     <script>
                         function batch_set_action(selectElement) {
+                            let form = selectElement.closest('form');
+                            let selectedOption = selectElement.options[selectElement.selectedIndex];
+
                             parts = selectElement.value.split('|');
-                            selectElement.closest('form').action = parts[0];
+                            form.action = parts[0];
+
+                            if (selectedOption.dataset.confirm == 'true') {
+                                if (form.getAttribute('data-controller') !== null) {
+                                    form.setAttribute('data-controller', form.getAttribute('data-controller') + ' confirm');
+                                } else {
+                                    form.setAttribute('data-controller', 'confirm');
+                                }
+                            } else {
+                                form.setAttribute('data-controller', form.getAttribute('data-controller').replace('confirm', ''));
+                            }
                         }
 
                         document.addEventListener('DOMContentLoaded', () => batch_set_action(document.getElementById('batch-select')))
@@ -86,7 +98,7 @@
             </div>
         {% endif %}
 
-        <div class="float-end">
+        <div class="float-end mt-2">
             {{ knp_pagination_render(grid.pagination, '@KnpPaginator/Pagination/bootstrap_v5_pagination.html.twig') }}
         </div>
     </div>
