@@ -10,11 +10,15 @@ trait DatagridControllerHelper
 {
     public function createFilterFormBuilder(string $name = 'filters', string $method = 'GET', bool $csrfProtection = false, array $options = []): FormBuilderInterface
     {
-        return $this->container->get('form.factory')
-            ->createNamedBuilder($name, options: array_merge([
-                'method' => $method,
-                'csrf_protection' => $csrfProtection,
-            ], $options));
+        $defaultOptions = [
+            'method' => $method,
+        ];
+
+        if ($this->container->get('form.factory')->create()->getConfig()->hasOption('csrf_protection')) {
+            $defaultOptions['csrf_protection'] = $csrfProtection;
+        }
+
+        return $this->container->get('form.factory')->createNamedBuilder($name, options: array_merge($defaultOptions, $options));
     }
 
     protected function assertCsrfTokenValid(Request $request, $tokenId, string $tokenName = '_token'): void
