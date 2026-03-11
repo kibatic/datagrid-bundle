@@ -1,5 +1,5 @@
 {% if (parameters.badge ?? false) is true %}
-{% for item in value %}<span class="badge {{ (parameters.badgeRounded ?? false) ? 'rounded-pill ' : '' }}text-bg-{{ parameters.badgeType|default('secondary') }}">{{ item }}</span>{% endfor %}
+{% for item in value %}<span class="badge {{ (parameters.badgeRounded ?? false) ? 'rounded-pill ' : '' }}text-bg-{{ parameters.badgeType|default('secondary') }}">{{ item }}</span> {% endfor %}
 {% else %}
 {{ value|join(', ') }}
 {% endif %}

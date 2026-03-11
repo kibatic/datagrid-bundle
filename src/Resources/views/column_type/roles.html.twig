@@ -1,0 +1,16 @@
+{% set ignoreRoleUser = parameters.ignoreRoleUser|default(true) %}
+{% if parameters.badge is not defined %}
+    {% set parameters = parameters|merge({badge: true}) %}
+{% endif %}
+{% set roles = [] %}
+
+{% for role in value %}
+    {% if not ignoreRoleUser or role != 'ROLE_USER' %}
+        {% set role = role|replace({'ROLE': '', '_': ''})|lower|capitalize %}
+        {% set roles = roles|merge([role]) %}
+    {% endif %}
+{% endfor %}
+
+{% set value = roles %}
+
+{% extends '@KibaticDatagrid/column_type/array.html.twig' %}

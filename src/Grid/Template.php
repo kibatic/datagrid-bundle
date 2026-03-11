@@ -11,4 +11,6 @@ class Template
     const ENTITY = 'entity.html.twig';
     const ACTIONS = 'actions.html.twig';
     const LABELED_ENUM = 'labeled_enum.html.twig';
+    const ROLES = 'roles.html.twig';
+    const DUMP = 'dump.html.twig';
 }
