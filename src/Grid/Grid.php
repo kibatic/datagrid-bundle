@@ -17,6 +17,7 @@ class Grid
     private string $batchMethod;
     private string $theme;
     private $rowAttributesCallback = null;
+    private array $filterLayout;
 
     private Request $request;
     private PaginationInterface $pagination;
@@ -30,6 +31,7 @@ class Grid
         string $batchMethod = 'POST',
         string $batchActionsTokenId,
         ?callable $rowAttributesCallback = null,
+        array $filterLayout = [],
     ) {
         $this->columns = $columns;
         $this->request = $request;
@@ -39,6 +41,7 @@ class Grid
         $this->batchActionsTokenId = $batchActionsTokenId;
         $this->theme = $theme;
         $this->rowAttributesCallback = $rowAttributesCallback;
+        $this->filterLayout = $filterLayout;
     }
 
     public function getColumns(): array
@@ -79,6 +82,11 @@ class Grid
     public function getTheme(): string
     {
         return $this->theme;
+    }
+
+    public function getFilterLayout(): array
+    {
+        return $this->filterLayout;
     }
 
     public function getRowAttributes($item, bool $keepAsArray = false): null|array|string
