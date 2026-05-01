@@ -99,9 +99,9 @@ class GridBuilder
     public function addColumn(
         string|TranslatableMessage $name,
         string|callable|null $value = null,
-        string $template = null,
+        ?string $template = null,
         array $templateParameters = [],
-        string $sortable = null,
+        ?string $sortable = null,
         callable|string|null $sortableQuery = null,
         bool $enabled = true,
     ): self {
@@ -300,9 +300,9 @@ class GridBuilder
                 $this->request,
                 $pagination,
                 $this->theme,
+                $this::class,
                 $this->batchActions,
                 $this->batchMethod,
-                $this::class,
                 $this->rowAttributesCallback,
             );
         }
