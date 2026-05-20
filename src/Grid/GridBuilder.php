@@ -99,9 +99,9 @@ class GridBuilder
     public function addColumn(
         string|TranslatableMessage $name,
         string|callable|null $value = null,
-        string $template = null,
+        ?string $template = null,
         array $templateParameters = [],
-        string $sortable = null,
+        ?string $sortable = null,
         callable|string|null $sortableQuery = null,
         bool $enabled = true,
     ): self {
