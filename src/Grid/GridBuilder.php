@@ -89,7 +89,7 @@ class GridBuilder
     public function setTheme(string $theme): self
     {
         $this->theme = $theme;
-        
+
         return $this;
     }
 
@@ -117,7 +117,7 @@ class GridBuilder
 
         return $this;
     }
-    
+
     public function getColumns(): array
     {
         return array_filter($this->columns, fn(Column $column) => $column->enabled);
@@ -134,7 +134,7 @@ class GridBuilder
         throw new \Exception("Column named {$name} not found.");
     }
 
-    public function removeColumn(string $name): self
+    public function removeColumn(string|TranslatableMessage $name): self
     {
         foreach ($this->columns as $key => $column) {
             if ($column->name === $name) {
@@ -181,7 +181,7 @@ class GridBuilder
             if ($column->sortable !== $sortBy) {
                 continue;
             }
-            
+
             if (is_callable($column->sortableQuery)) {
                 $sortCallback = $column->sortableQuery;
                 $sortCallback($this->queryBuilder, $direction);
@@ -300,9 +300,9 @@ class GridBuilder
                 $this->request,
                 $pagination,
                 $this->theme,
-                $this::class,
                 $this->batchActions,
                 $this->batchMethod,
+                $this::class,
                 $this->rowAttributesCallback,
             );
         }
