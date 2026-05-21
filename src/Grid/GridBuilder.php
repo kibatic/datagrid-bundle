@@ -300,9 +300,9 @@ class GridBuilder
                 $this->request,
                 $pagination,
                 $this->theme,
+                $this::class,
                 $this->batchActions,
                 $this->batchMethod,
-                $this::class,
                 $this->rowAttributesCallback,
             );
         }
