@@ -1,7 +1,23 @@
 {{ form_start(form) }}
 
+{% set layoutFieldNames = [] %}
+{% for row in grid.filterLayout %}
+    {% set layoutFieldNames = layoutFieldNames|merge(row.fields) %}
+    {% if row.fields|length > 1 %}
+        <div class="row datagrid-filter-group">
+            {% for fieldName in row.fields %}
+                <div class="col datagrid-filter-group-item">
+                    {{ form_row(form[fieldName]) }}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        {{ form_row(form[row.fields[0]]) }}
+    {% endif %}
+{% endfor %}
+
 {% for field in form %}
-    {% if field.vars.block_prefixes[0] != 'button' %}
+    {% if field.vars.block_prefixes[0] != 'button' and field.vars.name not in layoutFieldNames %}
         {{ form_row(field) }}
     {% endif %}
 {% endfor %}
