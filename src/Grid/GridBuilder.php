@@ -33,6 +33,7 @@ class GridBuilder
     private ?string $theme = '@KibaticDatagrid/theme/bootstrap5';
     private ?string $explicitRouteName = null;
     private array $explicitRouteParams = [];
+    private string $paginationKey = 'page';
 
     private ?Grid $grid;
 
@@ -302,6 +303,16 @@ class GridBuilder
         return $this;
     }
 
+    /**
+     * Set the query parameter name used for pagination. Default is "page".
+     */
+    public function setPaginationKey(string $paginationKey): self
+    {
+        $this->paginationKey = $paginationKey;
+
+        return $this;
+    }
+
     public function setExplicitRoute(string $routeName, array $routeParams = []): self
     {
         $this->explicitRouteName = $routeName;
@@ -330,8 +341,11 @@ class GridBuilder
 
             $pagination = $this->paginator->paginate(
                 $this->queryBuilder->getQuery(),
-                $this->request->query->getInt('page', 1),
-                $this->itemsPerPage
+                $this->request->query->getInt($this->paginationKey, 1),
+                $this->itemsPerPage,
+                [
+                    'pageParameterName' => $this->paginationKey,
+                ]
             );
 
             if ($this->explicitRouteName) {
