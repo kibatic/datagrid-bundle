@@ -4,6 +4,8 @@ Select all: Tout selectionner
 Sort: Trier
 Filter: Filtrer
 Reset: Réinitialiser
+Show all filters: Voir tous les filtres
+Show less filters: Voir moins de filtres
 
 column:
   boolean:
