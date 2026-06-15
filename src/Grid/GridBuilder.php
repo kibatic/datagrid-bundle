@@ -258,10 +258,10 @@ class GridBuilder
                 continue;
             }
 
-            $filterField = $this->filtersForm->get($filter->formFieldName);
-
-            if ($filterField === null) {
-                throw new \Exception("Form field named {$filter->formFieldName} not found in the filters form of the datagrid.");
+            if ($this->filtersForm->has($filter->formFieldName)) {
+                $filterField = $this->filtersForm->get($filter->formFieldName);
+            } else {
+                throw new \Exception("Form field named \"{$filter->formFieldName}\" not found in the filters form of the datagrid.");
             }
 
             $filterValue = $filterField->getData();
