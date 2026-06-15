@@ -138,7 +138,7 @@ class GridBuilder
     public function removeColumn(string|TranslatableMessage $name): self
     {
         foreach ($this->columns as $key => $column) {
-            if ($column->name === $name) {
+            if ($column->name == $name) {
                 unset($this->columns[$key]);
             }
         }
