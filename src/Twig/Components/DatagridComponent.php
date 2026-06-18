@@ -10,4 +10,7 @@ final class DatagridComponent
 {
     public ?Grid $grid = null;
     public ?FormView $form = null;
+
+    public ?string $tableSize = null;
+    public bool $tableStickyScroll = false;
 }

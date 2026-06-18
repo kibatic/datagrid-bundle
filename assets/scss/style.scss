@@ -1,0 +1,10 @@
+.table-sticky-scroll {
+  max-height: 380px;
+  overflow-y: auto;
+
+  thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+}
