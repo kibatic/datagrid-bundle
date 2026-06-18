@@ -1,4 +1,16 @@
-{{ form_start(form) }}
+{% set relatedTurboFrames = this.relatedTurboFrames ?? false %}
+{% set form_options = {} %}
+
+{% if relatedTurboFrames %}
+    {% set form_options = form_options|merge({
+        'attr': {
+            'data-controller': 'form-turbo-frame-updater',
+            'data-form-turbo-frame-updater-turbo-frame-ids-value': this.relatedTurboFrames|json_encode
+        }
+    }) %}
+{% endif %}
+
+{{ form_start(form, form_options) }}
 
 {% set layoutFieldNames = [] %}
 {% for row in grid.filterLayout %}
@@ -22,6 +34,7 @@
     {% endif %}
 {% endfor %}
 
+{% if not relatedTurboFrames %}
 <div class="row">
     <div class="col text-end">
         <ul class="list-inline">
@@ -47,4 +60,6 @@
         </ul>
     </div>
 </div>
+{% endif %}
+
 {{ form_end(form) }}

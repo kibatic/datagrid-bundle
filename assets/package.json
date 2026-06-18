@@ -12,6 +12,13 @@
                 "webpackMode": "eager",
                 "fetch": "eager",
                 "enabled": true
+            },
+            "form-turbo-frame-updater": {
+                "main": "dist/form_turbo_frame_updater_controller.js",
+                "name": "form-turbo-frame-updater",
+                "webpackMode": "eager",
+                "fetch": "eager",
+                "enabled": true
             }
         },
         "importmap": {
