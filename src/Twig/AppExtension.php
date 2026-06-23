@@ -29,7 +29,17 @@ class AppExtension extends AbstractExtension
     {
         return [
             new TwigFunction('datagrid_reset_url', $this->resetUrl(...)),
+            new TwigFunction('datagrid_call', $this->call(...)),
         ];
+    }
+
+    /**
+     * Invoque une closure passée en paramètre de colonne (ex. variante de
+     * badge calculée selon la valeur et l'entité de la ligne).
+     */
+    public function call(callable $callback, mixed ...$args): mixed
+    {
+        return $callback(...$args);
     }
 
     public static function attributesToHtml(array $attributes): string

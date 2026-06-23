@@ -1,0 +1,4 @@
+{% if value is not null %}
+    {% set label = attribute(value, 'label') is defined ? value.label : (value.name ?? value) %}
+    <span class="badge text-bg-secondary">{{ label|trans }}</span>
+{% endif %}
