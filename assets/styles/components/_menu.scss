@@ -4,6 +4,7 @@
 // =========================================================
 
 .dropdown-menu {
+    display: none;
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -11,6 +12,10 @@
     padding: var(--sp-1);
     min-width: 180px;
     font-size: var(--fs-14);
+
+    &.show {
+        display: block;
+    }
 
     .dropdown-item {
         display: flex;
