@@ -34,6 +34,7 @@
             <input type="hidden" name="_batch_csrf_token" value="{{ csrf_token(grid.batchActionsTokenId) }}">
         {% endif %}
 
+        <div class="datagrid-scroll">
         <table class="{% block grid_table_class %}datagrid{% endblock %}">
             <thead>
             <tr{% if header_tr_class is not empty %} class="{{ header_tr_class }}"{% endif %}>
@@ -97,6 +98,7 @@
             {% endfor %}
             </tbody>
         </table>
+        </div>
 
         {% if grid.hasBatchActions %}</form>{% endif %}
 

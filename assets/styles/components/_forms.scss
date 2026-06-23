@@ -175,6 +175,7 @@
 .checkbox,
 .radio,
 .form-check-input {
+    -webkit-appearance: none; // Safari / iOS anciens
     appearance: none;
     width: 16px;
     height: 16px;

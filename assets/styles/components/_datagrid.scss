@@ -171,12 +171,19 @@
         }
     }
 
-    // Colonne case à cocher (sélection batch)
-    th:first-child:has(> input[type='checkbox']),
-    td:first-child:has(> input[type='checkbox']) {
+    // Colonne case à cocher (sélection batch). Classe explicite plutôt que
+    // :has() pour une compatibilité maximale.
+    .checkbox-cell {
         width: 40px;
         padding-right: 0;
     }
+}
+
+// Conteneur de défilement horizontal de la table (mobile/tablette) :
+// la table scrolle seule, en-tête et filtres restent en place.
+.datagrid-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 // --- Barre de sélection (actions par lot) ---
@@ -475,4 +482,58 @@
 
 .cell-muted {
     color: var(--fg-3);
+}
+
+// --- Responsive (mobile / tablette) ---
+
+@media (max-width: 768px) {
+    // La table conserve une largeur minimale et défile horizontalement
+    // plutôt que d'écraser les colonnes.
+    .datagrid-scroll .datagrid {
+        min-width: 760px;
+    }
+}
+
+@media (max-width: 640px) {
+    // Filtres : chaque champ en pleine largeur, disposition en colonne
+    .datagrid-filters-fields,
+    .datagrid-filters-advanced {
+        > * {
+            width: 100%;
+        }
+
+        .input-with-icon,
+        .input,
+        input.form-control,
+        select,
+        .select,
+        select.form-select {
+            width: 100%;
+            min-width: 0;
+        }
+    }
+
+    .datagrid-filters-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .datagrid-filters-actions {
+        margin-left: 0;
+        justify-content: flex-end;
+    }
+}
+
+// Cibles tactiles : boutons icônes agrandis sur pointeur grossier (tactile)
+@media (pointer: coarse) {
+    .datagrid-card .btn-icon,
+    .datagrid .btn-icon {
+        width: 40px;
+        height: 40px;
+
+        &.btn-sm {
+            width: 36px;
+            height: 36px;
+        }
+    }
 }

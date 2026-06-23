@@ -14,6 +14,7 @@
 @use 'abstracts/mixins';
 @use 'base/typography';
 @use 'base/bootstrap';
+@use 'base/compat';
 
 // 2. Composants
 @use 'components/buttons';
