@@ -1,26 +1,55 @@
 {% set header_tr_class = block('grid_header_tr_class') is defined ? block('grid_header_tr_class') : '' %}
 
 {% if grid.pagination.totalItemCount > 0 %}
-    <div class="datagrid-card">
-        <div class="toolbar">
-            <span class="toolbar-meta">
-                {{ 'result_count'|trans({'%count%': grid.pagination.totalItemCount}, 'KibaticDatagridBundle') }}
-            </span>
-            <span class="toolbar-spacer"></span>
-            {% block toolbar_actions %}{% endblock %}
-        </div>
+    <div class="datagrid-card"{% if grid.hasBatchActions %} data-controller="batch"{% endif %}>
+        {% if grid.hasBatchActions %}
+            {# Barre de sélection : masquée tant qu'aucune ligne n'est cochée #}
+            <div class="datagrid-batchbar" data-batch-target="bar" hidden>
+                <span class="datagrid-batchbar-count">
+                    <strong data-batch-target="count">0</strong> {{ 'selected'|trans({}, 'KibaticDatagridBundle') }}
+                </span>
+                <div class="datagrid-batchbar-actions">
+                    {% for action in grid.batchActions %}
+                        <button
+                            type="button"
+                            class="btn btn-sm{% if action.variant %} btn-{{ action.variant }}{% endif %}"
+                            data-action="batch#submit"
+                            data-url="{{ action.url }}"
+                            data-confirm="{{ action.confirm ? 'true' : 'false' }}"
+                            data-confirm-text="{{ 'Confirm this action?'|trans({}, 'KibaticDatagridBundle') }}"
+                        >
+                            {% if action.icon %}<twig:ux:icon name="{{ action.icon }}" />{% endif %}
+                            {{ action.label|trans }}
+                        </button>
+                    {% endfor %}
+                    <button type="button" class="btn btn-ghost btn-sm" data-action="batch#clear">
+                        {{ 'Deselect all'|trans({}, 'KibaticDatagridBundle') }}
+                    </button>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if not grid.hasBatchActions %}
+            <div class="toolbar">
+                <span class="toolbar-meta">
+                    {{ 'result_count'|trans({'%count%': grid.pagination.totalItemCount}, 'KibaticDatagridBundle') }}
+                </span>
+                <span class="toolbar-spacer"></span>
+                {% block toolbar_actions %}{% endblock %}
+            </div>
+        {% endif %}
 
         {% if grid.hasBatchActions %}
-            <form name="datagrid-batch-action" method="{{ grid.batchMethod }}" action="{{ grid.batchActions[0].url }}" data-controller="confirm">
+            <form name="datagrid-batch-action" method="{{ grid.batchMethod }}" action="{{ grid.batchActions[0].url }}" data-batch-target="form">
             <input type="hidden" name="_batch_csrf_token" value="{{ csrf_token(grid.batchActionsTokenId) }}">
         {% endif %}
 
-        <table class="{% block grid_table_class %}datagrid{% endblock %}" {% if grid.hasBatchActions %}data-controller="checker"{% endif %}>
+        <table class="{% block grid_table_class %}datagrid{% endblock %}">
             <thead>
             <tr{% if header_tr_class is not empty %} class="{{ header_tr_class }}"{% endif %}>
                 {% if grid.hasBatchActions %}
                     <th class="checkbox-cell">
-                        <input type="checkbox" class="checkbox" data-checker-target="master" title="{{ 'Select all'|trans({}, 'KibaticDatagridBundle') }}" />
+                        <input type="checkbox" class="checkbox" data-batch-target="master" data-action="batch#toggleAll" title="{{ 'Select all'|trans({}, 'KibaticDatagridBundle') }}" />
                     </th>
                 {% endif %}
                 {% for column in grid.columns %}
@@ -66,7 +95,7 @@
                 <tr{{ grid.rowAttributes(item)|raw }}>
                     {% if grid.hasBatchActions %}
                         <td class="checkbox-cell">
-                            <input type="checkbox" class="checkbox" name="ids[]" value="{{ item.id }}" data-checker-target="checkbox" />
+                            <input type="checkbox" class="checkbox" name="ids[]" value="{{ item.id }}" data-batch-target="checkbox" data-action="batch#refresh" />
                         </td>
                     {% endif %}
                     {% for column in grid.columns %}
@@ -79,53 +108,14 @@
             </tbody>
         </table>
 
+        {% if grid.hasBatchActions %}</form>{% endif %}
+
         <div class="datagrid-footer">
-            {% if grid.hasBatchActions %}
-                <div class="datagrid-batch">
-                    <div class="input-group">
-                        <label class="input-group-text" for="batch-select">
-                            {{ 'Batch action'|trans({}, 'KibaticDatagridBundle') }}
-                        </label>
-                        <select onchange="batch_set_action(this)" class="form-select" id="batch-select">
-                            {% for batchAction in grid.batchActions %}
-                                <option value="{{ batchAction.url }}" data-confirm="{{ batchAction.confirm ? 'true' : 'false' }}">{{ batchAction.label|trans }}</option>
-                            {% endfor %}
-                        </select>
-                        <script>
-                            function batch_set_action(selectElement) {
-                                let form = selectElement.closest('form');
-                                let selectedOption = selectElement.options[selectElement.selectedIndex];
-
-                                parts = selectElement.value.split('|');
-                                form.action = parts[0];
-
-                                if (selectedOption.dataset.confirm == 'true') {
-                                    if (form.getAttribute('data-controller') !== null) {
-                                        form.setAttribute('data-controller', form.getAttribute('data-controller') + ' confirm');
-                                    } else {
-                                        form.setAttribute('data-controller', 'confirm');
-                                    }
-                                } else {
-                                    form.setAttribute('data-controller', form.getAttribute('data-controller').replace('confirm', ''));
-                                }
-                            }
-
-                            document.addEventListener('DOMContentLoaded', () => batch_set_action(document.getElementById('batch-select')))
-                            document.addEventListener('turbo:load', () => batch_set_action(document.getElementById('batch-select')))
-                        </script>
-                        <input type="submit" class="btn btn-primary btn-sm" value="OK">
-                    </div>
-                </div>
-            {% else %}
-                <span></span>
-            {% endif %}
-
+            <span></span>
             <div class="datagrid-pagination">
                 {{ knp_pagination_render(grid.pagination, '@KnpPaginator/Pagination/bootstrap_v5_pagination.html.twig') }}
             </div>
         </div>
-
-        {% if grid.hasBatchActions %}</form>{% endif %}
     </div>
 {% else %}
     <div class="datagrid-card">

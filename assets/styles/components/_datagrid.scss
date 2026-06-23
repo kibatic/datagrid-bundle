@@ -21,14 +21,20 @@
     margin: 0;
     padding: 0;
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: center;
-    gap: var(--sp-2);
+    justify-content: flex-end;
+    gap: var(--sp-1);
 }
 
 .datagrid-card .list-inline-item,
 .datagrid-filters .list-inline-item {
     margin: 0;
+}
+
+// Le kebab d'actions reste en ligne avec les boutons icônes
+.datagrid-card .list-inline .dropdown {
+    display: inline-flex;
 }
 
 // --- Toolbar (au-dessus de la table) ---
@@ -144,6 +150,7 @@
     th.num {
         text-align: right;
         font-variant-numeric: tabular-nums;
+        white-space: nowrap;
     }
 
     // Colonne d'actions
@@ -170,6 +177,37 @@
         width: 40px;
         padding-right: 0;
     }
+}
+
+// --- Barre de sélection (actions par lot) ---
+.datagrid-batchbar[hidden] {
+    display: none;
+}
+
+.datagrid-batchbar {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-4);
+    padding: var(--sp-2) var(--sp-4);
+    background: var(--brand-50);
+    border-bottom: 1px solid color-mix(in srgb, var(--brand-500) 18%, transparent);
+    flex-wrap: wrap;
+}
+
+.datagrid-batchbar-count {
+    font-size: var(--fs-13);
+    color: var(--brand-700);
+
+    strong {
+        font-weight: var(--fw-semibold);
+    }
+}
+
+.datagrid-batchbar-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    flex-wrap: wrap;
 }
 
 // --- Pied : pagination + batch ---
@@ -257,6 +295,53 @@
     color: var(--fg-3);
 }
 
+// Bouton « Plus de filtres » / « Moins de filtres »
+.datagrid-filters-toggle {
+    display: inline-flex;
+    align-items: center;
+    height: 28px;
+    padding: 0 var(--sp-3);
+    background: var(--surface-2);
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    font: inherit;
+    font-size: var(--fs-13);
+    font-weight: var(--fw-medium);
+    color: var(--fg-2);
+    cursor: pointer;
+    transition: background var(--t-quick), color var(--t-quick);
+
+    &:hover {
+        background: color-mix(in srgb, var(--surface-2) 92%, #000);
+        color: var(--fg-1);
+    }
+
+    svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .filters-toggle-label {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--sp-2);
+    }
+
+    .filters-toggle-less {
+        display: none;
+    }
+}
+
+.datagrid-filters.is-expanded .datagrid-filters-toggle {
+    .filters-toggle-more {
+        display: none;
+    }
+
+    .filters-toggle-less {
+        display: inline-flex;
+    }
+}
+
 .datagrid-filters-row {
     display: flex;
     align-items: flex-end;
@@ -264,22 +349,23 @@
     flex-wrap: wrap;
 }
 
-.datagrid-filters-fields {
+// Disposition inline partagée (ligne principale + section avancée)
+.datagrid-filters-fields,
+.datagrid-filters-advanced {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     gap: var(--sp-3);
     flex-wrap: wrap;
-    flex: 1;
 
     // Chaque champ (.field du thème de form projet) sans marge verticale
     > * {
         margin: 0;
     }
 
-    // Libellés masqués visuellement (placeholders en relais) mais lus par
-    // les lecteurs d'écran.
-    .field-label,
-    label {
+    // Libellés empilés masqués visuellement (placeholders en relais), mais
+    // toujours lus par les lecteurs d'écran. Le label de checkbox
+    // (.field-checkbox-label) reste visible.
+    .field-label {
         position: absolute;
         width: 1px;
         height: 1px;
@@ -293,13 +379,13 @@
 
     .input,
     input.form-control {
-        min-width: 260px;
+        min-width: 240px;
     }
 
     select,
     .select,
     select.form-select {
-        min-width: 180px;
+        min-width: 170px;
         font-family: var(--font-sans);
         font-size: var(--fs-14);
         color: var(--fg-1);
@@ -321,13 +407,74 @@
     }
 }
 
+.datagrid-filters-fields {
+    flex: 1;
+    align-items: flex-end;
+}
+
+// Section des filtres avancés : repliée par défaut, dépliée via le toggle
+.datagrid-filters-advanced {
+    margin-top: var(--sp-3);
+    padding-top: var(--sp-4);
+    border-top: 1px dashed var(--border);
+    display: none;
+}
+
+.datagrid-filters.is-expanded .datagrid-filters-advanced {
+    display: flex;
+}
+
+// Label de la checkbox « inclure archivés » (reste visible)
+.field-checkbox-label {
+    font-size: var(--fs-14);
+    color: var(--fg-1);
+}
+
 .datagrid-filters-actions {
     display: flex;
     align-items: center;
     gap: var(--sp-2);
     margin-left: auto;
+}
 
-    .list-inline {
-        margin: 0;
+// --- Helpers de cellules (composition applicative) ---
+.datagrid {
+    td.cell-reference {
+        font-family: var(--font-mono);
+        font-size: var(--fs-12);
+        color: var(--fg-2);
+        white-space: nowrap;
     }
+
+    td.cell-strong a {
+        font-weight: var(--fw-semibold);
+        color: var(--fg-1);
+
+        &:hover {
+            color: var(--brand-600);
+        }
+    }
+}
+
+.cell-stack {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.3;
+}
+
+.cell-stack-primary {
+    color: var(--fg-1);
+}
+
+.cell-stack-secondary {
+    font-size: var(--fs-13);
+    color: var(--fg-2);
+
+    &:hover {
+        color: var(--brand-600);
+    }
+}
+
+.cell-muted {
+    color: var(--fg-3);
 }

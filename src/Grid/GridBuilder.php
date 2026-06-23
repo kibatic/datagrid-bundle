@@ -230,12 +230,14 @@ class GridBuilder
         }
     }
 
-    public function addBatchAction(string $label, string $url, bool $confirm = true): self
+    public function addBatchAction(string|TranslatableMessage $label, string $url, bool $confirm = true, ?string $variant = null, ?string $icon = null): self
     {
         $this->batchActions[] = [
             'label' => $label,
             'url' => $url,
             'confirm' => $confirm,
+            'variant' => $variant,
+            'icon' => $icon,
         ];
 
         return $this;

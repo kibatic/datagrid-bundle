@@ -12,6 +12,20 @@
                 "webpackMode": "eager",
                 "fetch": "eager",
                 "enabled": true
+            },
+            "filters-collapse": {
+                "main": "dist/filters_collapse_controller.js",
+                "name": "filters-collapse",
+                "webpackMode": "eager",
+                "fetch": "eager",
+                "enabled": true
+            },
+            "batch": {
+                "main": "dist/batch_controller.js",
+                "name": "batch",
+                "webpackMode": "eager",
+                "fetch": "eager",
+                "enabled": true
             }
         },
         "importmap": {

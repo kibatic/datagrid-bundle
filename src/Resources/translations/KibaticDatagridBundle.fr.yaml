@@ -4,7 +4,12 @@ Select all: Tout selectionner
 Sort: Trier
 Filter: Filtrer
 Filters: Filtres
+'More filters': Plus de filtres
+'Fewer filters': Moins de filtres
 Reset: Réinitialiser
+selected: sélectionnés
+'Deselect all': Tout désélectionner
+'Confirm this action?': Confirmer cette action ?
 result_count: '{0}Aucun résultat|{1}1 résultat|]1,Inf[%count% résultats'
 
 column:
