@@ -1,0 +1,140 @@
+{% set header_tr_class = block('grid_header_tr_class') is defined ? block('grid_header_tr_class') : '' %}
+
+{% if grid.pagination.totalItemCount > 0 %}
+    <div class="datagrid-card">
+        <div class="toolbar">
+            <span class="toolbar-meta">
+                {{ 'result_count'|trans({'%count%': grid.pagination.totalItemCount}, 'KibaticDatagridBundle') }}
+            </span>
+            <span class="toolbar-spacer"></span>
+            {% block toolbar_actions %}{% endblock %}
+        </div>
+
+        {% if grid.hasBatchActions %}
+            <form name="datagrid-batch-action" method="{{ grid.batchMethod }}" action="{{ grid.batchActions[0].url }}" data-controller="confirm">
+            <input type="hidden" name="_batch_csrf_token" value="{{ csrf_token(grid.batchActionsTokenId) }}">
+        {% endif %}
+
+        <table class="{% block grid_table_class %}datagrid{% endblock %}" {% if grid.hasBatchActions %}data-controller="checker"{% endif %}>
+            <thead>
+            <tr{% if header_tr_class is not empty %} class="{{ header_tr_class }}"{% endif %}>
+                {% if grid.hasBatchActions %}
+                    <th class="checkbox-cell">
+                        <input type="checkbox" class="checkbox" data-checker-target="master" title="{{ 'Select all'|trans({}, 'KibaticDatagridBundle') }}" />
+                    </th>
+                {% endif %}
+                {% for column in grid.columns %}
+                    {% set th_class = block('grid_header_th_class') is defined ? block('grid_header_th_class') : '' %}
+
+                    {% if column.templateParameter('col_class', null) is not null %}
+                        {% set th_class = th_class ~ ' ' ~ column.templateParameter('col_class', null) %}
+                    {% endif %}
+                    {% set current_order = grid.request.query.get('sort_order') %}
+                    {% set is_sorted = column.sortable is not null and grid.request.query.get('sort_by') == column.sortable %}
+
+                    <th class="{{ th_class }}{% if column.sortable is not null %} sortable{% endif %}{% if is_sorted %} sorted{% endif %}">
+                        {% if not (column.name starts with '_') %}
+                            {% if column.sortable is not null %}
+                                {% set sortUrl = path(
+                                    grid.pagination.route,
+                                    grid.pagination.params|merge({
+                                        'sort_by': column.sortable,
+                                        'sort_order': current_order == 'ASC' ? 'DESC' : 'ASC'
+                                    })
+                                ) %}
+                                <a href="{{ sortUrl }}" title="{{ 'Sort'|trans({}, 'KibaticDatagridBundle') }}">
+                                    <span>{{ column.name|trans }}</span>
+                                    {% if is_sorted and current_order == 'ASC' %}
+                                        <svg class="sort-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6 -6l6 6" /></svg>
+                                    {% elseif is_sorted %}
+                                        <svg class="sort-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6l6 -6" /></svg>
+                                    {% else %}
+                                        <svg class="sort-icon sort-icon-muted" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 9l4 -4l4 4" /><path d="M16 15l-4 4l-4 -4" /></svg>
+                                    {% endif %}
+                                </a>
+                            {% else %}
+                                {{ column.name|trans }}
+                            {% endif %}
+                        {% endif %}
+                    </th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in grid.pagination %}
+                {% set gridLoop = loop %}
+                <tr{{ grid.rowAttributes(item)|raw }}>
+                    {% if grid.hasBatchActions %}
+                        <td class="checkbox-cell">
+                            <input type="checkbox" class="checkbox" name="ids[]" value="{{ item.id }}" data-checker-target="checkbox" />
+                        </td>
+                    {% endif %}
+                    {% for column in grid.columns %}
+                        <td {% if column.templateParameter('col_class', null) is not null %}class="{{ column.templateParameter('col_class', null) }}"{% endif %}>
+                            {% include '@KibaticDatagrid/_column_value.html.twig' %}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="datagrid-footer">
+            {% if grid.hasBatchActions %}
+                <div class="datagrid-batch">
+                    <div class="input-group">
+                        <label class="input-group-text" for="batch-select">
+                            {{ 'Batch action'|trans({}, 'KibaticDatagridBundle') }}
+                        </label>
+                        <select onchange="batch_set_action(this)" class="form-select" id="batch-select">
+                            {% for batchAction in grid.batchActions %}
+                                <option value="{{ batchAction.url }}" data-confirm="{{ batchAction.confirm ? 'true' : 'false' }}">{{ batchAction.label|trans }}</option>
+                            {% endfor %}
+                        </select>
+                        <script>
+                            function batch_set_action(selectElement) {
+                                let form = selectElement.closest('form');
+                                let selectedOption = selectElement.options[selectElement.selectedIndex];
+
+                                parts = selectElement.value.split('|');
+                                form.action = parts[0];
+
+                                if (selectedOption.dataset.confirm == 'true') {
+                                    if (form.getAttribute('data-controller') !== null) {
+                                        form.setAttribute('data-controller', form.getAttribute('data-controller') + ' confirm');
+                                    } else {
+                                        form.setAttribute('data-controller', 'confirm');
+                                    }
+                                } else {
+                                    form.setAttribute('data-controller', form.getAttribute('data-controller').replace('confirm', ''));
+                                }
+                            }
+
+                            document.addEventListener('DOMContentLoaded', () => batch_set_action(document.getElementById('batch-select')))
+                            document.addEventListener('turbo:load', () => batch_set_action(document.getElementById('batch-select')))
+                        </script>
+                        <input type="submit" class="btn btn-primary btn-sm" value="OK">
+                    </div>
+                </div>
+            {% else %}
+                <span></span>
+            {% endif %}
+
+            <div class="datagrid-pagination">
+                {{ knp_pagination_render(grid.pagination, '@KnpPaginator/Pagination/bootstrap_v5_pagination.html.twig') }}
+            </div>
+        </div>
+
+        {% if grid.hasBatchActions %}</form>{% endif %}
+    </div>
+{% else %}
+    <div class="datagrid-card">
+        <div class="empty-state">
+            <svg class="empty-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 13a8 8 0 0 1 7 -7h2a8 8 0 0 1 7 7v3a3 3 0 0 1 -3 3h-10a3 3 0 0 1 -3 -3z" opacity=".4" />
+                <path d="M4 13h3l2 3h6l2 -3h3" />
+            </svg>
+            <h3>{{ 'No result'|trans({}, 'KibaticDatagridBundle') }}</h3>
+        </div>
+    </div>
+{% endif %}

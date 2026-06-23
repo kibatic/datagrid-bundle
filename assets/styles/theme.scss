@@ -1,0 +1,48 @@
+// =========================================================
+//  Kibatic Datagrid — thème par défaut (point d'entrée SCSS)
+//
+//  Importer ce fichier depuis le projet pour appliquer le thème :
+//      @use 'theme';   // via load_path du sass-bundle
+//  puis surcharger --brand-500 dans une feuille projet pour reskinner.
+//
+//  Organisation : un partial = un composant. Les valeurs thémables
+//  restent des custom properties CSS (cf. abstracts/_tokens.scss).
+// =========================================================
+
+// 1. Fondations (ordre important : tokens avant tout le reste)
+@use 'abstracts/tokens';
+@use 'abstracts/mixins';
+@use 'base/typography';
+@use 'base/bootstrap';
+
+// 2. Composants
+@use 'components/buttons';
+@use 'components/forms';
+@use 'components/badges';
+@use 'components/card';
+@use 'components/modal';
+@use 'components/menu';
+@use 'components/avatar';
+@use 'components/chips';
+@use 'components/empty-state';
+@use 'components/datagrid';
+
+// 3. Utilitaires de mise en page légers
+.row-flex {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+}
+
+.col-flex {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+}
+
+.between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-3);
+}

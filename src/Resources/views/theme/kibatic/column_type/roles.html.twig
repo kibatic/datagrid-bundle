@@ -1,0 +1,7 @@
+{% set ignoreRoleUser = parameters.ignoreRoleUser|default(true) %}
+
+{% for role in value %}
+    {% if not ignoreRoleUser or role != 'ROLE_USER' %}
+        <span class="badge badge-brand">{{ role|replace({'ROLE_': '', '_': ' '})|lower|capitalize }}</span>
+    {% endif %}
+{% endfor %}

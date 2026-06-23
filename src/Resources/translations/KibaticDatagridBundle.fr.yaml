@@ -3,7 +3,9 @@ Batch action: Traitement par lot
 Select all: Tout selectionner
 Sort: Trier
 Filter: Filtrer
+Filters: Filtres
 Reset: Réinitialiser
+result_count: '{0}Aucun résultat|{1}1 résultat|]1,Inf[%count% résultats'
 
 column:
   boolean:

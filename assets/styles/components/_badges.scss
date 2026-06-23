@@ -1,0 +1,66 @@
+// =========================================================
+//  Badges — statuts, rôles, valeurs d'énumération.
+//  Couvre nos classes sémantiques (.badge-success…) et les
+//  classes Bootstrap émises par le column_type array du bundle
+//  (.text-bg-secondary, .bg-primary…).
+// =========================================================
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px var(--sp-2);
+    font-size: var(--fs-12);
+    font-weight: var(--fw-medium);
+    line-height: 1.4;
+    border-radius: var(--radius);
+    background: var(--surface-2);
+    color: var(--fg-2);
+    border: 1px solid transparent;
+
+    &.badge-success,
+    &.text-bg-success {
+        background: var(--success-50);
+        color: var(--success-700);
+    }
+
+    &.badge-warning,
+    &.text-bg-warning {
+        background: var(--warning-50);
+        color: var(--warning-700);
+    }
+
+    &.badge-danger,
+    &.text-bg-danger {
+        background: var(--danger-50);
+        color: var(--danger-700);
+    }
+
+    &.badge-info,
+    &.text-bg-info {
+        background: var(--info-50);
+        color: var(--info-700);
+    }
+
+    &.badge-brand,
+    &.text-bg-primary,
+    &.bg-primary {
+        background: var(--brand-50);
+        color: var(--brand-700);
+    }
+
+    &.text-bg-secondary {
+        background: var(--surface-2);
+        color: var(--fg-2);
+    }
+
+    // Pastille de statut en préfixe
+    &.badge-dot::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        border-radius: var(--radius-full);
+        background: currentColor;
+        flex-shrink: 0;
+    }
+}

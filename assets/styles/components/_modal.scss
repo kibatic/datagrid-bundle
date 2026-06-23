@@ -1,0 +1,64 @@
+// =========================================================
+//  Modale — confirmations (suppression) et dialogues.
+//  Cible le markup Bootstrap (.modal-content…) et SweetAlert
+//  utilisés par les confirmations du bundle.
+// =========================================================
+
+.modal-backdrop {
+    background-color: rgba(15, 23, 42, 0.4);
+    backdrop-filter: none;
+}
+
+.modal-content {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-modal);
+}
+
+.modal-header {
+    padding: var(--sp-6) var(--sp-6) var(--sp-3);
+    border-bottom: 1px solid var(--border);
+
+    .modal-title {
+        font-size: var(--fs-16);
+        font-weight: var(--fw-semibold);
+    }
+
+    .btn-close {
+        opacity: 0.4;
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+
+    // Bulle d'icône pour les confirmations destructrices
+    .modal-icon-bubble {
+        width: 36px;
+        height: 36px;
+        border-radius: var(--radius-full);
+        display: grid;
+        place-items: center;
+        flex-shrink: 0;
+        background: var(--danger-50);
+        color: var(--danger-700);
+
+        svg {
+            width: 20px;
+            height: 20px;
+        }
+    }
+}
+
+.modal-body {
+    padding: var(--sp-3) var(--sp-6) var(--sp-6);
+    color: var(--fg-2);
+}
+
+.modal-footer {
+    padding: var(--sp-3) var(--sp-6);
+    border-top: 1px solid var(--border);
+    justify-content: flex-end;
+    gap: var(--sp-2);
+}

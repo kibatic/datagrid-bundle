@@ -1,0 +1,4 @@
+{# Date au format jour/mois/année par défaut ; surchargeable via le paramètre `format`. #}
+{% set format = parameters.format|default('d/m/Y') %}
+
+<span class="datetime">{% if value is not null %}{{ value|date(format) }}{% else %}{{ null_value|default('-') }}{% endif %}</span>

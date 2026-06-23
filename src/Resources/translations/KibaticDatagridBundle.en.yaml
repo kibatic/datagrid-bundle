@@ -1,3 +1,6 @@
+result_count: '{0}No result|{1}1 result|]1,Inf[%count% results'
+Filters: Filters
+
 column:
   boolean:
     'true': Yes

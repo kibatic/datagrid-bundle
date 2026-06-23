@@ -1,0 +1,94 @@
+// =========================================================
+//  Remap Bootstrap 5 → tokens du thème.
+//  Bootstrap 5.3 expose la plupart des valeurs visuelles en
+//  variables CSS : on les remappe ici pour que les composants
+//  Bootstrap (formulaires de filtres, alertes, modales…)
+//  héritent du thème sans le look Bootstrap par défaut.
+//
+//  Doit être chargé après les tokens.
+// =========================================================
+
+:root {
+    --bs-primary: var(--brand-500);
+    --bs-primary-rgb: 79, 111, 154;
+
+    --bs-body-bg: var(--surface);
+    --bs-body-color: var(--fg-1);
+    --bs-secondary-color: var(--fg-2);
+    --bs-tertiary-color: var(--fg-3);
+    --bs-tertiary-bg: var(--surface);
+    --bs-secondary-bg: var(--surface-2);
+
+    --bs-body-font-family: var(--font-sans);
+    --bs-body-font-size: var(--fs-14);
+    --bs-body-line-height: var(--lh-body);
+
+    --bs-link-color: var(--brand-600);
+    --bs-link-hover-color: var(--brand-700);
+
+    --bs-border-color: var(--border);
+    --bs-border-color-translucent: rgba(15, 23, 42, 0.08);
+    --bs-border-radius: var(--radius);
+    --bs-border-radius-sm: var(--radius-sm);
+    --bs-border-radius-lg: var(--radius-lg);
+    --bs-border-radius-xl: var(--radius-lg);
+    --bs-border-radius-xxl: var(--radius-lg);
+    --bs-border-radius-pill: var(--radius-full);
+
+    --bs-danger: var(--danger-500);
+    --bs-danger-rgb: 220, 38, 38;
+    --bs-success: var(--success-500);
+    --bs-success-rgb: 22, 163, 74;
+    --bs-warning: var(--warning-500);
+    --bs-warning-rgb: 217, 119, 6;
+    --bs-info: var(--info-500);
+    --bs-info-rgb: 8, 145, 178;
+
+    --bs-card-bg: var(--card);
+    --bs-card-border-color: var(--border);
+    --bs-card-border-radius: var(--radius-lg);
+
+    --bs-modal-bg: var(--card);
+    --bs-modal-border-color: var(--border);
+    --bs-modal-border-radius: var(--radius-lg);
+    --bs-modal-box-shadow: var(--shadow-modal);
+
+    --bs-form-control-bg: var(--card);
+    --bs-form-control-disabled-bg: var(--surface-2);
+    --bs-input-btn-focus-color: color-mix(in srgb, var(--brand-500) 18%, transparent);
+    --bs-input-btn-focus-box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-500) 18%, transparent);
+
+    --bs-alert-border-radius: var(--radius);
+}
+
+// --- Alertes (notifications + état d'erreur) ---
+.alert {
+    border-radius: var(--radius);
+    font-size: var(--fs-14);
+    border-width: 1px;
+    margin-bottom: var(--sp-4);
+
+    &.alert-info {
+        background: var(--info-50);
+        border-color: color-mix(in srgb, var(--info-500) 20%, transparent);
+        color: var(--info-700);
+    }
+
+    &.alert-success {
+        background: var(--success-50);
+        border-color: color-mix(in srgb, var(--success-500) 20%, transparent);
+        color: var(--success-700);
+    }
+
+    &.alert-warning {
+        background: var(--warning-50);
+        border-color: color-mix(in srgb, var(--warning-500) 20%, transparent);
+        color: var(--warning-700);
+    }
+
+    &.alert-danger {
+        background: var(--danger-50);
+        border-color: color-mix(in srgb, var(--danger-500) 20%, transparent);
+        color: var(--danger-700);
+    }
+}

@@ -1,0 +1,108 @@
+// =========================================================
+//  Styles au niveau élément (porté de colors_and_type.css)
+//  Pose les bases typographiques du thème sur les balises
+//  brutes, avant toute classe de composant.
+// =========================================================
+
+@use '../abstracts/mixins' as *;
+
+html {
+    font-family: var(--font-sans);
+    font-size: var(--fs-14);
+    color: var(--fg-1);
+    background: var(--surface);
+    font-feature-settings: 'cv11', 'ss01';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    margin: 0;
+    line-height: var(--lh-body);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-tight);
+    color: var(--fg-1);
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+
+h1 {
+    font-size: var(--fs-24);
+    letter-spacing: -0.02em;
+}
+
+h2 {
+    font-size: var(--fs-20);
+}
+
+h3 {
+    font-size: var(--fs-18);
+}
+
+h4 {
+    font-size: var(--fs-16);
+}
+
+h5 {
+    font-size: var(--fs-15);
+}
+
+h6 {
+    font-size: var(--fs-13);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--fg-2);
+    font-weight: var(--fw-semibold);
+}
+
+p {
+    margin: 0;
+}
+
+a {
+    color: var(--brand-600);
+    text-decoration: none;
+    transition: color var(--t-quick);
+
+    &:hover {
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+}
+
+code,
+kbd,
+.mono {
+    font-family: var(--font-mono);
+    font-size: var(--fs-13);
+}
+
+small,
+.meta {
+    font-size: var(--fs-13);
+    color: var(--fg-2);
+}
+
+.num,
+td.num,
+th.num,
+.tabular {
+    @include tabular-nums;
+}
+
+::selection {
+    background: var(--brand-100);
+    color: var(--fg-1);
+}
+
+*:focus-visible {
+    @include focus-ring;
+}

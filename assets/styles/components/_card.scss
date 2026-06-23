@@ -1,0 +1,37 @@
+// =========================================================
+//  Card / panneau — conteneur des vues détail et formulaires.
+// =========================================================
+
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: none;
+
+    .card-header {
+        padding: var(--sp-4) var(--sp-6);
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: var(--sp-3);
+        background: none;
+        border-radius: 0;
+
+        h2 {
+            font-size: var(--fs-16);
+            font-weight: var(--fw-semibold);
+            margin: 0;
+        }
+    }
+
+    .card-body {
+        padding: var(--sp-6);
+    }
+
+    .card-footer {
+        padding: var(--sp-4) var(--sp-6);
+        border-top: 1px solid var(--border);
+        background: none;
+        border-radius: 0;
+    }
+}

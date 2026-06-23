@@ -1,0 +1,36 @@
+<div class="datagrid-filters">
+    <div class="datagrid-filters-head">
+        <span class="datagrid-filters-title">{{ 'Filters'|trans({}, 'KibaticDatagridBundle') }}</span>
+        {% block filters_head_actions %}{% endblock %}
+    </div>
+
+    {{ form_start(form) }}
+    <div class="datagrid-filters-row">
+        <div class="datagrid-filters-fields">
+            {% for field in form %}
+                {% if field.vars.block_prefixes[0] != 'button' %}
+                    {{ form_row(field) }}
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <div class="datagrid-filters-actions">
+            {% for field in form %}
+                {% if field.vars.block_prefixes[0] == 'button' %}
+                    {{ form_row(field) }}
+                {% endif %}
+            {% endfor %}
+
+            <button type="submit" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v2.172a2 2 0 0 1 -.586 1.414l-4.414 4.414v7l-6 2v-8.5l-4.48 -4.928a2 2 0 0 1 -.52 -1.345v-2.172z" /></svg>
+                {{ 'Filter'|trans({}, 'KibaticDatagridBundle') }}
+            </button>
+
+            <a href="{{ datagrid_reset_url(form) }}" class="btn btn-ghost">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4" /><path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" /></svg>
+                {{ 'Reset'|trans({}, 'KibaticDatagridBundle') }}
+            </a>
+        </div>
+    </div>
+    {{ form_end(form) }}
+</div>

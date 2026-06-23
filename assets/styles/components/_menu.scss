@@ -1,0 +1,66 @@
+// =========================================================
+//  Dropdown / menu — menus d'actions contextuelles.
+//  Cible le markup Bootstrap (.dropdown-menu / .dropdown-item).
+// =========================================================
+
+.dropdown-menu {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-pop);
+    padding: var(--sp-1);
+    min-width: 180px;
+    font-size: var(--fs-14);
+
+    .dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: var(--sp-2);
+        padding: var(--sp-2) var(--sp-3);
+        border-radius: var(--radius-sm);
+        font-size: var(--fs-14);
+        color: var(--fg-1);
+        cursor: pointer;
+        transition: background var(--t-quick);
+
+        svg {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+
+        &:hover,
+        &:focus {
+            background: var(--surface-2);
+            color: var(--fg-1);
+        }
+
+        &.text-danger,
+        &.danger {
+            color: var(--danger-700);
+
+            &:hover,
+            &:focus {
+                background: var(--danger-50);
+                color: var(--danger-700);
+            }
+        }
+    }
+
+    .dropdown-divider {
+        height: 1px;
+        background: var(--border);
+        border: none;
+        margin: var(--sp-1) 0;
+        opacity: 1;
+    }
+
+    .dropdown-header {
+        font-size: var(--fs-12);
+        font-weight: var(--fw-semibold);
+        color: var(--fg-3);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        padding: var(--sp-2) var(--sp-3);
+    }
+}
