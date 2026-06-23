@@ -29,16 +29,6 @@
             </div>
         {% endif %}
 
-        {% if not grid.hasBatchActions %}
-            <div class="toolbar">
-                <span class="toolbar-meta">
-                    {{ 'result_count'|trans({'%count%': grid.pagination.totalItemCount}, 'KibaticDatagridBundle') }}
-                </span>
-                <span class="toolbar-spacer"></span>
-                {% block toolbar_actions %}{% endblock %}
-            </div>
-        {% endif %}
-
         {% if grid.hasBatchActions %}
             <form name="datagrid-batch-action" method="{{ grid.batchMethod }}" action="{{ grid.batchActions[0].url }}" data-batch-target="form">
             <input type="hidden" name="_batch_csrf_token" value="{{ csrf_token(grid.batchActionsTokenId) }}">
