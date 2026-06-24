@@ -1,5 +1,26 @@
-{% if value %}
-    <span class="badge badge-success">{{ 'column.boolean.true'|trans({}, 'KibaticDatagridBundle') }}</span>
+{#
+    Colonne booléenne rendue en badge, couleurs configurables.
+
+    Paramètres de colonne :
+      - trueVariant  : variante du badge si vrai  (défaut 'success')
+      - falseVariant : variante du badge si faux  (défaut 'neutral')
+                       variantes : success / warning / danger / info / brand / neutral
+      - trueLabel / falseLabel : libellés (défaut : traductions du bundle)
+
+    Valeur nulle : affiche null_value (défaut '—'), sans badge.
+
+    Exemples :
+      - oui important / non neutre :   (défauts) → vert / gris
+      - oui neutre / non bloquant :    {trueVariant: 'neutral', falseVariant: 'danger'}
+      - oui ok / non erreur :          {falseVariant: 'danger'}
+#}
+{% if value is null %}
+    <span class="cell-muted">{{ null_value|default('—') }}</span>
 {% else %}
-    <span class="badge">{{ 'column.boolean.false'|trans({}, 'KibaticDatagridBundle') }}</span>
+    {% set variant = value ? (parameters.trueVariant ?? 'success') : (parameters.falseVariant ?? 'neutral') %}
+    {% set label = value
+        ? (parameters.trueLabel ?? 'column.boolean.true'|trans({}, 'KibaticDatagridBundle'))
+        : (parameters.falseLabel ?? 'column.boolean.false'|trans({}, 'KibaticDatagridBundle')) %}
+
+    <span class="badge{% if variant and variant != 'neutral' %} badge-{{ variant }}{% endif %}">{{ label }}</span>
 {% endif %}

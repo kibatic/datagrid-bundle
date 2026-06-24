@@ -1,7 +1,39 @@
-{% set ignoreRoleUser = parameters.ignoreRoleUser|default(true) %}
+{#
+    Colonne « rôles » : un badge par rôle, couleur et icône configurables.
+
+    Le bundle fournit des défauts pour les rôles standards Symfony
+    (ROLE_SUPER_ADMIN, ROLE_ADMIN, ROLE_USER). Les projets peuvent les
+    surcharger et ajouter leurs rôles métier via les paramètres :
+
+      - variants : map rôle => variante de badge (fusionnée par-dessus les défauts)
+                   ex. {'ROLE_MANAGER': 'info'}
+      - icons    : map rôle => icône ux:icon (fusionnée par-dessus les défauts)
+      - ignoreRoleUser : masque ROLE_USER (défaut true)
+
+    Variante par défaut d'un rôle inconnu : 'brand' (sans icône).
+    Le libellé vient de role|trans (prévoir une clé de traduction par rôle).
+#}
+{% set ignoreRoleUser = parameters.ignoreRoleUser ?? true %}
+
+{% set variants = {
+    'ROLE_SUPER_ADMIN': 'danger',
+    'ROLE_ADMIN': 'warning',
+    'ROLE_USER': 'neutral',
+}|merge(parameters.variants ?? {}) %}
+
+{% set icons = {
+    'ROLE_SUPER_ADMIN': 'bi:shield-lock-fill',
+    'ROLE_ADMIN': 'bi:shield-fill-check',
+    'ROLE_USER': 'bi:person',
+}|merge(parameters.icons ?? {}) %}
 
 {% for role in value %}
     {% if not ignoreRoleUser or role != 'ROLE_USER' %}
-        <span class="badge badge-brand">{{ role|replace({'ROLE_': '', '_': ' '})|lower|capitalize }}</span>
+        {% set variant = variants[role] ?? 'brand' %}
+        {% set icon = icons[role] ?? null %}
+        <span class="badge{% if variant and variant != 'neutral' %} badge-{{ variant }}{% endif %}">
+            {%- if icon %}<twig:ux:icon name="{{ icon }}" />{% endif -%}
+            {{ role|trans }}
+        </span>
     {% endif %}
 {% endfor %}

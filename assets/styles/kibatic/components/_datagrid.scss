@@ -110,13 +110,13 @@
             color: var(--brand-600);
         }
 
-        // Icône de tri
+        // Icône de tri (Bootstrap Icons, à remplissage : couleur via
+        // `color`/currentColor, pas via stroke).
         .sort-icon {
             width: 14px;
             height: 14px;
             flex: none;
-            stroke: var(--fg-3);
-            fill: none;
+            color: var(--fg-3);
         }
 
         .sort-icon-muted {
@@ -124,7 +124,7 @@
         }
 
         &.sorted .sort-icon {
-            stroke: var(--brand-600);
+            color: var(--brand-600);
         }
     }
 

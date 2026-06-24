@@ -13,10 +13,11 @@ use Kibatic\DatagridBundle\Grid\Theme;
 $grid->setTheme(Theme::KIBATIC);
 ```
 
-Côté assets du projet, importer le point d'entrée SCSS :
+Côté assets du projet, importer le point d'entrée SCSS (avec le dossier
+`assets/styles` du bundle dans le `load_path` du sass-bundle) :
 
 ```scss
-@use '@kibatic/datagrid-bundle/styles/theme';
+@use 'kibatic/theme';
 ```
 
 ## Recolorer pour un client
@@ -36,14 +37,21 @@ actives et la pagination. C'est le seul override requis pour un reskin de base.
 
 ## Organisation
 
+Tout le SCSS du thème est regroupé sous `assets/styles/kibatic/` (en miroir du
+thème Twig `src/Resources/views/theme/kibatic/`), pour ne pas se mélanger aux
+éventuels autres thèmes.
+
 ```
-assets/styles/
+assets/styles/kibatic/
 ├── theme.scss            point d'entrée (@use des fondations + composants)
 ├── abstracts/
 │   ├── _tokens.scss      design tokens (custom properties CSS)
 │   └── _mixins.scss      mixins partagés (focus-ring, tabular-nums…)
 ├── base/
-│   └── _typography.scss  styles au niveau élément
+│   ├── _fonts.scss       @font-face Inter auto-hébergée
+│   ├── _typography.scss  styles au niveau élément
+│   ├── _bootstrap.scss   remap des variables Bootstrap (filet de sécurité)
+│   └── _compat.scss      fallbacks cross-browser
 └── components/           un partial = un composant (datagrid, badges, …)
 ```
 

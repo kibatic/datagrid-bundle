@@ -53,14 +53,4 @@
         background: var(--surface-2);
         color: var(--fg-2);
     }
-
-    // Pastille de statut en préfixe
-    &.badge-dot::before {
-        content: '';
-        width: 6px;
-        height: 6px;
-        border-radius: var(--radius-full);
-        background: currentColor;
-        flex-shrink: 0;
-    }
 }
