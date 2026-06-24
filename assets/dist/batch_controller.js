@@ -1,4 +1,5 @@
 import { Controller } from '@hotwired/stimulus'
+import Swal from 'sweetalert2'
 
 /*
  * Sélection par lot du datagrid.
@@ -65,13 +66,31 @@ export default class extends Controller {
 
     submit(event) {
         const button = event.currentTarget
-        const confirmMessage = button.dataset.confirmText
+        const url = button.dataset.url
 
-        if (button.dataset.confirm === 'true' && confirmMessage && !window.confirm(confirmMessage)) {
+        const run = () => {
+            this.formTarget.action = url
+            this.formTarget.submit()
+        }
+
+        if (button.dataset.confirm === 'true') {
+            // Même confirmation SweetAlert que le reste de l'app (style par défaut).
+            Swal.fire({
+                title: 'Êtes-vous sûr ?',
+                text: button.dataset.confirmText,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Oui',
+                cancelButtonText: 'Non',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    run()
+                }
+            })
+
             return
         }
 
-        this.formTarget.action = button.dataset.url
-        this.formTarget.submit()
+        run()
     }
 }
