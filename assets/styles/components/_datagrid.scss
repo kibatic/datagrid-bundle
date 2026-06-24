@@ -10,7 +10,9 @@
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    overflow: hidden;
+    // `clip` arrondit les coins SANS créer de conteneur de défilement,
+    // ce qui préserve le `position: sticky` de l'en-tête et de la barre batch.
+    overflow: clip;
 }
 
 // Listes inline du bundle (actions de ligne, boutons de filtres) :
@@ -67,6 +69,9 @@
     margin: 0;
 
     thead th {
+        position: sticky;
+        top: var(--topbar-h);
+        z-index: 2;
         text-align: left;
         font-size: var(--fs-13);
         font-weight: var(--fw-semibold);
@@ -179,11 +184,11 @@
     }
 }
 
-// Conteneur de défilement horizontal de la table (mobile/tablette) :
-// la table scrolle seule, en-tête et filtres restent en place.
+// Conteneur de défilement horizontal de la table : activé uniquement en
+// mobile/tablette (voir media query plus bas). Sur desktop il reste en
+// `overflow: visible` pour ne pas casser le `position: sticky` de l'en-tête.
 .datagrid-scroll {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    min-width: 0;
 }
 
 // --- Barre de sélection (actions par lot) ---
@@ -192,6 +197,9 @@
 }
 
 .datagrid-batchbar {
+    position: sticky;
+    top: var(--topbar-h);
+    z-index: 4;
     display: flex;
     align-items: center;
     gap: var(--sp-4);
@@ -236,8 +244,12 @@
     gap: var(--sp-1);
     flex-wrap: wrap;
     margin: 0;
+    padding: 0;
+    list-style: none;
 
     .page-item {
+        margin: 0;
+
         .page-link {
             min-width: 32px;
             height: 32px;
@@ -487,8 +499,13 @@
 // --- Responsive (mobile / tablette) ---
 
 @media (max-width: 768px) {
-    // La table conserve une largeur minimale et défile horizontalement
-    // plutôt que d'écraser les colonnes.
+    // Défilement horizontal de la table en mobile/tablette ; elle conserve une
+    // largeur minimale plutôt que d'écraser les colonnes.
+    .datagrid-scroll {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
     .datagrid-scroll .datagrid {
         min-width: 760px;
     }

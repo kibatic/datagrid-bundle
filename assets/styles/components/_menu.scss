@@ -17,13 +17,25 @@
         display: block;
     }
 
+    // Un item de menu peut être un <a> ou un <button> (formulaire de
+    // suppression) : on réinitialise le style natif du bouton pour qu'il
+    // occupe toute la largeur, comme les liens.
+    form {
+        margin: 0;
+    }
+
     .dropdown-item {
         display: flex;
         align-items: center;
         gap: var(--sp-2);
+        width: 100%;
         padding: var(--sp-2) var(--sp-3);
+        border: 0;
+        background: transparent;
         border-radius: var(--radius-sm);
+        font-family: inherit;
         font-size: var(--fs-14);
+        text-align: left;
         color: var(--fg-1);
         cursor: pointer;
         transition: background var(--t-quick);
