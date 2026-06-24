@@ -12,6 +12,7 @@
 // 1. Fondations (ordre important : tokens avant tout le reste)
 @use 'abstracts/tokens';
 @use 'abstracts/mixins';
+@use 'base/fonts';
 @use 'base/typography';
 @use 'base/bootstrap';
 @use 'base/compat';

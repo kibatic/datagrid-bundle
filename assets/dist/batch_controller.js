@@ -31,6 +31,10 @@ export default class extends Controller {
         }
         if (this.hasBarTarget) {
             this.barTarget.hidden = selected === 0
+            // Expose la hauteur de la barre pour décaler le sticky de l'en-tête
+            // (évite tout chevauchement). 0 quand la barre est masquée.
+            const barHeight = selected === 0 ? 0 : this.barTarget.offsetHeight
+            this.element.style.setProperty('--datagrid-batchbar-h', `${barHeight}px`)
         }
         if (this.hasToolbarTarget) {
             this.toolbarTarget.hidden = selected > 0

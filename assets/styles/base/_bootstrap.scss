@@ -6,6 +6,11 @@
 //  héritent du thème sans le look Bootstrap par défaut.
 //
 //  Doit être chargé après les tokens.
+//
+//  NB : ces règles n'ont d'effet que si la CSS de Bootstrap est réellement
+//  chargée par le projet. Le thème fonctionne sans Bootstrap (il restyle
+//  directement les classes utilisées) ; ce fichier n'est qu'un filet de
+//  sécurité pour les projets qui chargent encore Bootstrap.
 // =========================================================
 
 :root {

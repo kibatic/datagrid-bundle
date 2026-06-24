@@ -70,7 +70,9 @@
 
     thead th {
         position: sticky;
-        top: var(--topbar-h);
+        // Sous la barre batch quand elle est visible (sa hauteur est fournie
+        // par le contrôleur Stimulus batch), sinon sous la topbar éventuelle.
+        top: calc(var(--datagrid-sticky-top) + var(--datagrid-batchbar-h, 0px));
         z-index: 2;
         text-align: left;
         font-size: var(--fs-13);
@@ -198,7 +200,7 @@
 
 .datagrid-batchbar {
     position: sticky;
-    top: var(--topbar-h);
+    top: var(--datagrid-sticky-top);
     z-index: 4;
     display: flex;
     align-items: center;

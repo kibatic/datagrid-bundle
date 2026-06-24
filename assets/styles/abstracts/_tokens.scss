@@ -10,8 +10,6 @@
 //  --brand-50 / --brand-600 / --brand-700) côté projet.
 // =========================================================
 
-@import url('https://rsms.me/inter/inter.css');
-
 :root {
     // ---------- Brand (seul élément à surcharger côté client) ----------
     --brand-50: #eef2f8;
@@ -101,6 +99,11 @@
     --sidebar-w: 240px;
     --row-h: 44px; // confortable
     --field-h: 36px;
+
+    // Décalage du sticky des en-têtes/barres de datagrid. Défaut 0 : le
+    // datagrid ne suppose aucune topbar. Une app dont la topbar est sticky
+    // surcharge ce token avec sa hauteur (ex. --datagrid-sticky-top: var(--topbar-h)).
+    --datagrid-sticky-top: 0px;
 
     // ---------- Mouvement ----------
     --t-quick: 120ms ease-out;

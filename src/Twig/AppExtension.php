@@ -36,6 +36,10 @@ class AppExtension extends AbstractExtension
     /**
      * Invoque une closure passée en paramètre de colonne (ex. variante de
      * badge calculée selon la valeur et l'entité de la ligne).
+     *
+     * Sécurité : le callable doit toujours provenir de la configuration de la
+     * grille (code développeur), jamais d'une entrée utilisateur — c'est un
+     * appel de callable arbitraire.
      */
     public function call(callable $callback, mixed ...$args): mixed
     {
