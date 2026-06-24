@@ -33,6 +33,7 @@ class GridBuilder
     private ?string $theme = '@KibaticDatagrid/theme/bootstrap5';
     private ?string $explicitRouteName = null;
     private array $explicitRouteParams = [];
+    private string $paginationKey = 'page';
 
     private ?Grid $grid;
 
@@ -89,7 +90,7 @@ class GridBuilder
     public function setTheme(string $theme): self
     {
         $this->theme = $theme;
-        
+
         return $this;
     }
 
@@ -99,9 +100,9 @@ class GridBuilder
     public function addColumn(
         string|TranslatableMessage $name,
         string|callable|null $value = null,
-        string $template = null,
+        ?string $template = null,
         array $templateParameters = [],
-        string $sortable = null,
+        ?string $sortable = null,
         callable|string|null $sortableQuery = null,
         bool $enabled = true,
     ): self {
@@ -117,7 +118,7 @@ class GridBuilder
 
         return $this;
     }
-    
+
     public function getColumns(): array
     {
         return array_filter($this->columns, fn(Column $column) => $column->enabled);
@@ -134,10 +135,10 @@ class GridBuilder
         throw new \Exception("Column named {$name} not found.");
     }
 
-    public function removeColumn(string $name): self
+    public function removeColumn(string|TranslatableMessage $name): self
     {
         foreach ($this->columns as $key => $column) {
-            if ($column->name === $name) {
+            if ($column->name == $name) {
                 unset($this->columns[$key]);
             }
         }
@@ -145,11 +146,58 @@ class GridBuilder
         return $this;
     }
 
-    public function addFilter(string $formFieldName, callable $callback, bool $enabled = true): self
+    public function addFilter(string $formFieldName, callable $callback, bool $enabled = true, ?string $group = null): self
     {
-        $this->filters[] = new Filter($formFieldName, $callback, $enabled);
+        $this->filters[] = new Filter($formFieldName, $callback, $enabled, $group);
 
         return $this;
+    }
+
+    /**
+     * Converts the flat list of filters into a layout array consumed by Twig.
+     *
+     * Each entry in the returned array represents one "slot" in the filter bar:
+     *   - ungrouped filter → one slot with a single field
+     *   - grouped filters  → one slot for the whole group, listing all its fields
+     *
+     * Example output:
+     *   [
+     *     ['fields' => ['name'],          'group' => null],   // standalone filter
+     *     ['fields' => ['dateFrom','dateTo'], 'group' => 'date'], // grouped filters
+     *     ['fields' => ['status'],         'group' => null],   // standalone filter
+     *   ]
+     *
+     * Groups are emitted in the order their first member appears, and $processedGroups
+     * prevents the same group from being added a second time when the loop reaches
+     * subsequent members of that group.
+     */
+    private function buildFilterLayout(): array
+    {
+        $layout = [];
+        $processedGroups = [];
+
+        foreach ($this->filters as $filter) {
+            if (!$filter->enabled) {
+                continue;
+            }
+
+            if ($filter->group === null) {
+                // Ungrouped filter: occupies its own slot.
+                $layout[] = ['fields' => [$filter->formFieldName], 'group' => null];
+            } elseif (!in_array($filter->group, $processedGroups)) {
+                // First time we encounter this group: collect all enabled fields belonging
+                // to it (in declaration order) and emit a single slot for the whole group.
+                $processedGroups[] = $filter->group;
+                $groupFields = array_map(
+                    fn(Filter $f) => $f->formFieldName,
+                    array_filter($this->filters, fn(Filter $f) => $f->enabled && $f->group === $filter->group)
+                );
+                $layout[] = ['fields' => array_values($groupFields), 'group' => $filter->group];
+            }
+            // Subsequent members of an already-processed group are intentionally skipped.
+        }
+
+        return $layout;
     }
 
     public function removeFilter(string $formFieldName): self
@@ -181,7 +229,7 @@ class GridBuilder
             if ($column->sortable !== $sortBy) {
                 continue;
             }
-            
+
             if (is_callable($column->sortableQuery)) {
                 $sortCallback = $column->sortableQuery;
                 $sortCallback($this->queryBuilder, $direction);
@@ -210,10 +258,10 @@ class GridBuilder
                 continue;
             }
 
-            $filterField = $this->filtersForm->get($filter->formFieldName);
-
-            if ($filterField === null) {
-                throw new \Exception("Form field named {$filter->formFieldName} not found in the filters form of the datagrid.");
+            if ($this->filtersForm->has($filter->formFieldName)) {
+                $filterField = $this->filtersForm->get($filter->formFieldName);
+            } else {
+                throw new \Exception("Form field named \"{$filter->formFieldName}\" not found in the filters form of the datagrid.");
             }
 
             $filterValue = $filterField->getData();
@@ -257,6 +305,16 @@ class GridBuilder
         return $this;
     }
 
+    /**
+     * Set the query parameter name used for pagination. Default is "page".
+     */
+    public function setPaginationKey(string $paginationKey): self
+    {
+        $this->paginationKey = $paginationKey;
+
+        return $this;
+    }
+
     public function setExplicitRoute(string $routeName, array $routeParams = []): self
     {
         $this->explicitRouteName = $routeName;
@@ -285,8 +343,11 @@ class GridBuilder
 
             $pagination = $this->paginator->paginate(
                 $this->queryBuilder->getQuery(),
-                $this->request->query->getInt('page', 1),
-                $this->itemsPerPage
+                $this->request->query->getInt($this->paginationKey, 1),
+                $this->itemsPerPage,
+                [
+                    'pageParameterName' => $this->paginationKey,
+                ]
             );
 
             if ($this->explicitRouteName) {
@@ -302,10 +363,11 @@ class GridBuilder
                 $this->request,
                 $pagination,
                 $this->theme,
+                $this::class,
                 $this->batchActions,
                 $this->batchMethod,
-                $this::class,
                 $this->rowAttributesCallback,
+                $this->buildFilterLayout(),
             );
         }
 

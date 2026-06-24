@@ -1,11 +1,40 @@
-{{ form_start(form) }}
+{% set relatedTurboFrames = this.relatedTurboFrames ?? false %}
+{% set form_options = {} %}
+
+{% if relatedTurboFrames %}
+    {% set form_options = form_options|merge({
+        'attr': {
+            'data-controller': 'form-turbo-frame-updater',
+            'data-form-turbo-frame-updater-turbo-frame-ids-value': this.relatedTurboFrames|json_encode
+        }
+    }) %}
+{% endif %}
+
+{{ form_start(form, form_options) }}
+
+{% set layoutFieldNames = [] %}
+{% for row in grid.filterLayout %}
+    {% set layoutFieldNames = layoutFieldNames|merge(row.fields) %}
+    {% if row.fields|length > 1 %}
+        <div class="row datagrid-filter-group">
+            {% for fieldName in row.fields %}
+                <div class="col datagrid-filter-group-item">
+                    {{ form_row(form[fieldName]) }}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        {{ form_row(form[row.fields[0]]) }}
+    {% endif %}
+{% endfor %}
 
 {% for field in form %}
-    {% if field.vars.block_prefixes[0] != 'button' %}
+    {% if field.vars.block_prefixes[0] != 'button' and field.vars.name not in layoutFieldNames %}
         {{ form_row(field) }}
     {% endif %}
 {% endfor %}
 
+{% if not relatedTurboFrames %}
 <div class="row">
     <div class="col text-end">
         <ul class="list-inline">
@@ -31,4 +60,6 @@
         </ul>
     </div>
 </div>
+{% endif %}
+
 {{ form_end(form) }}

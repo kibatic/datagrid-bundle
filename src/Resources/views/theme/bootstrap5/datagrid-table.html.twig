@@ -6,7 +6,10 @@
         <input type="hidden" name="_batch_csrf_token" value="{{ csrf_token(grid.batchActionsTokenId) }}">
     {% endif %}
 
-    <table class="{% block grid_table_class %}table table-bordered table-striped table-hover{% endblock %}" {% if grid.hasBatchActions %}data-controller="checker"{% endif %}>
+    {% if this.tableStickyScroll ?? false %}
+        <div class="table-sticky-scroll">
+    {% endif %}
+    <table class="{% block grid_table_class %}table table-bordered table-striped table-hover table-{{ this.tableSize ?? 'nm' }}{% endblock %}" {% if grid.hasBatchActions %}data-controller="checker"{% endif %}>
         <thead>
         <tr{% if header_tr_class is not empty %} class="{{ header_tr_class }}"{% endif %}>
             {% if grid.hasBatchActions %}
@@ -58,6 +61,9 @@
         {% endfor %}
         </tbody>
     </table>
+    {% if this.tableStickyScroll ?? false %}
+        </div>
+    {% endif %}
 
     <div class="clearfix">
         {% if grid.hasBatchActions %}

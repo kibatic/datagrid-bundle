@@ -28,6 +28,6 @@
     }
   },
   "require-dev": {
-    "symfony/asset-mapper": "^7.0"
+    "symfony/asset-mapper": "^7.0|^8.0"
   }
 }

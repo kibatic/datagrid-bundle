@@ -10,4 +10,6 @@ final class DatagridFiltersComponent
 {
     public FormView $form;
     public Grid $grid;
+    
+    public array $relatedTurboFrames = [];
 }
