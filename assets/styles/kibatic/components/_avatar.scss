@@ -1,3 +1,4 @@
+@mixin styles {
 // =========================================================
 //  Avatar — initiales sur pastille ronde.
 // =========================================================
@@ -14,4 +15,5 @@
     font-weight: var(--fw-semibold);
     flex-shrink: 0;
     text-transform: uppercase;
+}
 }

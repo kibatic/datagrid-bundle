@@ -1,3 +1,4 @@
+@mixin styles {
 // =========================================================
 //  Datagrid — surface principale du bundle.
 //  Regroupe : carte conteneur, toolbar, table .datagrid,
@@ -555,4 +556,5 @@
             height: 36px;
         }
     }
+}
 }

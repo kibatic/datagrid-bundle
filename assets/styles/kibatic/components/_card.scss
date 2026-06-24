@@ -1,3 +1,4 @@
+@mixin styles {
 // =========================================================
 //  Card / panneau — conteneur des vues détail et formulaires.
 // =========================================================
@@ -34,4 +35,5 @@
         background: none;
         border-radius: 0;
     }
+}
 }

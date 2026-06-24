@@ -1,4 +1,7 @@
-<div{{ attributes }}>
+{# Le thème kibatic scope tout son CSS sous .kibatic-datagrid : on ajoute la
+   classe au conteneur pour que le style ne fuie pas hors du datagrid. #}
+{% set theme_class = grid is defined and grid.theme ends with '/kibatic' ? 'kibatic-datagrid' : '' %}
+<div{{ attributes.defaults({ class: theme_class }) }}>
     {% if grid is defined and form is defined %}
         {% include grid.theme ~ '/datagrid.html.twig' %}
     {% elseif grid is defined and form is not defined %}

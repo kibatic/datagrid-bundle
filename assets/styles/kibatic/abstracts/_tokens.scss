@@ -10,7 +10,7 @@
 //  --brand-50 / --brand-600 / --brand-700) côté projet.
 // =========================================================
 
-:root {
+@mixin tokens {
     // ---------- Brand (seul élément à surcharger côté client) ----------
     --brand-50: #eef2f8;
     --brand-100: #d8e2ee;

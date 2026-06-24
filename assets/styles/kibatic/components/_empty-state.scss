@@ -1,3 +1,4 @@
+@mixin styles {
 // =========================================================
 //  État vide — affiché quand le datagrid ne renvoie aucun
 //  résultat (remplace l'alerte Bootstrap).
@@ -27,4 +28,5 @@
         margin: 0;
         color: var(--fg-2);
     }
+}
 }

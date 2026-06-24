@@ -1,3 +1,4 @@
+@mixin styles {
 // =========================================================
 //  Fallbacks de compatibilité pour navigateurs sans color-mix()
 //  (antérieurs à ~2023). Les couleurs themables y sont approximées
@@ -41,4 +42,5 @@
     .btn:hover {
         background: var(--surface-2);
     }
+}
 }

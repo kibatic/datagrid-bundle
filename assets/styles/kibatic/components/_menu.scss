@@ -1,3 +1,4 @@
+@mixin styles {
 // =========================================================
 //  Dropdown / menu — menus d'actions contextuelles.
 //  Cible le markup Bootstrap (.dropdown-menu / .dropdown-item).
@@ -80,4 +81,5 @@
         letter-spacing: 0.06em;
         padding: var(--sp-2) var(--sp-3);
     }
+}
 }

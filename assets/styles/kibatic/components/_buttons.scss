@@ -1,3 +1,4 @@
+@mixin styles {
 // =========================================================
 //  Boutons — .btn et variantes
 //  Couvre aussi les classes Bootstrap émises par le bundle
@@ -159,4 +160,5 @@
             width: 28px;
         }
     }
+}
 }

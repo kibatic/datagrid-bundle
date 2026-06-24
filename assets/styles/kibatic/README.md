@@ -13,12 +13,26 @@ use Kibatic\DatagridBundle\Grid\Theme;
 $grid->setTheme(Theme::KIBATIC);
 ```
 
-Côté assets du projet, importer le point d'entrée SCSS (avec le dossier
-`assets/styles` du bundle dans le `load_path` du sass-bundle) :
+Côté assets du projet, importer **un des deux points d'entrée SCSS** (avec le
+dossier `assets/styles` du bundle dans le `load_path` du sass-bundle).
 
+### `kibatic/theme` — projet greenfield (design system global)
 ```scss
 @use 'kibatic/theme';
 ```
+Adopte entièrement le design Kibatic : style les éléments de base (typo, fond,
+liens, focus), remappe les variables Bootstrap, applique les composants au
+niveau global.
+
+### `kibatic/datagrid` — intégration dans un projet existant (scopé)
+```scss
+@use 'kibatic/datagrid';
+```
+Tout est confiné sous `.kibatic-datagrid` (wrapper ajouté automatiquement
+autour du rendu du datagrid). **Aucun effet de bord** sur l'UI existante : ni
+sur les éléments de base, ni sur les classes Bootstrap hors datagrid, ni sur
+les variables `--bs-*`. La couleur de marque est **adoptée du projet hôte**
+(`--bs-primary`) si présente, sinon la marque kibatic par défaut.
 
 ## Recolorer pour un client
 

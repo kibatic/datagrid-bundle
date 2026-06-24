@@ -1,3 +1,4 @@
+@mixin styles {
 // =========================================================
 //  Formulaires — champs custom (.field/.input) et contrôles
 //  Bootstrap (.form-control/.form-select) émis par les filtres
@@ -234,4 +235,5 @@
         background: #fff;
         border-radius: 1px;
     }
+}
 }

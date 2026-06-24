@@ -1,3 +1,4 @@
+@mixin styles {
 // =========================================================
 //  Modale — confirmations (suppression) et dialogues.
 //  Cible le markup Bootstrap (.modal-content…) et SweetAlert
@@ -61,4 +62,5 @@
     border-top: 1px solid var(--border);
     justify-content: flex-end;
     gap: var(--sp-2);
+}
 }

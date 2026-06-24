@@ -1,3 +1,4 @@
+@mixin styles {
 // =========================================================
 //  Badges — statuts, rôles, valeurs d'énumération.
 //  Couvre nos classes sémantiques (.badge-success…) et les
@@ -53,4 +54,5 @@
         background: var(--surface-2);
         color: var(--fg-2);
     }
+}
 }
