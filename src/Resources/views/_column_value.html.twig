@@ -1,6 +1,14 @@
 {% set template = column.template(item) %}
 
-{% include ['@KibaticUX/datagrid/column_type/' ~ template, grid.theme ~ '/column_type/' ~ template, '@KibaticDatagrid/column_type/' ~ template, template] with {
+{# Chaîne de résolution : surcharge UX projet → chaque thème de la grille
+   (dans l'ordre de priorité) → base du bundle → template brut. #}
+{% set candidates = ['@KibaticUX/datagrid/column_type/' ~ template] %}
+{% for theme in grid.themes %}
+    {% set candidates = candidates|merge([theme ~ '/column_type/' ~ template]) %}
+{% endfor %}
+{% set candidates = candidates|merge(['@KibaticDatagrid/column_type/' ~ template, template]) %}
+
+{% include candidates with {
     'column': column,
     'parameters': column.templateParameters,
     'item': item,

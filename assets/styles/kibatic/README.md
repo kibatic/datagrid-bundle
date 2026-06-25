@@ -13,16 +13,9 @@ use Kibatic\DatagridBundle\Grid\Theme;
 $grid->setTheme(Theme::KIBATIC);
 ```
 
-Côté assets du projet, importer **un des deux points d'entrée SCSS** (avec le
-dossier `assets/styles` du bundle dans le `load_path` du sass-bundle).
-
-### `kibatic/theme` — projet greenfield (design system global)
-```scss
-@use 'kibatic/theme';
-```
-Adopte entièrement le design Kibatic : style les éléments de base (typo, fond,
-liens, focus), remappe les variables Bootstrap, applique les composants au
-niveau global.
+Côté assets du projet, le bundle expose **un point d'entrée scopé** plus ses
+**partials réutilisables** (avec le dossier `assets/styles` du bundle dans le
+`load_path` du sass-bundle).
 
 ### `kibatic/datagrid` — intégration dans un projet existant (scopé)
 ```scss
@@ -33,6 +26,26 @@ autour du rendu du datagrid). **Aucun effet de bord** sur l'UI existante : ni
 sur les éléments de base, ni sur les classes Bootstrap hors datagrid, ni sur
 les variables `--bs-*`. La couleur de marque est **adoptée du projet hôte**
 (`--bs-primary`) si présente, sinon la marque kibatic par défaut.
+
+### Mode greenfield (design system global) — assemblé côté projet
+Le bundle ne fournit **pas** de point d'entrée global : appliquer le design au
+niveau global (typo de base, remap Bootstrap, composants hors `.kibatic-datagrid`)
+est une décision applicative. Un projet greenfield compose lui-même les partials
+du bundle dans son `app.scss` :
+```scss
+@use 'kibatic/base/fonts';
+@use 'kibatic/abstracts/tokens';
+@use 'kibatic/base/typography';
+@use 'kibatic/base/bootstrap';
+@use 'kibatic/styles';
+
+:root {
+    @include tokens.tokens;
+}
+
+@include styles.components;
+```
+Voir `assets/styles/app.scss` du projet demo pour un exemple complet.
 
 ## Recolorer pour un client
 
@@ -57,7 +70,8 @@ thème Twig `src/Resources/views/theme/kibatic/`), pour ne pas se mélanger aux
 
 ```
 assets/styles/kibatic/
-├── theme.scss            point d'entrée (@use des fondations + composants)
+├── datagrid.scss         point d'entrée scopé (.kibatic-datagrid)
+├── _styles.scss          agrégateur des composants (mixin `components`)
 ├── abstracts/
 │   ├── _tokens.scss      design tokens (custom properties CSS)
 │   └── _mixins.scss      mixins partagés (focus-ring, tabular-nums…)
