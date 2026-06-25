@@ -1,11 +1,11 @@
 // =========================================================
-//  Remap Bootstrap 5 → tokens du thème.
+//  Remap Bootstrap 5 → variables du thème.
 //  Bootstrap 5.3 expose la plupart des valeurs visuelles en
 //  variables CSS : on les remappe ici pour que les composants
 //  Bootstrap (formulaires de filtres, alertes, modales…)
 //  héritent du thème sans le look Bootstrap par défaut.
 //
-//  Doit être chargé après les tokens.
+//  Doit être chargé après les variables.
 //
 //  NB : ces règles n'ont d'effet que si la CSS de Bootstrap est réellement
 //  chargée par le projet. Le thème fonctionne sans Bootstrap (il restyle

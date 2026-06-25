@@ -1,7 +1,7 @@
 # Thème « kibatic » — Datagrid Bundle
 
 Thème par défaut neutre et soigné pour le Kibatic Datagrid Bundle. Conçu pour
-être **embarqué dans le bundle** et **recoloré par projet** via un seul token.
+être **embarqué dans le bundle** et **recoloré par projet** via une seule variable CSS.
 
 ## Activer le thème
 
@@ -34,13 +34,13 @@ est une décision applicative. Un projet greenfield compose lui-même les partia
 du bundle dans son `app.scss` :
 ```scss
 @use 'kibatic/base/fonts';
-@use 'kibatic/abstracts/tokens';
+@use 'kibatic/abstracts/variables';
 @use 'kibatic/base/typography';
 @use 'kibatic/base/bootstrap';
 @use 'kibatic/styles';
 
 :root {
-    @include tokens.tokens;
+    @include variables.variables;
 }
 
 @include styles.components;
@@ -49,7 +49,7 @@ Voir `assets/styles/app.scss` du projet demo pour un exemple complet.
 
 ## Recolorer pour un client
 
-Surcharger les tokens de marque dans une feuille de style **projet** (jamais ici) :
+Surcharger les variables CSS de marque dans une feuille de style **projet** (jamais ici) :
 
 ```css
 :root {
@@ -59,7 +59,7 @@ Surcharger les tokens de marque dans une feuille de style **projet** (jamais ici
 }
 ```
 
-Le token `--brand-500` cascade sur les boutons, liens, focus rings, lignes
+La variable CSS `--brand-500` cascade sur les boutons, liens, focus rings, lignes
 actives et la pagination. C'est le seul override requis pour un reskin de base.
 
 ## Organisation
@@ -73,7 +73,7 @@ assets/styles/kibatic/
 ├── datagrid.scss         point d'entrée scopé (.kibatic-datagrid)
 ├── _styles.scss          agrégateur des composants (mixin `components`)
 ├── abstracts/
-│   ├── _tokens.scss      design tokens (custom properties CSS)
+│   ├── _variables.scss   variables CSS (custom properties)
 │   └── _mixins.scss      mixins partagés (focus-ring, tabular-nums…)
 ├── base/
 │   ├── _fonts.scss       @font-face Inter auto-hébergée

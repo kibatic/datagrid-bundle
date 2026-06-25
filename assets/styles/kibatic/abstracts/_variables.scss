@@ -1,7 +1,7 @@
 // =========================================================
-//  Datagrid Default Theme — design tokens
+//  Datagrid Default Theme — variables CSS
 //
-//  Les tokens restent des CUSTOM PROPERTIES CSS (et non des
+//  Les variables restent des CUSTOM PROPERTIES CSS (et non des
 //  variables Sass figées) : c'est ce qui permet à un projet
 //  client de recolorer le thème en surchargeant `--brand-500`
 //  dans une feuille de style projet, sans recompiler le SCSS.
@@ -10,7 +10,7 @@
 //  --brand-50 / --brand-600 / --brand-700) côté projet.
 // =========================================================
 
-@mixin tokens {
+@mixin variables {
     // ---------- Brand (seul élément à surcharger côté client) ----------
     --brand-50: #eef2f8;
     --brand-100: #d8e2ee;

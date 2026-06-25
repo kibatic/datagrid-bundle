@@ -12,11 +12,11 @@
 // =========================================================
 
 @use 'base/fonts';
-@use 'abstracts/tokens';
+@use 'abstracts/variables';
 @use 'styles';
 
 .kibatic-datagrid {
-    @include tokens.tokens;
+    @include variables.variables;
 
     // Adopte la marque de l'hôte (--bs-primary) si définie, sinon la marque
     // kibatic par défaut. Les nuances sont dérivées.
