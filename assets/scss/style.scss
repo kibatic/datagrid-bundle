@@ -1,0 +1,9 @@
+.datagrid-filters-toggle {
+  &[aria-expanded="true"] .datagrid-filters-show-more {
+    display: none;
+  }
+
+  &[aria-expanded="false"] .datagrid-filters-show-less {
+    display: none;
+  }
+}
