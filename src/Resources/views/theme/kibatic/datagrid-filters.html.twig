@@ -1,7 +1,42 @@
+{#
+    Filtres du datagrid (thème kibatic).
+
+    Supporte :
+      - les groupes de filtres (grid.filterLayout : champs déclarés avec un même
+        `group` rendus côte à côte) ;
+      - le filtrage temps réel (this.relatedTurboFrames : la liste rendue via
+        <twig:datagrid-filters :relatedTurboFrames="['#frame']"> ; le formulaire
+        met à jour les turbo-frames à la volée, sans bouton) ;
+      - le repli des filtres avancés (champs marqués `data-filter-advanced`).
+#}
+{% set relatedTurboFrames = this.relatedTurboFrames ?? [] %}
+{% set realtime = relatedTurboFrames is not empty %}
+
+{% set layout = grid.filterLayout %}
+{% set layout_names = [] %}
+{% for row in layout %}{% set layout_names = layout_names|merge(row.fields) %}{% endfor %}
+
 {% set has_advanced = false %}
 {% for field in form %}
     {% if field.vars.row_attr['data-filter-advanced'] is defined %}{% set has_advanced = true %}{% endif %}
 {% endfor %}
+
+{% set form_options = realtime ? {
+    'attr': {
+        'data-controller': 'form-turbo-frame-updater',
+        'data-form-turbo-frame-updater-turbo-frame-ids-value': relatedTurboFrames|json_encode,
+    }
+} : {} %}
+
+{% macro field_block(form, row) %}
+    {% if row.fields|length > 1 %}
+        <div class="datagrid-filter-group">
+            {% for fieldName in row.fields %}{{ form_row(form[fieldName]) }}{% endfor %}
+        </div>
+    {% else %}
+        {{ form_row(form[row.fields[0]]) }}
+    {% endif %}
+{% endmacro %}
 
 <div class="datagrid-filters" data-controller="filters-collapse">
     <div class="datagrid-filters-head">
@@ -21,21 +56,30 @@
         {% endif %}
     </div>
 
-    {{ form_start(form) }}
+    {{ form_start(form, form_options) }}
     <div class="datagrid-filters-row">
         <div class="datagrid-filters-fields">
+            {# groupes + champs simples (filterLayout), non avancés #}
+            {% for row in layout %}
+                {% if form[row.fields[0]].vars.row_attr['data-filter-advanced'] is not defined %}
+                    {{ _self.field_block(form, row) }}
+                {% endif %}
+            {% endfor %}
+            {# champs hors filterLayout (sans filtre), non avancés #}
             {% for field in form %}
-                {% if field.vars.block_prefixes[0] != 'button' and field.vars.row_attr['data-filter-advanced'] is not defined %}
+                {% if field.vars.name not in layout_names and field.vars.block_prefixes[0] != 'button' and field.vars.row_attr['data-filter-advanced'] is not defined %}
                     {{ form_row(field) }}
                 {% endif %}
             {% endfor %}
         </div>
 
         <div class="datagrid-filters-actions">
-            <button type="submit" class="btn btn-primary">
-                <twig:ux:icon name="bi:funnel" />
-                {{ 'Filter'|trans({}, 'KibaticDatagridBundle') }}
-            </button>
+            {% if not realtime %}
+                <button type="submit" class="btn btn-primary">
+                    <twig:ux:icon name="bi:funnel" />
+                    {{ 'Filter'|trans({}, 'KibaticDatagridBundle') }}
+                </button>
+            {% endif %}
 
             <a href="{{ datagrid_reset_url(form) }}" class="btn btn-ghost">
                 <twig:ux:icon name="bi:arrow-clockwise" />
@@ -46,8 +90,13 @@
 
     {% if has_advanced %}
         <div class="datagrid-filters-advanced">
+            {% for row in layout %}
+                {% if form[row.fields[0]].vars.row_attr['data-filter-advanced'] is defined %}
+                    {{ _self.field_block(form, row) }}
+                {% endif %}
+            {% endfor %}
             {% for field in form %}
-                {% if field.vars.row_attr['data-filter-advanced'] is defined %}
+                {% if field.vars.name not in layout_names and field.vars.block_prefixes[0] != 'button' and field.vars.row_attr['data-filter-advanced'] is defined %}
                     {{ form_row(field) }}
                 {% endif %}
             {% endfor %}

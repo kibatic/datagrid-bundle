@@ -434,6 +434,22 @@
     align-items: flex-end;
 }
 
+// Groupe de filtres (ex. prix min/max) : champs côte à côte.
+.datagrid-filter-group {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--sp-2);
+
+    > * {
+        margin: 0;
+    }
+
+    .input,
+    input.form-control {
+        min-width: 110px;
+    }
+}
+
 // Section des filtres avancés : repliée par défaut, dépliée via le toggle
 .datagrid-filters-advanced {
     margin-top: var(--sp-3);

@@ -1,3 +1,4 @@
-<div{{ attributes }}>
+{% set theme_class = grid is defined and grid.theme ends with '/kibatic' ? 'kibatic-datagrid' : '' %}
+<div{{ attributes.defaults({ class: theme_class }) }}>
     {% include grid.theme ~ '/datagrid-filters.html.twig' %}
 </div>
