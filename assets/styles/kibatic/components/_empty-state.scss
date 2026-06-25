@@ -1,0 +1,32 @@
+@mixin styles {
+// =========================================================
+//  État vide — affiché quand le datagrid ne renvoie aucun
+//  résultat (remplace l'alerte Bootstrap).
+// =========================================================
+
+.empty-state {
+    padding: var(--sp-12) var(--sp-6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--sp-3);
+    text-align: center;
+    color: var(--fg-2);
+
+    .empty-icon {
+        width: 48px;
+        height: 48px;
+        color: var(--fg-3);
+    }
+
+    h3 {
+        color: var(--fg-1);
+    }
+
+    p {
+        max-width: 360px;
+        margin: 0;
+        color: var(--fg-2);
+    }
+}
+}

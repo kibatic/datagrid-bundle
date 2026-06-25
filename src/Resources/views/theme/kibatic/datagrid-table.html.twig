@@ -1,0 +1,119 @@
+{% set header_tr_class = block('grid_header_tr_class') is defined ? block('grid_header_tr_class') : '' %}
+
+{% if grid.pagination.totalItemCount > 0 %}
+    <div class="datagrid-card"{% if grid.hasBatchActions %} data-controller="batch"{% endif %}>
+        {% if grid.hasBatchActions %}
+            {# Barre de sélection : masquée tant qu'aucune ligne n'est cochée #}
+            <div class="datagrid-batchbar" data-batch-target="bar" hidden>
+                <span class="datagrid-batchbar-count">
+                    <strong data-batch-target="count">0</strong> {{ 'selected'|trans({}, 'KibaticDatagridBundle') }}
+                </span>
+                <div class="datagrid-batchbar-actions">
+                    {% for action in grid.batchActions %}
+                        <button
+                            type="button"
+                            class="btn btn-sm{% if action.variant %} btn-{{ action.variant }}{% endif %}"
+                            data-action="batch#submit"
+                            data-url="{{ action.url }}"
+                            data-confirm="{{ action.confirm ? 'true' : 'false' }}"
+                            data-confirm-text="{{ 'Confirm this action?'|trans({}, 'KibaticDatagridBundle') }}"
+                        >
+                            {% if action.icon %}<twig:ux:icon name="{{ action.icon }}" />{% endif %}
+                            {{ action.label|trans }}
+                        </button>
+                    {% endfor %}
+                    <button type="button" class="btn btn-ghost btn-sm" data-action="batch#clear">
+                        {{ 'Deselect all'|trans({}, 'KibaticDatagridBundle') }}
+                    </button>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if grid.hasBatchActions %}
+            <form name="datagrid-batch-action" method="{{ grid.batchMethod }}" action="{{ grid.batchActions[0].url }}" data-batch-target="form">
+            <input type="hidden" name="_batch_csrf_token" value="{{ csrf_token(grid.batchActionsTokenId) }}">
+        {% endif %}
+
+        <div class="datagrid-scroll">
+        <table class="{% block grid_table_class %}datagrid{% endblock %}">
+            <thead>
+            <tr{% if header_tr_class is not empty %} class="{{ header_tr_class }}"{% endif %}>
+                {% if grid.hasBatchActions %}
+                    <th class="checkbox-cell">
+                        <input type="checkbox" class="checkbox" data-batch-target="master" data-action="batch#toggleAll" title="{{ 'Select all'|trans({}, 'KibaticDatagridBundle') }}" />
+                    </th>
+                {% endif %}
+                {% for column in grid.columns %}
+                    {% set th_class = block('grid_header_th_class') is defined ? block('grid_header_th_class') : '' %}
+
+                    {% if column.templateParameter('col_class', null) is not null %}
+                        {% set th_class = th_class ~ ' ' ~ column.templateParameter('col_class', null) %}
+                    {% endif %}
+                    {% set current_order = grid.request.query.get('sort_order') %}
+                    {% set is_sorted = column.sortable is not null and grid.request.query.get('sort_by') == column.sortable %}
+
+                    <th class="{{ th_class }}{% if column.sortable is not null %} sortable{% endif %}{% if is_sorted %} sorted{% endif %}">
+                        {% if not (column.name starts with '_') %}
+                            {% if column.sortable is not null %}
+                                {% set sortUrl = path(
+                                    grid.pagination.route,
+                                    grid.pagination.params|merge({
+                                        'sort_by': column.sortable,
+                                        'sort_order': current_order == 'ASC' ? 'DESC' : 'ASC'
+                                    })
+                                ) %}
+                                <a href="{{ sortUrl }}" title="{{ 'Sort'|trans({}, 'KibaticDatagridBundle') }}">
+                                    <span>{{ column.name|trans }}</span>
+                                    {% if is_sorted and current_order == 'ASC' %}
+                                        <twig:ux:icon name="bi:chevron-up" class="sort-icon" />
+                                    {% elseif is_sorted %}
+                                        <twig:ux:icon name="bi:chevron-down" class="sort-icon" />
+                                    {% else %}
+                                        <twig:ux:icon name="bi:chevron-expand" class="sort-icon sort-icon-muted" />
+                                    {% endif %}
+                                </a>
+                            {% else %}
+                                {{ column.name|trans }}
+                            {% endif %}
+                        {% endif %}
+                    </th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in grid.pagination %}
+                {% set gridLoop = loop %}
+                <tr{{ grid.rowAttributes(item)|raw }}>
+                    {% if grid.hasBatchActions %}
+                        <td class="checkbox-cell">
+                            <input type="checkbox" class="checkbox" name="ids[]" value="{{ item.id }}" data-batch-target="checkbox" data-action="batch#refresh" />
+                        </td>
+                    {% endif %}
+                    {% for column in grid.columns %}
+                        <td {% if column.templateParameter('col_class', null) is not null %}class="{{ column.templateParameter('col_class', null) }}"{% endif %}>
+                            {% include '@KibaticDatagrid/_column_value.html.twig' %}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+
+        {% if grid.hasBatchActions %}</form>{% endif %}
+
+        <div class="datagrid-footer">
+            <span></span>
+            <div class="datagrid-pagination">
+                {{ knp_pagination_render(grid.pagination, '@KnpPaginator/Pagination/bootstrap_v5_pagination.html.twig') }}
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="datagrid-card">
+        <div class="empty-state">
+            <twig:ux:icon name="bi:inbox" class="empty-icon" />
+            <h3>{{ 'No result'|trans({}, 'KibaticDatagridBundle') }}</h3>
+        </div>
+    </div>
+{% endif %}

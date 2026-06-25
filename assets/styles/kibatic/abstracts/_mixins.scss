@@ -1,0 +1,18 @@
+// =========================================================
+//  Mixins partagés du thème
+//  À enrichir au fil des composants (focus ring, troncature,
+//  états désactivés, etc.).
+// =========================================================
+
+// Anneau de focus accessible, cohérent avec --brand-500.
+@mixin focus-ring {
+    outline: 2px solid var(--brand-500);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+}
+
+// Chiffres tabulaires (montants, identifiants alignés en colonne).
+@mixin tabular-nums {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum';
+}

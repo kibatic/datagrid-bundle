@@ -1,0 +1,41 @@
+@mixin styles {
+// =========================================================
+//  Chip de filtre — filtres actifs au-dessus du datagrid.
+// =========================================================
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-2);
+    height: 28px;
+    padding: 0 var(--sp-2) 0 var(--sp-3);
+    background: var(--brand-50);
+    color: var(--brand-700);
+    border: 1px solid color-mix(in srgb, var(--brand-500) 18%, transparent);
+    border-radius: var(--radius);
+    font-size: var(--fs-13);
+    font-weight: var(--fw-medium);
+
+    .chip-x {
+        width: 18px;
+        height: 18px;
+        display: inline-grid;
+        place-items: center;
+        border-radius: var(--radius-full);
+        cursor: pointer;
+        color: var(--brand-700);
+        background: transparent;
+        border: none;
+        padding: 0;
+
+        &:hover {
+            background: color-mix(in srgb, var(--brand-500) 16%, transparent);
+        }
+
+        svg {
+            width: 12px;
+            height: 12px;
+        }
+    }
+}
+}

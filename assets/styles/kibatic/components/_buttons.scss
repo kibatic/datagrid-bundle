@@ -1,0 +1,164 @@
+@mixin styles {
+// =========================================================
+//  Boutons — .btn et variantes
+//  Couvre aussi les classes Bootstrap émises par le bundle
+//  (btn-outline-primary/-danger, btn-secondary, btn-sm…) pour
+//  que les actions du datagrid restent cohérentes.
+// =========================================================
+
+.btn {
+    --btn-bg: var(--card);
+    --btn-fg: var(--fg-1);
+    --btn-bd: var(--border-strong);
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-2);
+    height: var(--field-h);
+    padding: 0 var(--sp-3);
+    font-family: var(--font-sans);
+    font-size: var(--fs-14);
+    font-weight: var(--fw-medium);
+    color: var(--btn-fg);
+    background: var(--btn-bg);
+    border: 1px solid var(--btn-bd);
+    border-radius: var(--radius);
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    user-select: none;
+    transition:
+        background var(--t-quick),
+        border-color var(--t-quick),
+        color var(--t-quick);
+
+    // Icônes : on ne force NI stroke NI fill ici. Les SVG Tabler inline
+    // portent déjà fill="none" + stroke="currentColor" en attribut ; les
+    // Bootstrap Icons (ux:icon) sont à remplissage (fill="currentColor").
+    // Forcer fill:none transformerait ces dernières en contours baveux.
+    svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+    }
+
+    &:hover {
+        background: color-mix(in srgb, var(--btn-bg) 94%, #000);
+        color: var(--btn-fg);
+        text-decoration: none;
+    }
+
+    &:active {
+        background: color-mix(in srgb, var(--btn-bg) 88%, #000);
+    }
+
+    &:disabled,
+    &[disabled] {
+        opacity: 0.5;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    // Variante : primaire
+    &.btn-primary {
+        --btn-bg: var(--brand-500);
+        --btn-fg: var(--fg-on-brand);
+        --btn-bd: var(--brand-500);
+
+        &:hover {
+            background: var(--brand-600);
+            border-color: var(--brand-600);
+            color: #fff;
+        }
+
+        &:active {
+            background: var(--brand-700);
+            border-color: var(--brand-700);
+        }
+    }
+
+    // Variante : danger
+    &.btn-danger {
+        --btn-bg: var(--danger-500);
+        --btn-fg: #fff;
+        --btn-bd: var(--danger-500);
+
+        &:hover {
+            background: var(--danger-700);
+            border-color: var(--danger-700);
+            color: #fff;
+        }
+    }
+
+    // Variante : outline danger (action de suppression)
+    &.btn-outline-danger {
+        --btn-bg: transparent;
+        --btn-fg: var(--danger-500);
+        --btn-bd: color-mix(in srgb, var(--danger-500) 40%, transparent);
+
+        &:hover {
+            background: var(--danger-500);
+            border-color: var(--danger-500);
+            color: #fff;
+        }
+    }
+
+    // Variante : outline primary (action d'édition)
+    &.btn-outline-primary {
+        --btn-bg: transparent;
+        --btn-fg: var(--brand-600);
+        --btn-bd: color-mix(in srgb, var(--brand-500) 40%, transparent);
+
+        &:hover {
+            background: var(--brand-500);
+            border-color: var(--brand-500);
+            color: #fff;
+        }
+    }
+
+    // Variante : ghost / lien
+    &.btn-ghost,
+    &.btn-link {
+        --btn-bg: transparent;
+        --btn-bd: transparent;
+        --btn-fg: var(--fg-2);
+
+        &:hover {
+            background: var(--surface-2);
+            color: var(--fg-1);
+        }
+    }
+
+    // Variante : par défaut (outline neutre)
+    &.btn-default,
+    &.btn-secondary {
+        --btn-bg: var(--card);
+        --btn-fg: var(--fg-1);
+        --btn-bd: var(--border-strong);
+    }
+
+    // Taille : petite
+    &.btn-sm,
+    &.btn-small {
+        height: 28px;
+        padding: 0 var(--sp-2);
+        font-size: var(--fs-13);
+
+        svg {
+            width: 14px;
+            height: 14px;
+        }
+    }
+
+    // Bouton icône seul
+    &.btn-icon {
+        width: var(--field-h);
+        padding: 0;
+        justify-content: center;
+
+        &.btn-sm {
+            width: 28px;
+        }
+    }
+}
+}

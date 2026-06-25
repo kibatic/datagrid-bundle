@@ -1,0 +1,239 @@
+@mixin styles {
+// =========================================================
+//  Formulaires — champs custom (.field/.input) et contrôles
+//  Bootstrap (.form-control/.form-select) émis par les filtres
+//  et les formulaires de CRUD.
+// =========================================================
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
+}
+
+.field-label {
+    font-size: var(--fs-13);
+    font-weight: var(--fw-medium);
+    color: var(--fg-2);
+
+    .required {
+        color: var(--danger-500);
+        margin-left: 2px;
+    }
+}
+
+.field-hint {
+    font-size: var(--fs-12);
+    color: var(--fg-3);
+}
+
+.field-error {
+    font-size: var(--fs-12);
+    color: var(--danger-700);
+}
+
+.input,
+.select,
+.textarea {
+    font-family: var(--font-sans);
+    font-size: var(--fs-14);
+    color: var(--fg-1);
+    background: var(--card);
+    border: 1px solid var(--border-input);
+    border-radius: var(--radius);
+    padding: 0 var(--sp-3);
+    height: var(--field-h);
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color var(--t-quick), box-shadow var(--t-quick);
+
+    &::placeholder {
+        color: var(--fg-3);
+    }
+
+    &:hover {
+        border-color: var(--border-strong);
+    }
+
+    &:focus {
+        outline: none;
+        border-color: var(--brand-500);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-500) 18%, transparent);
+    }
+
+    &[aria-invalid='true'],
+    &.is-invalid {
+        border-color: var(--danger-500);
+    }
+
+    &:disabled {
+        background: var(--surface-2);
+        color: var(--fg-3);
+        cursor: not-allowed;
+    }
+}
+
+.textarea {
+    height: auto;
+    padding: var(--sp-2) var(--sp-3);
+    resize: vertical;
+    min-height: 80px;
+    line-height: var(--lh-body);
+}
+
+// Contrôles Bootstrap — appliquer nos variables
+.form-control,
+.form-select {
+    font-family: var(--font-sans);
+    font-size: var(--fs-14);
+    color: var(--fg-1);
+    background-color: var(--card);
+    border-color: var(--border-input);
+    border-radius: var(--radius);
+
+    &::placeholder {
+        color: var(--fg-3);
+    }
+
+    &:hover {
+        border-color: var(--border-strong);
+    }
+
+    &:focus {
+        border-color: var(--brand-500);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-500) 18%, transparent);
+        color: var(--fg-1);
+        background-color: var(--card);
+    }
+
+    &:disabled,
+    &[readonly] {
+        background-color: var(--surface-2);
+        color: var(--fg-3);
+    }
+
+    &.is-invalid {
+        border-color: var(--danger-500);
+
+        &:focus {
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger-500) 18%, transparent);
+        }
+    }
+}
+
+.form-label {
+    font-size: var(--fs-13);
+    font-weight: var(--fw-medium);
+    color: var(--fg-2);
+    margin-bottom: var(--sp-2);
+}
+
+.form-text {
+    font-size: var(--fs-12);
+    color: var(--fg-3);
+}
+
+.invalid-feedback {
+    font-size: var(--fs-12);
+    color: var(--danger-700);
+}
+
+.input-group {
+    .input-group-text {
+        background: var(--surface);
+        border-color: var(--border-input);
+        color: var(--fg-2);
+        font-size: var(--fs-14);
+    }
+}
+
+.input-with-icon {
+    position: relative;
+
+    .icon-leading {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 16px;
+        height: 16px;
+        color: var(--fg-3);
+        pointer-events: none;
+
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    .input,
+    .form-control {
+        padding-left: 32px;
+    }
+}
+
+// Checkbox / radio — custom (sélection batch du datagrid incluse)
+.checkbox,
+.radio,
+.form-check-input {
+    -webkit-appearance: none; // Safari / iOS anciens
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--border-strong);
+    background: var(--card);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    display: inline-grid;
+    place-items: center;
+    transition: background var(--t-quick), border-color var(--t-quick);
+    flex: none;
+
+    &:checked {
+        background: var(--brand-500);
+        border-color: var(--brand-500);
+    }
+
+    &:focus,
+    &:focus-visible {
+        border-color: var(--brand-500);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-500) 18%, transparent);
+        outline: none;
+    }
+}
+
+.checkbox:checked::after,
+.form-check-input[type='checkbox']:checked::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>") center / contain no-repeat;
+}
+
+.radio,
+.form-check-input[type='radio'] {
+    border-radius: var(--radius-full);
+
+    &:checked::after {
+        content: '';
+        width: 6px;
+        height: 6px;
+        background: #fff;
+        border-radius: var(--radius-full);
+    }
+}
+
+.checkbox:indeterminate,
+.form-check-input:indeterminate {
+    background: var(--brand-500);
+    border-color: var(--brand-500);
+
+    &::after {
+        content: '';
+        width: 8px;
+        height: 2px;
+        background: #fff;
+        border-radius: 1px;
+    }
+}
+}

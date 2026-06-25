@@ -30,7 +30,12 @@ class GridBuilder
     private array $filters = [];
     private array $batchActions = [];
     private ?string $batchMethod = 'POST';
-    private ?string $theme = '@KibaticDatagrid/theme/bootstrap5';
+    /**
+     * @var string[] Chaîne de thèmes, du plus prioritaire au moins prioritaire.
+     *               Le premier est le thème « structurel » (gabarits de la grille) ;
+     *               les suivants servent de fallback pour la résolution des column types.
+     */
+    private array $themes = ['@KibaticDatagrid/theme/bootstrap5'];
     private ?string $explicitRouteName = null;
     private array $explicitRouteParams = [];
     private string $paginationKey = 'page';
@@ -81,15 +86,23 @@ class GridBuilder
         $this->filters = [];
         $this->batchActions = [];
         $this->batchMethod = 'POST';
-        $this->theme = '@KibaticDatagrid/theme/bootstrap5';
+        $this->themes = ['@KibaticDatagrid/theme/bootstrap5'];
         $this->explicitRouteName = null;
         $this->explicitRouteParams = [];
         $this->grid = null;
     }
 
-    public function setTheme(string $theme): self
+    /**
+     * Définit la chaîne de thèmes. Le premier argument est le thème structurel
+     * (gabarits de la grille) ; les suivants servent de fallback pour la
+     * résolution des column types.
+     *
+     * Ex. : setTheme(Theme::KIBATIC, Theme::BOOTSTRAP5) rend la grille avec le
+     * thème kibatic et récupère les column types manquants depuis bootstrap5.
+     */
+    public function setTheme(string ...$themes): self
     {
-        $this->theme = $theme;
+        $this->themes = $themes;
 
         return $this;
     }
@@ -278,12 +291,14 @@ class GridBuilder
         }
     }
 
-    public function addBatchAction(string|TranslatableMessage $label, string $url, bool $confirm = true): self
+    public function addBatchAction(string|TranslatableMessage $label, string $url, bool $confirm = true, ?string $variant = null, ?string $icon = null): self
     {
         $this->batchActions[] = [
             'label' => $label,
             'url' => $url,
             'confirm' => $confirm,
+            'variant' => $variant,
+            'icon' => $icon,
         ];
 
         return $this;
@@ -360,7 +375,7 @@ class GridBuilder
                 $this->getColumns(),
                 $this->request,
                 $pagination,
-                $this->theme,
+                $this->themes,
                 $this::class,
                 $this->batchActions,
                 $this->batchMethod,

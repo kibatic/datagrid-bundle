@@ -1,0 +1,28 @@
+// =========================================================
+//  Inter (variable) auto-hébergée — embarquée dans le bundle.
+//  Remplace l'ancien @import depuis rsms.me (pas de CDN externe :
+//  ni CSP, ni fuite d'IP, ni dépendance réseau au runtime).
+//  Les .woff2 sont dans assets/dist/fonts/, mappés par AssetMapper
+//  sur le chemin logique @kibatic/datagrid-bundle/fonts/.
+//
+//  NB : la sass-bundle résout les url() relativement au fichier sass
+//  RACINE du projet (app.scss), pas à ce partial. Le chemin ci-dessous
+//  suppose donc que le bundle est chargé dans packages/ (convention
+//  Kibatic). Pour une autre arborescence, surcharger ces @font-face.
+// =========================================================
+
+@font-face {
+    font-family: 'Inter var';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('../../packages/datagrid-bundle/assets/dist/fonts/InterVariable.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Inter var';
+    font-style: italic;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('../../packages/datagrid-bundle/assets/dist/fonts/InterVariable-Italic.woff2') format('woff2');
+}

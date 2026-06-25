@@ -1,0 +1,46 @@
+@mixin styles {
+// =========================================================
+//  Fallbacks de compatibilité pour navigateurs sans color-mix()
+//  (antérieurs à ~2023). Les couleurs themables y sont approximées
+//  avec la marque par défaut (#4f6f9a). Les navigateurs récents
+//  ignorent ce bloc et conservent les color-mix().
+// =========================================================
+
+@supports not (color: color-mix(in srgb, red, blue)) {
+    // Anneaux de focus (état d'accessibilité critique)
+    .input:focus,
+    .select:focus,
+    .textarea:focus,
+    .form-control:focus,
+    .form-select:focus,
+    .checkbox:focus,
+    .radio:focus,
+    .form-check-input:focus,
+    .form-check-input:focus-visible,
+    .btn:focus-visible {
+        box-shadow: 0 0 0 3px rgba(79, 111, 154, 0.25);
+    }
+
+    // Bordures teintées
+    .chip {
+        border-color: rgba(79, 111, 154, 0.25);
+    }
+
+    .datagrid-batchbar {
+        border-bottom-color: rgba(79, 111, 154, 0.25);
+    }
+
+    .btn-outline-primary {
+        border-color: rgba(79, 111, 154, 0.4);
+    }
+
+    .btn-outline-danger {
+        border-color: rgba(220, 38, 38, 0.4);
+    }
+
+    // Survol de boutons (pas de color-mix disponible : aplat neutre)
+    .btn:hover {
+        background: var(--surface-2);
+    }
+}
+}

@@ -1,0 +1,52 @@
+// =========================================================
+//  Agrégateur des composants du thème, exposé en mixin `components`.
+//  Permet de les émettre soit globalement (theme.scss, mode greenfield),
+//  soit confinés sous `.kibatic-datagrid` (datagrid.scss, intégration
+//  dans un projet existant sans effet de bord).
+// =========================================================
+
+@use 'components/buttons';
+@use 'components/forms';
+@use 'components/badges';
+@use 'components/card';
+@use 'components/modal';
+@use 'components/menu';
+@use 'components/avatar';
+@use 'components/chips';
+@use 'components/empty-state' as empty;
+@use 'components/datagrid';
+@use 'base/compat';
+
+@mixin components {
+    @include buttons.styles;
+    @include forms.styles;
+    @include badges.styles;
+    @include card.styles;
+    @include modal.styles;
+    @include menu.styles;
+    @include avatar.styles;
+    @include chips.styles;
+    @include empty.styles;
+    @include datagrid.styles;
+    @include compat.styles;
+
+    // Utilitaires de mise en page légers
+    .row-flex {
+        display: flex;
+        align-items: center;
+        gap: var(--sp-3);
+    }
+
+    .col-flex {
+        display: flex;
+        flex-direction: column;
+        gap: var(--sp-3);
+    }
+
+    .between {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--sp-3);
+    }
+}

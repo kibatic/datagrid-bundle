@@ -1,0 +1,35 @@
+// =========================================================
+//  Point d'entrée SCOPÉ — à importer dans un PROJET EXISTANT.
+//
+//      @use 'kibatic/datagrid';
+//
+//  Tout est confiné sous `.kibatic-datagrid` (wrapper ajouté automatiquement
+//  autour du rendu du datagrid en thème kibatic). Aucune fuite sur l'UI
+//  existante : ni sur les éléments de base (html/body/h1…), ni sur les
+//  classes Bootstrap partagées hors datagrid.
+//
+//  La couleur de marque est adoptée du projet hôte (--bs-primary) si présente.
+// =========================================================
+
+@use 'base/fonts';
+@use 'abstracts/variables';
+@use 'styles';
+
+.kibatic-datagrid {
+    @include variables.variables;
+
+    // Adopte la marque de l'hôte (--bs-primary) si définie, sinon la marque
+    // kibatic par défaut. Les nuances sont dérivées.
+    --brand-500: var(--bs-primary, #4f6f9a);
+    --brand-600: color-mix(in srgb, var(--brand-500) 85%, #000);
+    --brand-700: color-mix(in srgb, var(--brand-500) 72%, #000);
+    --brand-50: color-mix(in srgb, var(--brand-500) 12%, #fff);
+    --brand-100: color-mix(in srgb, var(--brand-500) 22%, #fff);
+
+    // Look kibatic (Inter chargée par base/fonts ; dégrade vers la pile
+    // système si la police n'est pas servie).
+    font-family: var(--font-sans);
+    color: var(--fg-1);
+
+    @include styles.components;
+}

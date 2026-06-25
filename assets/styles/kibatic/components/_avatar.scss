@@ -1,0 +1,19 @@
+@mixin styles {
+// =========================================================
+//  Avatar — initiales sur pastille ronde.
+// =========================================================
+
+.avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-full);
+    background: var(--brand-100);
+    color: var(--brand-700);
+    display: inline-grid;
+    place-items: center;
+    font-size: var(--fs-12);
+    font-weight: var(--fw-semibold);
+    flex-shrink: 0;
+    text-transform: uppercase;
+}
+}

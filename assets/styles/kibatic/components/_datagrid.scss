@@ -1,0 +1,576 @@
+@mixin styles {
+// =========================================================
+//  Datagrid — surface principale du bundle.
+//  Regroupe : carte conteneur, toolbar, table .datagrid,
+//  pied (pagination + batch) et formulaire de filtres.
+//  Le thème Twig kibatic émet `<table class="datagrid">`.
+// =========================================================
+
+// --- Carte conteneur ---
+.datagrid-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    // `clip` arrondit les coins SANS créer de conteneur de défilement,
+    // ce qui préserve le `position: sticky` de l'en-tête et de la barre batch.
+    overflow: clip;
+}
+
+// Listes inline du bundle (actions de ligne, boutons de filtres) :
+// supprime les puces et aligne les éléments horizontalement.
+.datagrid-card .list-inline,
+.datagrid-filters .list-inline {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--sp-1);
+}
+
+.datagrid-card .list-inline-item,
+.datagrid-filters .list-inline-item {
+    margin: 0;
+}
+
+// Le kebab d'actions reste en ligne avec les boutons icônes
+.datagrid-card .list-inline .dropdown {
+    display: inline-flex;
+}
+
+// --- Toolbar (au-dessus de la table) ---
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    padding: var(--sp-3) var(--sp-4);
+    border-bottom: 1px solid var(--border);
+    background: var(--card);
+    flex-wrap: wrap;
+
+    .toolbar-spacer {
+        flex: 1;
+    }
+}
+
+.toolbar-meta {
+    font-size: var(--fs-13);
+    color: var(--fg-2);
+    font-variant-numeric: tabular-nums;
+}
+
+// --- Table ---
+.datagrid {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--fs-14);
+    background: var(--card);
+    margin: 0;
+
+    thead th {
+        position: sticky;
+        // Sous la barre batch quand elle est visible (sa hauteur est fournie
+        // par le contrôleur Stimulus batch), sinon sous la topbar éventuelle.
+        top: calc(var(--datagrid-sticky-top) + var(--datagrid-batchbar-h, 0px));
+        z-index: 2;
+        text-align: left;
+        font-size: var(--fs-13);
+        font-weight: var(--fw-semibold);
+        color: var(--fg-2);
+        background: var(--card);
+        border-bottom: 1px solid var(--border);
+        padding: var(--sp-3);
+        white-space: nowrap;
+        user-select: none;
+        vertical-align: middle;
+
+        a {
+            color: var(--fg-2);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+
+            &:hover {
+                color: var(--fg-1);
+                text-decoration: none;
+            }
+        }
+
+        &.sortable {
+            cursor: pointer;
+
+            &:hover a {
+                color: var(--fg-1);
+            }
+        }
+
+        &.sorted a {
+            color: var(--brand-600);
+        }
+
+        // Icône de tri (Bootstrap Icons, à remplissage : couleur via
+        // `color`/currentColor, pas via stroke).
+        .sort-icon {
+            width: 14px;
+            height: 14px;
+            flex: none;
+            color: var(--fg-3);
+        }
+
+        .sort-icon-muted {
+            opacity: 0.85;
+        }
+
+        &.sorted .sort-icon {
+            color: var(--brand-600);
+        }
+    }
+
+    tbody td {
+        padding: var(--sp-3);
+        border-bottom: 1px solid var(--border);
+        vertical-align: middle;
+        color: var(--fg-1);
+    }
+
+    tbody tr {
+        transition: background var(--t-quick);
+
+        &:hover {
+            background: var(--surface-2);
+        }
+
+        &:last-child td {
+            border-bottom: none;
+        }
+
+        &.selected {
+            background: var(--brand-50);
+            box-shadow: inset 2px 0 0 0 var(--brand-500);
+        }
+    }
+
+    // Colonnes numériques
+    td.num,
+    th.num {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+    }
+
+    // Colonne d'actions
+    td.actions,
+    td.text-end {
+        text-align: right;
+        white-space: nowrap;
+
+        .list-inline {
+            margin: 0;
+            display: inline-flex;
+            gap: var(--sp-1);
+            justify-content: flex-end;
+        }
+
+        .list-inline-item {
+            margin: 0;
+        }
+    }
+
+    // Colonne case à cocher (sélection batch). Classe explicite plutôt que
+    // :has() pour une compatibilité maximale.
+    .checkbox-cell {
+        width: 40px;
+        padding-right: 0;
+    }
+}
+
+// Conteneur de défilement horizontal de la table : activé uniquement en
+// mobile/tablette (voir media query plus bas). Sur desktop il reste en
+// `overflow: visible` pour ne pas casser le `position: sticky` de l'en-tête.
+.datagrid-scroll {
+    min-width: 0;
+}
+
+// --- Barre de sélection (actions par lot) ---
+.datagrid-batchbar[hidden] {
+    display: none;
+}
+
+.datagrid-batchbar {
+    position: sticky;
+    top: var(--datagrid-sticky-top);
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    gap: var(--sp-4);
+    padding: var(--sp-2) var(--sp-4);
+    background: var(--brand-50);
+    border-bottom: 1px solid color-mix(in srgb, var(--brand-500) 18%, transparent);
+    flex-wrap: wrap;
+}
+
+.datagrid-batchbar-count {
+    font-size: var(--fs-13);
+    color: var(--brand-700);
+
+    strong {
+        font-weight: var(--fw-semibold);
+    }
+}
+
+.datagrid-batchbar-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    flex-wrap: wrap;
+}
+
+// --- Pied : pagination + batch ---
+.datagrid-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-3);
+    padding: var(--sp-3) var(--sp-4);
+    border-top: 1px solid var(--border);
+    background: var(--card);
+    flex-wrap: wrap;
+}
+
+// Pagination (KnpPaginator bootstrap_v5 : .pagination > .page-item > .page-link)
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-1);
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    .page-item {
+        margin: 0;
+
+        .page-link {
+            min-width: 32px;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 var(--sp-2);
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: var(--fs-13);
+            font-weight: var(--fw-medium);
+            color: var(--fg-1);
+            cursor: pointer;
+            text-decoration: none;
+            line-height: 1;
+            transition: background var(--t-quick), border-color var(--t-quick);
+
+            &:hover {
+                background: var(--surface-2);
+                color: var(--fg-1);
+                border-color: var(--border-strong);
+            }
+        }
+
+        &.active .page-link {
+            background: var(--brand-500);
+            border-color: var(--brand-500);
+            color: #fff;
+        }
+
+        &.disabled .page-link {
+            opacity: 0.4;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+    }
+}
+
+// --- Formulaire de filtres ---
+.datagrid-filters {
+    padding: var(--sp-4);
+    margin-bottom: var(--sp-4);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+}
+
+.datagrid-filters-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-3);
+    margin-bottom: var(--sp-3);
+}
+
+.datagrid-filters-title {
+    font-size: var(--fs-12);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--fg-3);
+}
+
+// Bouton « Plus de filtres » / « Moins de filtres »
+.datagrid-filters-toggle {
+    display: inline-flex;
+    align-items: center;
+    height: 28px;
+    padding: 0 var(--sp-3);
+    background: var(--surface-2);
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    font: inherit;
+    font-size: var(--fs-13);
+    font-weight: var(--fw-medium);
+    color: var(--fg-2);
+    cursor: pointer;
+    transition: background var(--t-quick), color var(--t-quick);
+
+    &:hover {
+        background: color-mix(in srgb, var(--surface-2) 92%, #000);
+        color: var(--fg-1);
+    }
+
+    svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .filters-toggle-label {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--sp-2);
+    }
+
+    .filters-toggle-less {
+        display: none;
+    }
+}
+
+.datagrid-filters.is-expanded .datagrid-filters-toggle {
+    .filters-toggle-more {
+        display: none;
+    }
+
+    .filters-toggle-less {
+        display: inline-flex;
+    }
+}
+
+.datagrid-filters-row {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--sp-3);
+    flex-wrap: wrap;
+}
+
+// Disposition inline partagée (ligne principale + section avancée)
+.datagrid-filters-fields,
+.datagrid-filters-advanced {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    flex-wrap: wrap;
+
+    // Chaque champ (.field du thème de form projet) sans marge verticale
+    > * {
+        margin: 0;
+    }
+
+    // Libellés empilés masqués visuellement (placeholders en relais), mais
+    // toujours lus par les lecteurs d'écran. Le label de checkbox
+    // (.field-checkbox-label) reste visible.
+    .field-label {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+        border: 0;
+    }
+
+    .input,
+    input.form-control {
+        min-width: 240px;
+    }
+
+    select,
+    .select,
+    select.form-select {
+        min-width: 170px;
+        font-family: var(--font-sans);
+        font-size: var(--fs-14);
+        color: var(--fg-1);
+        background: var(--card);
+        border: 1px solid var(--border-input);
+        border-radius: var(--radius);
+        height: var(--field-h);
+        padding: 0 var(--sp-3);
+
+        &:hover {
+            border-color: var(--border-strong);
+        }
+
+        &:focus {
+            outline: none;
+            border-color: var(--brand-500);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-500) 18%, transparent);
+        }
+    }
+}
+
+.datagrid-filters-fields {
+    flex: 1;
+    align-items: flex-end;
+}
+
+// Groupe de filtres (ex. prix min/max) : champs côte à côte.
+.datagrid-filter-group {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--sp-2);
+
+    > * {
+        margin: 0;
+    }
+
+    .input,
+    input.form-control {
+        min-width: 110px;
+    }
+}
+
+// Section des filtres avancés : repliée par défaut, dépliée via le toggle
+.datagrid-filters-advanced {
+    margin-top: var(--sp-3);
+    display: none;
+}
+
+.datagrid-filters.is-expanded .datagrid-filters-advanced {
+    display: flex;
+}
+
+// Label de la checkbox « inclure archivés » (reste visible)
+.field-checkbox-label {
+    font-size: var(--fs-14);
+    color: var(--fg-1);
+}
+
+.datagrid-filters-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    margin-left: auto;
+}
+
+// --- Helpers de cellules (composition applicative) ---
+.datagrid {
+    td.cell-reference {
+        font-family: var(--font-mono);
+        font-size: var(--fs-12);
+        color: var(--fg-2);
+        white-space: nowrap;
+    }
+
+    td.cell-strong a {
+        font-weight: var(--fw-semibold);
+        color: var(--fg-1);
+
+        &:hover {
+            color: var(--brand-600);
+        }
+    }
+}
+
+.cell-stack {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.3;
+}
+
+.cell-stack-primary {
+    color: var(--fg-1);
+}
+
+.cell-stack-secondary {
+    font-size: var(--fs-13);
+    color: var(--fg-2);
+
+    &:hover {
+        color: var(--brand-600);
+    }
+}
+
+.cell-muted {
+    color: var(--fg-3);
+}
+
+// --- Responsive (mobile / tablette) ---
+
+@media (max-width: 768px) {
+    // Défilement horizontal de la table en mobile/tablette ; elle conserve une
+    // largeur minimale plutôt que d'écraser les colonnes.
+    .datagrid-scroll {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .datagrid-scroll .datagrid {
+        min-width: 760px;
+    }
+}
+
+@media (max-width: 640px) {
+    // Filtres : chaque champ en pleine largeur, disposition en colonne
+    .datagrid-filters-fields,
+    .datagrid-filters-advanced {
+        > * {
+            width: 100%;
+        }
+
+        .input-with-icon,
+        .input,
+        input.form-control,
+        select,
+        .select,
+        select.form-select {
+            width: 100%;
+            min-width: 0;
+        }
+    }
+
+    .datagrid-filters-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .datagrid-filters-actions {
+        margin-left: 0;
+        justify-content: flex-end;
+    }
+}
+
+// Cibles tactiles : boutons icônes agrandis sur pointeur grossier (tactile)
+@media (pointer: coarse) {
+    .datagrid-card .btn-icon,
+    .datagrid .btn-icon {
+        width: 40px;
+        height: 40px;
+
+        &.btn-sm {
+            width: 36px;
+            height: 36px;
+        }
+    }
+}
+}

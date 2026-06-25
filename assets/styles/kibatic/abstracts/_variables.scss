@@ -1,0 +1,111 @@
+// =========================================================
+//  Datagrid Default Theme — variables CSS
+//
+//  Les variables restent des CUSTOM PROPERTIES CSS (et non des
+//  variables Sass figées) : c'est ce qui permet à un projet
+//  client de recolorer le thème en surchargeant `--brand-500`
+//  dans une feuille de style projet, sans recompiler le SCSS.
+//
+//  Pour reskinner : override --brand-500 (et idéalement
+//  --brand-50 / --brand-600 / --brand-700) côté projet.
+// =========================================================
+
+@mixin variables {
+    // ---------- Brand (seul élément à surcharger côté client) ----------
+    --brand-50: #eef2f8;
+    --brand-100: #d8e2ee;
+    --brand-500: #4f6f9a; // boutons primaires, liens, focus rings
+    --brand-600: #3f5a82; // hover
+    --brand-700: #324969; // pressed, texte accent sur fond teinté
+
+    // ---------- Surfaces neutres ----------
+    --surface: #eef1f5; // fond de page
+    --surface-2: #e4e8ee; // hover de ligne, alternance subtile
+    --card: #ffffff; // cartes, modales, dropdowns
+
+    // ---------- Premiers plans ----------
+    --fg-1: #0f172a; // texte principal, titres
+    --fg-2: #475569; // texte secondaire, en-têtes de table, meta
+    --fg-3: #94a3b8; // placeholder, désactivé, icônes au repos
+    --fg-on-brand: #ffffff;
+
+    // ---------- Bordures ----------
+    --border: #e2e8f0;
+    --border-strong: #cbd5e1;
+    --border-input: #cbd5e1;
+
+    // ---------- Sémantique ----------
+    --success-50: #f0fdf4;
+    --success-500: #16a34a;
+    --success-700: #15803d;
+
+    --warning-50: #fffbeb;
+    --warning-500: #d97706;
+    --warning-700: #b45309;
+
+    --danger-50: #fef2f2;
+    --danger-500: #dc2626;
+    --danger-700: #b91c1c;
+
+    --info-50: #ecfeff;
+    --info-500: #0891b2;
+    --info-700: #0e7490;
+
+    // ---------- Typographie ----------
+    --font-sans: 'Inter var', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+    --fs-12: 12px;
+    --fs-13: 13px;
+    --fs-14: 14px; // body / table par défaut
+    --fs-15: 15px; // form / détail
+    --fs-16: 16px;
+    --fs-18: 18px;
+    --fs-20: 20px;
+    --fs-24: 24px;
+    --fs-32: 32px;
+
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    --fw-bold: 700;
+
+    --lh-tight: 1.3;
+    --lh-body: 1.5;
+
+    // ---------- Espacements (échelle 4px) ----------
+    --sp-1: 4px;
+    --sp-2: 8px;
+    --sp-3: 12px;
+    --sp-4: 16px;
+    --sp-6: 24px;
+    --sp-8: 32px;
+    --sp-12: 48px;
+    --sp-16: 64px;
+
+    // ---------- Rayons ----------
+    --radius-0: 0; // cellules de table
+    --radius-sm: 4px;
+    --radius: 6px; // boutons, inputs, badges
+    --radius-lg: 8px; // cartes, modales
+    --radius-full: 9999px;
+
+    // ---------- Ombres (rares) ----------
+    --shadow-pop: 0 4px 12px rgba(15, 23, 42, 0.08);
+    --shadow-modal: 0 12px 32px rgba(15, 23, 42, 0.16);
+
+    // ---------- Layout ----------
+    --topbar-h: 56px;
+    --sidebar-w: 240px;
+    --row-h: 44px; // confortable
+    --field-h: 36px;
+
+    // Décalage du sticky des en-têtes/barres de datagrid. Défaut 0 : le
+    // datagrid ne suppose aucune topbar. Une app dont la topbar est sticky
+    // surcharge ce token avec sa hauteur (ex. --datagrid-sticky-top: var(--topbar-h)).
+    --datagrid-sticky-top: 0px;
+
+    // ---------- Mouvement ----------
+    --t-quick: 120ms ease-out;
+    --t-modal: 150ms ease-out;
+}

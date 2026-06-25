@@ -13,6 +13,20 @@
                 "fetch": "eager",
                 "enabled": true
             },
+            "filters-collapse": {
+                "main": "dist/filters_collapse_controller.js",
+                "name": "filters-collapse",
+                "webpackMode": "eager",
+                "fetch": "eager",
+                "enabled": true
+            },
+            "batch": {
+                "main": "dist/batch_controller.js",
+                "name": "batch",
+                "webpackMode": "eager",
+                "fetch": "eager",
+                "enabled": true
+            },
             "form-turbo-frame-updater": {
                 "main": "dist/form_turbo_frame_updater_controller.js",
                 "name": "form-turbo-frame-updater",

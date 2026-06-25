@@ -1,3 +1,11 @@
+result_count: '{0}No result|{1}1 result|]1,Inf[%count% results'
+Filters: Filters
+'More filters': More filters
+'Fewer filters': Fewer filters
+selected: selected
+'Deselect all': Deselect all
+'Confirm this action?': Confirm this action?
+
 column:
   boolean:
     'true': Yes
