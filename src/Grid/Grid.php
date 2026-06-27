@@ -27,9 +27,9 @@ class Grid
         Request $request,
         PaginationInterface $pagination,
         string $theme,
+        string $batchActionsTokenId,
         array $batchActions = [],
         string $batchMethod = 'POST',
-        string $batchActionsTokenId,
         ?callable $rowAttributesCallback = null,
         array $filterLayout = [],
     ) {

@@ -33,6 +33,7 @@ class GridBuilder
     private ?string $theme = '@KibaticDatagrid/theme/bootstrap5';
     private ?string $explicitRouteName = null;
     private array $explicitRouteParams = [];
+    private string $paginationKey = 'page';
 
     private ?Grid $grid;
 
@@ -89,7 +90,7 @@ class GridBuilder
     public function setTheme(string $theme): self
     {
         $this->theme = $theme;
-        
+
         return $this;
     }
 
@@ -99,9 +100,9 @@ class GridBuilder
     public function addColumn(
         string|TranslatableMessage $name,
         string|callable|null $value = null,
-        string $template = null,
+        ?string $template = null,
         array $templateParameters = [],
-        string $sortable = null,
+        ?string $sortable = null,
         callable|string|null $sortableQuery = null,
         bool $enabled = true,
     ): self {
@@ -117,7 +118,7 @@ class GridBuilder
 
         return $this;
     }
-    
+
     public function getColumns(): array
     {
         return array_filter($this->columns, fn(Column $column) => $column->enabled);
@@ -134,10 +135,10 @@ class GridBuilder
         throw new \Exception("Column named {$name} not found.");
     }
 
-    public function removeColumn(string $name): self
+    public function removeColumn(string|TranslatableMessage $name): self
     {
         foreach ($this->columns as $key => $column) {
-            if ($column->name === $name) {
+            if ($column->name == $name) {
                 unset($this->columns[$key]);
             }
         }
@@ -229,7 +230,7 @@ class GridBuilder
             if ($column->sortable !== $sortBy) {
                 continue;
             }
-            
+
             if (is_callable($column->sortableQuery)) {
                 $sortCallback = $column->sortableQuery;
                 $sortCallback($this->queryBuilder, $direction);
@@ -258,10 +259,10 @@ class GridBuilder
                 continue;
             }
 
-            $filterField = $this->filtersForm->get($filter->formFieldName);
-
-            if ($filterField === null) {
-                throw new \Exception("Form field named {$filter->formFieldName} not found in the filters form of the datagrid.");
+            if ($this->filtersForm->has($filter->formFieldName)) {
+                $filterField = $this->filtersForm->get($filter->formFieldName);
+            } else {
+                throw new \Exception("Form field named \"{$filter->formFieldName}\" not found in the filters form of the datagrid.");
             }
 
             $filterValue = $filterField->getData();
@@ -278,7 +279,7 @@ class GridBuilder
         }
     }
 
-    public function addBatchAction(string $label, string $url, bool $confirm = true): self
+    public function addBatchAction(string|TranslatableMessage $label, string $url, bool $confirm = true): self
     {
         $this->batchActions[] = [
             'label' => $label,
@@ -299,6 +300,16 @@ class GridBuilder
     public function setItemsPerPage(?int $itemsPerPage): self
     {
         $this->itemsPerPage = $itemsPerPage;
+
+        return $this;
+    }
+
+    /**
+     * Set the query parameter name used for pagination. Default is "page".
+     */
+    public function setPaginationKey(string $paginationKey): self
+    {
+        $this->paginationKey = $paginationKey;
 
         return $this;
     }
@@ -331,8 +342,11 @@ class GridBuilder
 
             $pagination = $this->paginator->paginate(
                 $this->queryBuilder->getQuery(),
-                $this->request->query->getInt('page', 1),
-                $this->itemsPerPage
+                $this->request->query->getInt($this->paginationKey, 1),
+                $this->itemsPerPage,
+                [
+                    'pageParameterName' => $this->paginationKey,
+                ]
             );
 
             if ($this->explicitRouteName) {
@@ -348,9 +362,9 @@ class GridBuilder
                 $this->request,
                 $pagination,
                 $this->theme,
+                $this::class,
                 $this->batchActions,
                 $this->batchMethod,
-                $this::class,
                 $this->rowAttributesCallback,
                 $this->buildFilterLayout(),
             );

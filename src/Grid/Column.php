@@ -18,10 +18,10 @@ class Column
 
     public function __construct(
         string|TranslatableMessage $name,
-        string|callable $value = null,
-        string $template = null,
+        string|callable|null $value = null,
+        ?string $template = null,
         array $templateParameters = [],
-        string|array $sortable = null,
+        string|array|null $sortable = null,
         callable|string|null $sortableQuery = null,
         bool $enabled = true,
     ) {
