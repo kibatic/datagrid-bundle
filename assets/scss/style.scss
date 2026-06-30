@@ -1,3 +1,12 @@
+.datagrid-filters-toggle {
+  &[aria-expanded="true"] .datagrid-filters-show-more {
+    display: none;
+  }
+
+  &[aria-expanded="false"] .datagrid-filters-show-less {
+    display: none;
+  }
+}
 .table-sticky-scroll {
   max-height: 380px;
   overflow-y: auto;

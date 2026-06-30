@@ -13,8 +13,22 @@
 {{ form_start(form, form_options) }}
 
 {% set layoutFieldNames = [] %}
+{% set hasHiddenRows = false %}
+{% set hiddenRowHasValue = false %}
+
 {% for row in grid.filterLayout %}
     {% set layoutFieldNames = layoutFieldNames|merge(row.fields) %}
+    {% if row.hidden %}
+        {% set hasHiddenRows = true %}
+        {% for fieldName in row.fields %}
+            {% if form[fieldName].vars.data is not empty %}
+                {% set hiddenRowHasValue = true %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endfor %}
+
+{% macro render_row(row, form) %}
     {% if row.fields|length > 1 %}
         <div class="row datagrid-filter-group">
             {% for fieldName in row.fields %}
@@ -26,7 +40,23 @@
     {% else %}
         {{ form_row(form[row.fields[0]]) }}
     {% endif %}
+{% endmacro %}
+
+{% for row in grid.filterLayout %}
+    {% if not row.hidden %}
+        {{ _self.render_row(row, form) }}
+    {% endif %}
 {% endfor %}
+
+{% if hasHiddenRows %}
+    <div class="collapse{% if hiddenRowHasValue %} show{% endif %}" id="datagrid-filters-advanced">
+        {% for row in grid.filterLayout %}
+            {% if row.hidden %}
+                {{ _self.render_row(row, form) }}
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}
 
 {% for field in form %}
     {% if field.vars.block_prefixes[0] != 'button' and field.vars.name not in layoutFieldNames %}
@@ -38,6 +68,19 @@
 <div class="row">
     <div class="col text-end">
         <ul class="list-inline">
+            {% if hasHiddenRows %}
+                <li class="list-inline-item">
+                    <a href="#datagrid-filters-advanced"
+                       class="btn btn-link datagrid-filters-toggle"
+                       data-bs-toggle="collapse"
+                       aria-expanded="{{ hiddenRowHasValue ? 'true' : 'false' }}"
+                       aria-controls="datagrid-filters-advanced">
+                        <span class="datagrid-filters-show-more">{{ 'Show all filters'|trans({}, 'KibaticDatagridBundle') }}</span>
+                        <span class="datagrid-filters-show-less">{{ 'Show less filters'|trans({}, 'KibaticDatagridBundle') }}</span>
+                    </a>
+                </li>
+            {% endif %}
+
             <li class="list-inline-item">
                 <a href="{{ datagrid_reset_url(form) }}" class="btn btn-default">
                     {{ 'Reset'|trans({}, 'KibaticDatagridBundle') }}

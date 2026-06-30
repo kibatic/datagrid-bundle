@@ -146,9 +146,9 @@ class GridBuilder
         return $this;
     }
 
-    public function addFilter(string $formFieldName, callable $callback, bool $enabled = true, ?string $group = null): self
+    public function addFilter(string $formFieldName, callable $callback, bool $enabled = true, ?string $group = null, bool $hidden = false): self
     {
-        $this->filters[] = new Filter($formFieldName, $callback, $enabled, $group);
+        $this->filters[] = new Filter($formFieldName, $callback, $enabled, $group, $hidden);
 
         return $this;
     }
@@ -183,16 +183,17 @@ class GridBuilder
 
             if ($filter->group === null) {
                 // Ungrouped filter: occupies its own slot.
-                $layout[] = ['fields' => [$filter->formFieldName], 'group' => null];
+                $layout[] = ['fields' => [$filter->formFieldName], 'group' => null, 'hidden' => $filter->hidden];
             } elseif (!in_array($filter->group, $processedGroups)) {
                 // First time we encounter this group: collect all enabled fields belonging
                 // to it (in declaration order) and emit a single slot for the whole group.
+                // The hidden flag of the first filter in the group applies to the whole group.
                 $processedGroups[] = $filter->group;
                 $groupFields = array_map(
                     fn(Filter $f) => $f->formFieldName,
                     array_filter($this->filters, fn(Filter $f) => $f->enabled && $f->group === $filter->group)
                 );
-                $layout[] = ['fields' => array_values($groupFields), 'group' => $filter->group];
+                $layout[] = ['fields' => array_values($groupFields), 'group' => $filter->group, 'hidden' => $filter->hidden];
             }
             // Subsequent members of an already-processed group are intentionally skipped.
         }
