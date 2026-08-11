@@ -188,29 +188,31 @@ class GridBuilder
      */
     private function buildFilterLayout(): array
     {
-        $layout = [];
-        $processedGroups = [];
+        // Index filters by group (null for ungrouped)
+        $grouped = [];
+        $hiddenFlags = [];
 
         foreach ($this->filters as $filter) {
             if (!$filter->enabled) {
                 continue;
             }
 
-            if ($filter->group === null) {
-                // Ungrouped filter: occupies its own slot.
-                $layout[] = ['fields' => [$filter->formFieldName], 'group' => null, 'hidden' => $filter->hidden];
-            } elseif (!in_array($filter->group, $processedGroups)) {
-                // First time we encounter this group: collect all enabled fields belonging
-                // to it (in declaration order) and emit a single slot for the whole group.
-                // The hidden flag of the first filter in the group applies to the whole group.
-                $processedGroups[] = $filter->group;
-                $groupFields = array_map(
-                    fn(Filter $f) => $f->formFieldName,
-                    array_filter($this->filters, fn(Filter $f) => $f->enabled && $f->group === $filter->group)
-                );
-                $layout[] = ['fields' => array_values($groupFields), 'group' => $filter->group, 'hidden' => $filter->hidden];
+            $groupKey = $filter->group ?? '*';
+
+            if (!isset($grouped[$groupKey])) {
+                $grouped[$groupKey] = [];
+                $hiddenFlags[$groupKey] = $filter->hidden;
             }
-            // Subsequent members of an already-processed group are intentionally skipped.
+
+            $grouped[$groupKey][] = $filter->formFieldName;
+        }
+
+        // Convert to layout array
+        $layout = [];
+
+        foreach ($grouped as $groupKey => $fields) {
+            $group = $groupKey === '*' ? null : $groupKey;
+            $layout[] = ['fields' => $fields, 'group' => $group, 'hidden' => $hiddenFlags[$groupKey]];
         }
 
         return $layout;
