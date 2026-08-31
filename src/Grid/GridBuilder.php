@@ -18,7 +18,7 @@ class GridBuilder
     private ?FormInterface $filtersForm;
     private ?int $defaultItemsPerPage;
     private ?int $itemsPerPage;
-    private $rowAttributesCallback = null;
+    private ?\Closure $rowAttributesCallback = null;
 
     /**
      * @var array|Column[]
@@ -112,11 +112,11 @@ class GridBuilder
      */
     public function addColumn(
         string|TranslatableMessage $name,
-        string|callable|null $value = null,
+        string|\Closure|null $value = null,
         ?string $template = null,
         array|\Closure $templateParameters = [],
         ?string $sortable = null,
-        callable|string|null $sortableQuery = null,
+        \Closure|string|null $sortableQuery = null,
         bool $enabled = true,
         array $headerAttr = [],
     ): self {
@@ -161,7 +161,7 @@ class GridBuilder
         return $this;
     }
 
-    public function addFilter(string $formFieldName, callable $callback, bool $enabled = true, ?string $group = null, bool $hidden = false): self
+    public function addFilter(string $formFieldName, \Closure $callback, bool $enabled = true, ?string $group = null, bool $hidden = false): self
     {
         $this->filters[] = new Filter($formFieldName, $callback, $enabled, $group, $hidden);
 
@@ -248,7 +248,7 @@ class GridBuilder
                 continue;
             }
 
-            if (is_callable($column->sortableQuery)) {
+            if ($column->sortableQuery instanceof \Closure) {
                 $sortCallback = $column->sortableQuery;
                 $sortCallback($this->queryBuilder, $direction);
                 continue;
@@ -341,7 +341,7 @@ class GridBuilder
         return $this;
     }
 
-    public function setRowAttributesCallback(callable $callback): self
+    public function setRowAttributesCallback(\Closure $callback): self
     {
         $this->rowAttributesCallback = $callback;
 

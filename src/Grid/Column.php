@@ -9,11 +9,17 @@ use Symfony\Component\Translation\TranslatableMessage;
 class Column
 {
     public string|TranslatableMessage $name;
-    public $value;
+    /**
+     * @var string|\Closure Chemin de propriété, ou callback résolvant la valeur de la ligne.
+     */
+    public string|\Closure $value;
     private ?string $template;
     public array|\Closure $templateParameters;
     public ?string $sortable;
-    public $sortableQuery;
+    /**
+     * @var string|\Closure|null Expression DQL de tri, ou callback appliquant le tri au QueryBuilder.
+     */
+    public string|\Closure|null $sortableQuery;
     public bool $enabled;
     /**
      * @var array Attributs HTML statiques du <th> de la colonne (ex. ['class' => 'num']).
@@ -22,11 +28,11 @@ class Column
 
     public function __construct(
         string|TranslatableMessage $name,
-        string|callable|null $value = null,
+        string|\Closure|null $value = null,
         ?string $template = null,
         array|\Closure $templateParameters = [],
         string|array|null $sortable = null,
-        callable|string|null $sortableQuery = null,
+        \Closure|string|null $sortableQuery = null,
         bool $enabled = true,
         array $headerAttr = [],
     ) {
@@ -60,13 +66,10 @@ class Column
             $entity = $entity[0];
         }
 
-        if (!is_string($this->value) && is_callable($this->value)) {
+        if ($this->value instanceof \Closure) {
             $valueCallback = $this->value;
-            return $valueCallback($entity, $extra ?? []);
-        }
 
-        if ($this->value === null) {
-            return isset($extra) ? [$entity, $extra] : $entity;
+            return $valueCallback($entity, $extra ?? []);
         }
 
         try {

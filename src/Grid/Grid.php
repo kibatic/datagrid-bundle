@@ -19,7 +19,7 @@ class Grid
      * @var string[] Chaîne de thèmes, du plus prioritaire au moins prioritaire.
      */
     private array $themes;
-    private $rowAttributesCallback = null;
+    private ?\Closure $rowAttributesCallback = null;
     private array $filterLayout;
 
     private Request $request;
@@ -33,7 +33,7 @@ class Grid
         string $batchActionsTokenId,
         array $batchActions = [],
         string $batchMethod = 'POST',
-        ?callable $rowAttributesCallback = null,
+        ?\Closure $rowAttributesCallback = null,
         array $filterLayout = [],
     ) {
         $this->columns = $columns;
@@ -109,7 +109,7 @@ class Grid
 
     public function getRowAttributes($item, bool $keepAsArray = false): null|array|string
     {
-        if (!is_callable($this->rowAttributesCallback)) {
+        if ($this->rowAttributesCallback === null) {
             return null;
         }
 

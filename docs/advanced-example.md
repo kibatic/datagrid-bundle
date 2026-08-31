@@ -28,7 +28,7 @@
             )
             ->addColumn(
                 'Title',
-                fn(Book $book) => $book->getTitle(), // second way using a callable returning wanted value
+                fn(Book $book) => $book->getTitle(), // second way using a closure returning wanted value
                 templateParameters: ['truncate' => 30]
             )
             ->addColumn(

@@ -106,11 +106,11 @@ Le `Grid` expose aux templates : `columns`, `pagination`, `request`, `themes`,
 ```php
 addColumn(
     string|TranslatableMessage $name,   // libellé d'en-tête (traduit par le template)
-    string|callable|null $value,        // résolution de la valeur (voir ci-dessous)
+    string|\Closure|null $value,        // résolution de la valeur (voir ci-dessous)
     ?string $template,                  // template de rendu de la valeur (Template::*)
     array|\Closure $templateParameters, // paramètres passés au template
     ?string $sortable,                  // valeur du ?sort_by= qui active le tri
-    callable|string|null $sortableQuery,// expression ou callback de tri custom
+    \Closure|string|null $sortableQuery,// expression ou callback de tri custom
     bool $enabled,                      // false = colonne ignorée
     array $headerAttr,                  // attributs HTML statiques du <th>
 )
@@ -120,9 +120,11 @@ addColumn(
 
 Trois formes, dans cet ordre de priorité :
 
-- **callable** : `fn(Product $p) => $p->getPrice()`. Si la ligne provient d'un
-  `SELECT` multiple (entité + colonnes extra), le callable reçoit
+- **Closure** : `fn(Product $p) => $p->getPrice()`. Si la ligne provient d'un
+  `SELECT` multiple (entité + colonnes extra), la closure reçoit
   `fn($entity, array $extra)` — `$extra` contient les selects additionnels.
+  Les autres formes de callable (`[$objet, 'methode']`, `'nom_de_fonction'`) ne
+  sont pas acceptées : enveloppez-les avec `\Closure::fromCallable()` ou `...`.
 - **string** : accessor PropertyAccess (`'name'`, `'owner.email'`). Si la
   propriété n'existe pas sur l'entité, tentative dans les données extra.
 - **null** : la valeur est l'entité elle-même.
@@ -148,7 +150,7 @@ On peut donc passer son propre chemin de template à `addColumn`.
 
 - **Tableau statique** : `['format' => 'd/m/Y']`, `['col_class' => 'num']`.
 - **Closure globale** : `fn($entity, array $extra) => [...]` — résolue **par
-  ligne** avec l'entité (même signature que le callable de valeur). Exemple :
+  ligne** avec l'entité (même signature que la closure de valeur). Exemple :
 
   ```php
   templateParameters: fn(Product $p) => [
