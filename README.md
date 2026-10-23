@@ -141,6 +141,25 @@ Or a more classic twig approach :
 {% endblock %}
 ```
 
+### Batch actions
+
+```php
+$gridBuilder
+    // confirmation dialog with the theme's default text
+    ->addBatchAction('Export', $this->generateUrl('app_project_export_batch'))
+    // no confirmation
+    ->addBatchAction('Archive', $this->generateUrl('app_project_archive_batch'), confirm: false)
+    // custom confirmation message (and optional title), translated like the label;
+    // simple HTML such as <br /> is allowed (it is injected as HTML in the dialog)
+    ->addBatchAction(
+        'Delete',
+        $this->generateUrl('app_project_delete_batch'),
+        confirm: 'All the tasks of these projects will also be deleted.<br />Are you sure?',
+        confirmTitle: 'Delete projects',
+    )
+;
+```
+
 
 Documentation
 -------------

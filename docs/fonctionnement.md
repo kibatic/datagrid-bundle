@@ -215,7 +215,14 @@ Un champ déclaré dans `addFilter` mais absent du form lève une exception expl
 - **Actions par ligne** : colonne `Template::ACTIONS` dont la valeur est un
   tableau de boutons `['name' => ..., 'url' => ..., 'btn_type' => ...,
   'icon' => ..., 'visible' => bool]`.
-- **Actions par lot** : `addBatchAction(label, url, confirm, variant, icon)`.
+- **Actions par lot** : `addBatchAction(label, url, confirm, variant, icon, confirmTitle)`.
+  `confirm` vaut `true` (confirmation avec le texte par défaut du thème),
+  `false` (pas de confirmation) ou directement le message de confirmation
+  (`string|TranslatableMessage`, passé à `|trans` comme le label ; HTML simple
+  accepté, ex. `<br />`, car injecté en HTML dans SweetAlert2 — ne pas y
+  mettre de données utilisateur non échappées). `confirmTitle` remplace le
+  titre par défaut de la boîte. Ex. :
+  `->addBatchAction('Delete', $url, confirm: 'Delete these items?<br />This cannot be undone.', variant: 'danger')`.
   Le thème affiche alors une colonne de cases à cocher (contrôleur Stimulus
   `batch`) et une barre d'actions. Les ids cochés sont postés en `ids[]`
   (méthode configurable par `setBatchMethod()`) avec un jeton CSRF

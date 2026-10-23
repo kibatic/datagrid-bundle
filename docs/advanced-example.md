@@ -101,9 +101,10 @@
                 Template::ACTIONS,
             )
             ->addBatchAction(
-                'delete',
                 'Delete',
-                $this->generateUrl('book_batch_delete')
+                $this->generateUrl('book_batch_delete'),
+                // true / false, or a custom confirmation message (translated like the label, simple HTML allowed)
+                confirm: 'Delete the selected books?<br />This cannot be undone.',
             )
             ->addFilter(
                 'id',

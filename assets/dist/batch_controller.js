@@ -83,9 +83,10 @@ export default class extends Controller {
         }
 
         if (params.confirm) {
+            // Le message peut contenir du HTML simple (ex. <br />), comme le contrôleur confirm de Kibatic UX.
             Swal.fire({
-                title: this.confirmTitleValue,
-                text: params.confirmText,
+                title: params.confirmTitle || this.confirmTitleValue,
+                html: params.confirmText,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: this.confirmYesValue,

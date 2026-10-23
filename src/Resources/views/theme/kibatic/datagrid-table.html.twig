@@ -24,7 +24,8 @@
                             data-action="batch#submit"
                             data-batch-url-param="{{ action.url }}"
                             data-batch-confirm-param="{{ action.confirm ? 'true' : 'false' }}"
-                            data-batch-confirm-text-param="{{ 'Confirm this action?'|trans({}, 'KibaticDatagridBundle') }}"
+                            data-batch-confirm-text-param="{{ (action.confirmMessage ?? null) ? action.confirmMessage|trans : 'Confirm this action?'|trans({}, 'KibaticDatagridBundle') }}"
+                            {%- if action.confirmTitle ?? null %} data-batch-confirm-title-param="{{ action.confirmTitle|trans }}"{% endif %}
                         >
                             {% if action.icon %}<twig:ux:icon name="{{ action.icon }}" />{% endif %}
                             {{ action.label|trans }}

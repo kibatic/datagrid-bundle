@@ -75,7 +75,12 @@
                     </label>
                     <select onchange="batch_set_action(this)" class="form-select" id="batch-select">
                         {% for batchAction in grid.batchActions %}
-                            <option value="{{ batchAction.url }}" data-confirm="{{ batchAction.confirm ? 'true' : 'false' }}">{{ batchAction.label|trans }}</option>
+                            <option
+                                value="{{ batchAction.url }}"
+                                data-confirm="{{ batchAction.confirm ? 'true' : 'false' }}"
+                                {%- if batchAction.confirmMessage ?? null %} data-confirm-text="{{ batchAction.confirmMessage|trans }}"{% endif %}
+                                {%- if batchAction.confirmTitle ?? null %} data-confirm-title="{{ batchAction.confirmTitle|trans }}"{% endif %}
+                            >{{ batchAction.label|trans }}</option>
                         {% endfor %}
                     </select>
                     <script>
@@ -86,14 +91,22 @@
                             parts = selectElement.value.split('|');
                             form.action = parts[0];
 
+                            let controllers = (form.getAttribute('data-controller') || '').split(' ').filter(c => c !== '' && c !== 'confirm');
                             if (selectedOption.dataset.confirm == 'true') {
-                                if (form.getAttribute('data-controller') !== null) {
-                                    form.setAttribute('data-controller', form.getAttribute('data-controller') + ' confirm');
-                                } else {
-                                    form.setAttribute('data-controller', 'confirm');
-                                }
+                                controllers.push('confirm');
+                            }
+                            form.setAttribute('data-controller', controllers.join(' '));
+
+                            // Message / titre propres à l'action, sinon valeurs par défaut du contrôleur confirm.
+                            if (selectedOption.dataset.confirmText !== undefined) {
+                                form.dataset.confirmTextValue = selectedOption.dataset.confirmText;
                             } else {
-                                form.setAttribute('data-controller', form.getAttribute('data-controller').replace('confirm', ''));
+                                delete form.dataset.confirmTextValue;
+                            }
+                            if (selectedOption.dataset.confirmTitle !== undefined) {
+                                form.dataset.confirmTitleValue = selectedOption.dataset.confirmTitle;
+                            } else {
+                                delete form.dataset.confirmTitleValue;
                             }
                         }
 

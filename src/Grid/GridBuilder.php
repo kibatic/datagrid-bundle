@@ -296,12 +296,28 @@ class GridBuilder
         }
     }
 
-    public function addBatchAction(string|TranslatableMessage $label, string $url, bool $confirm = true, ?string $variant = null, ?string $icon = null): self
-    {
+    /**
+     * @param bool|string|TranslatableMessage $confirm      true/false to enable or disable the confirmation dialog,
+     *                                                      or the confirmation message itself (implies true).
+     *                                                      The message is translated like the label and may contain simple HTML.
+     * @param string|TranslatableMessage|null $confirmTitle title of the confirmation dialog (theme default if null)
+     */
+    public function addBatchAction(
+        string|TranslatableMessage $label,
+        string $url,
+        bool|string|TranslatableMessage $confirm = true,
+        ?string $variant = null,
+        ?string $icon = null,
+        string|TranslatableMessage|null $confirmTitle = null,
+    ): self {
+        $confirmMessage = is_bool($confirm) || $confirm === '' ? null : $confirm;
+
         $this->batchActions[] = [
             'label' => $label,
             'url' => $url,
-            'confirm' => $confirm,
+            'confirm' => $confirm !== false && $confirm !== '',
+            'confirmMessage' => $confirmMessage,
+            'confirmTitle' => $confirmTitle,
             'variant' => $variant,
             'icon' => $icon,
         ];
